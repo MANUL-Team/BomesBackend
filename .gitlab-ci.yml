@@ -28,7 +28,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker stop bomes-api || echo "bomes-api is stoped"
     - docker rm bomes-api || echo "bomes-api is removed"
     - docker build -t bomes-api .
-    - docker run -dit --name bomes-api -p 8000:8000 --net bridge --ip 172.17.0.3 bomes-api
+    - docker run -dit --name bomes-api -p 8000:8000 --net docker_bomes --ip 172.17.0.3 bomes-api
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
