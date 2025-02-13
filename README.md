@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin http://gitlab.bomes.bom/stolbov.e/BomesAPI.git
+git remote add origin http://gitlab.bomes.ru/stolbov.e/BomesAPI.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](http://gitlab.bomes.bom/stolbov.e/BomesAPI/-/settings/integrations)
+- [ ] [Set up project integrations](http://gitlab.bomes.ru/stolbov.e/BomesAPI/-/settings/integrations)
 
 ## Collaborate with your team
 
