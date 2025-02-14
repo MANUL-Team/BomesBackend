@@ -29,7 +29,7 @@ workflow:
       fi
     - cd Servises/$PROJECT
     - docker build -t $DOCKERNAME .
-    - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip 172.20.1.2 $DOCKERNAME
+    - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
 
 .build-template-servises:
