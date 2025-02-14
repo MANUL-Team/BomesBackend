@@ -23,7 +23,10 @@ workflow:
     - docker stop bomes-api || echo "bomes-api is stoped"
     - docker rm bomes-api || echo "bomes-api is removed"
     - echo "Deleting oldest image bomes-api"
-#    - docker rmi $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ') || echo "image bomes-api is removed"
+    - if docker rmi $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ') 2>/dev/null;
+      then echo docker rmi $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ');
+      else echo "image bomes-api is removed";
+      fi
     - cd Servises/$PROJECT
     - docker build -t bomes-api .
     - docker run -dit --name bomes-api -p 8000:8000 --net docker_bomes --ip 172.20.1.2 bomes-api
