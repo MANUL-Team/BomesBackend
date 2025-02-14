@@ -56,3 +56,8 @@ BomesAuthentificationService:
   extends: .trigger
   variables:
     PROJECT: "BomesAuthentificationService"
+
+BomesChatControlsService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesChatControlsService"
