@@ -20,19 +20,19 @@ workflow:
     - when: manual
   script:
     - echo "Deleting oldest container and image..."
-    - docker stop bomes-api || echo "bomes-api is stoped"
-    - docker rm bomes-api || echo "bomes-api is removed"
-    - echo "Deleting oldest image bomes-api"
-    - if docker rmi $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ') 2>/dev/null;
-      then echo docker rmi $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ');
-      else echo "image bomes-api is removed";
+    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
+    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - echo "Deleting oldest image $DOCKERNAME"
+    - if docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ') 2>/dev/null;
+      then echo docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ');
+      else echo "image $DOCKERNAME is removed";
       fi
     - cd Servises/$PROJECT
-    - docker build -t bomes-api .
-    - docker run -dit --name bomes-api -p 8000:8000 --net docker_bomes --ip 172.20.1.2 bomes-api
+    - docker build -t $DOCKERNAME .
+    - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip 172.20.1.2 $DOCKERNAME
     - echo "Compile complete."
 
-.build-template:
+.build-template-servises:
   stage: build
   rules:
     # Если есть изменения, то собираем соответствующий микросервис
@@ -45,10 +45,15 @@ workflow:
     - when: manual
   script:
     - echo "Deleting oldest container and image..."
-    - docker stop bomes-api || echo "bomes-api is stoped"
-    - docker rm bomes-api || echo "bomes-api is removed"
-    - echo "Deleting oldest image bomes-api"
-    - docker rmi $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ') 
-    - docker build -t bomes-api .
-    - docker run -dit --name bomes-api -p 8000:8000 --net docker_bomes --ip 172.20.1.2 bomes-api
+    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
+    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - echo "Deleting oldest image $DOCKERNAME"
+    - if docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ') 2>/dev/null;
+      then echo docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ');
+      else echo "image $DOCKERNAME is removed";
+      fi
+    - cd Servises/$PROJECT
+    - tar -xvzf node_modules.tar.xz
+    - docker build -t $DOCKERNAME .
+    - docker run -dit --name $DOCKERNAME --net docker_bomes $DOCKERNAME
     - echo "Compile complete."

@@ -5,10 +5,10 @@ include:
 # Ставим глобальную переменную проекта
 # В шаблонах используется для именования Docker-образа
 variables:
-  PROJECT: "BomesAPI"
-  DOCKERNAME: "bomes-api"
+  PROJECT: "BomesAuthentificationService"
+  DOCKERNAME: "bomes-authentification"
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
 build-ci:
-  extends: .build-template-api
+  extends: .build-template-servises
