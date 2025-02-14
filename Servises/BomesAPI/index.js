@@ -13,22 +13,22 @@ const bot = new TelegramBot(API_KEY_BOT, {
 
 // PRODUCTION
 // -----------------------------------------------------------------------------
-const https = require('https');
-const fs = require('fs');
-const server = https.createServer({
-    cert: fs.readFileSync('./ssl/domain_name.crt'),
-    key: fs.readFileSync('./ssl/private.key'),
-    chain: fs.readFileSync('./ssl/chain.crt'),
-});
-const wss = new ws.Server({server});
-server.listen(PORT, () => console.log(`Server started on ${PORT} with WSS`));
+// const https = require('https');
+// const fs = require('fs');
+// const server = https.createServer({
+//     cert: fs.readFileSync('./ssl/domain_name.crt'),
+//     key: fs.readFileSync('./ssl/private.key'),
+//     chain: fs.readFileSync('./ssl/chain.crt'),
+// });
+// const wss = new ws.Server({server});
+// server.listen(PORT, () => console.log(`Server started on ${PORT} with WSS`));
 // -----------------------------------------------------------------------------
 
 // DEVELOPMENT
 // -----------------------------------------------------------------------------
-// const wss = new ws.Server({
-//     port: PORT
-// }, () => console.log(`Server started on ${PORT} with WS`));
+const wss = new ws.Server({
+    port: PORT
+}, () => console.log(`Server started on ${PORT} with WS`));
 // -----------------------------------------------------------------------------
 
 
