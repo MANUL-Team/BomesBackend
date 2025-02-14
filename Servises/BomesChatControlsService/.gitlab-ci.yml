@@ -11,5 +11,5 @@ variables:
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
-build-authentification-service:
+build-chatscontrols-service:
   extends: .build-template-servises
