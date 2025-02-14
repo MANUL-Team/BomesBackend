@@ -14,7 +14,7 @@ workflow:
     - changes:
         paths:
           - gitlab-ci/**/*
-          - packages/$PROJECT/**/*
+          - Servises/$PROJECT/**/*
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
@@ -36,7 +36,7 @@ workflow:
     - changes:
         paths:
           - gitlab-ci/**/*
-          - packages/$PROJECT/**/*
+          - Servises/$PROJECT/**/*
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
