@@ -53,7 +53,7 @@ workflow:
       else echo "image $DOCKERNAME is removed";
       fi
     - cd Servises/$PROJECT
-    - tar -xvzf node_modules.tar.xz
+    - tar -xvf node_modules.tar.xz
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME --net docker_bomes $DOCKERNAME
     - echo "Compile complete."
