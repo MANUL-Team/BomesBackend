@@ -17,7 +17,7 @@ workflow:
           - Servises/$PROJECT/**/*
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
-#    - when: manual
+    - when: manual
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
