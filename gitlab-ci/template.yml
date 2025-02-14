@@ -23,10 +23,7 @@ workflow:
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
     - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
     - echo "Deleting oldest image $DOCKERNAME"
-    - if docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ') 2>/dev/null;
-      then echo docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ');
-      else echo "image $DOCKERNAME is removed";
-      fi
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Servises/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
@@ -48,10 +45,7 @@ workflow:
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
     - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
     - echo "Deleting oldest image $DOCKERNAME"
-    - if docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ') 2>/dev/null;
-      then echo docker rmi $(docker images | grep $DOCKERNAME | awk {print'$3'} | tr -s '\n' ' ');
-      else echo "image $DOCKERNAME is removed";
-      fi
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Servises/$PROJECT
     - tar -xvf node_modules.tar.xz
     - docker build -t $DOCKERNAME .
