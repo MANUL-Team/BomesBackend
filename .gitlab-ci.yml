@@ -28,10 +28,10 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker stop bomes-api || echo "bomes-api is stoped"
     - docker rm bomes-api || echo "bomes-api is removed"
     - echo "Deleting oldest image bomes-api"
-    - for var in $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ') \
-      do \
-      docker rmi $var \
-      done
+    - for var in $(docker images | grep bomes-api | awk {print'$3'} | tr -s '\n' ' ') 
+    -  do 
+    -  docker rmi $var 
+    -  done
     - docker build -t bomes-api .
     - docker run -dit --name bomes-api -p 8000:8000 --net docker_bomes --ip 172.20.1.2 bomes-api
     - echo "Compile complete."
