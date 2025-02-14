@@ -11,5 +11,5 @@ variables:
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
-build-ci:
+build-authentification-service:
   extends: .build-template-servises
