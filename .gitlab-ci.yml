@@ -30,6 +30,20 @@ variables:
   PARENT_PIPELINE_SOURCE: "$CI_PIPELINE_SOURCE"
   PARENT_LABELS: "$CI_MERGE_REQUEST_LABELS"
 
+.trigger:
+  trigger:
+    # Автомагически подбираем нужный файл
+    include:
+      - local: Servises/$PROJECT/.gitlab-ci.yml
+    # Родительский пайплайн ждет выполнения всех дочерних
+    strategy: depend
+    # Передаем переменные в дочерние пайплайны
+    forward:
+      # Переменные CI, например, секреты
+      pipeline_variables: true
+      # Переменные из глобального блока variables
+      yaml_variables: true
+
 BomesAPI:
   extends: .trigger
   variables:
