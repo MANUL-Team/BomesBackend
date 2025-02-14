@@ -51,3 +51,8 @@ BomesAPI:
   extends: .trigger
   variables:
     PROJECT: "BomesAPI"
+
+BomesAuthentificationService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesAuthentificationService"
