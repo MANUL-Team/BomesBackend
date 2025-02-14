@@ -55,5 +55,5 @@ workflow:
     - cd Servises/$PROJECT
     - tar -xvf node_modules.tar.xz
     - docker build -t $DOCKERNAME .
-    - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
+    - docker run -dit --name $DOCKERNAME --net docker_bomes $DOCKERNAME
     - echo "Compile complete."
