@@ -24,9 +24,14 @@ stages:          # List of stages for jobs, and their order of execution
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - echo "Compiling the code..."
+    - echo "Deleting oldest container and image..."
     - docker stop bomes-api || echo "bomes-api is stoped"
     - docker rm bomes-api || echo "bomes-api is removed"
+    - IMG=$(docker images | grep none | awk {print'$3'} | tr -s '\n' ' ')
+    - for var in $IMG \
+      do \
+      docker rmi $var \
+      done
     - docker build -t bomes-api .
     - docker run -dit --name bomes-api -p 8000:8000 --net docker_bomes --ip 172.20.1.2 bomes-api
     - echo "Compile complete."
