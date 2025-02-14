@@ -47,7 +47,6 @@ workflow:
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Servises/$PROJECT
-    - tar -xvf node_modules.tar.xz
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
