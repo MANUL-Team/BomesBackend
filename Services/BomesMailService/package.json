@@ -1,0 +1,16 @@
+{
+  "name": "mailservice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "websocket": "^1.0.35",
+    "nodemailer": "^6.9.14"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
