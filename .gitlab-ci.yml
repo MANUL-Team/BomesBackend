@@ -34,7 +34,7 @@ variables:
   trigger:
     # Автомагически подбираем нужный файл
     include:
-      - local: Servises/$PROJECT/.gitlab-ci.yml
+      - local: Services/$PROJECT/.gitlab-ci.yml
     # Родительский пайплайн ждет выполнения всех дочерних
     strategy: depend
     # Передаем переменные в дочерние пайплайны
