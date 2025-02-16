@@ -5,9 +5,9 @@ include:
 # Ставим глобальную переменную проекта
 # В шаблонах используется для именования Docker-образа
 variables:
-  PROJECT: "BomesChatControlsService"
-  DOCKERNAME: "bomes-chatscontrols"
-  IP: "172.20.1.20"
+  PROJECT: "BomesMonitoringService"
+  DOCKERNAME: "bomes-monitoring"
+  IP: "172.20.1.70"
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно

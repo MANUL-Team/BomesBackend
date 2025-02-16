@@ -7,7 +7,7 @@ include:
 variables:
   PROJECT: "BomesAuthentificationService"
   DOCKERNAME: "bomes-authentification"
-  IP: "172.20.1.3"
+  IP: "172.20.1.10"
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
