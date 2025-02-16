@@ -1,5 +1,6 @@
 
 stages:          # List of stages for jobs, and their order of execution
+  - build-api
   - build
 
 workflow:
@@ -8,7 +9,7 @@ workflow:
 
 # Шаблон сборки образа 
 .build-template-api:
-  stage: build
+  stage: build-api
   rules:
     # Если есть изменения, то собираем соответствующий микросервис
     - changes:
