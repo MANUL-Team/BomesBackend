@@ -24,7 +24,7 @@ workflow:
     - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
-    - cd Servises/$PROJECT
+    - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
@@ -46,7 +46,7 @@ workflow:
     - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
-    - cd Servises/$PROJECT
+    - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
