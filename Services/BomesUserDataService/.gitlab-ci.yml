@@ -6,7 +6,7 @@ include:
 # В шаблонах используется для именования Docker-образа
 variables:
   PROJECT: "BomesUserDataService"
-  DOCKERNAME: "bomes-chatscontrols"
+  DOCKERNAME: "bomes-userdata"
   IP: "172.20.1.100"
 
 # Наследуемся, где надо — переопределяем переменные
