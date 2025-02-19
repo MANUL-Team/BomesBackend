@@ -78,6 +78,18 @@ wss.on("connection", (ws, req) => {
                     services["MessagingService"][0].send(JSON.stringify(request));
                 }
             }
+            else if (message.event === "DisconnectUser") {
+                const request = {
+                    event: "DisconnectUser",
+                    clientID: ws.clientID
+                };
+                if (services["UserControlsService"] && services["UserControlsService"].length > 0){
+                    services["UserControlsService"][0].send(JSON.stringify(request));
+                }
+                if (services["MessagingService"] && services["MessagingService"].length > 0){
+                    services["MessagingService"][0].send(JSON.stringify(request));
+                }
+            }
             else if (ws.clientID && !ws.serviceID){
                 SendFromClientToService(ws, message);
             }
