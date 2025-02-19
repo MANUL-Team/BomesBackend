@@ -226,7 +226,7 @@ async function SendMessage(connection, ws, message){
                         }
                     });
 
-                    message.time = Date.now()/1000;
+                    message.time = Math.round(Date.now()/1000);
                     message.value = message.value.replace(/(<([^>]+)>)/gi, '');
                     message.avatar = sender.avatar;
                     message.username = sender.username;
