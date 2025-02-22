@@ -231,6 +231,12 @@ async function SendMessage(connection, ws, message){
                     message.avatar = sender.avatar;
                     message.username = sender.username;
 
+                    message.data = message.username + ": ";
+                    if (message.dataType == "text")
+                        message.data += message.value;
+                    else
+                        message.data += "Вложение";
+
                     const sql = 'INSERT INTO `' + chat_name + '` (sender, dataType, value, reply, time, isRead, reaction) VALUES (?, ?, ?, ?, ?, ?, ?)';
                     const data = [message.sender, message.dataType, message.value, message.reply, message.time, message.isRead, ""];
                     connection.query(sql, data, function (err, results){
@@ -247,6 +253,7 @@ async function SendMessage(connection, ws, message){
                                 if (message.sender !== user.identifier){
                                     let msg = {
                                         chat: message.chat,
+                                        data: message.data,
                                         event: "Notification",
                                         clientID: user.clientID
                                     };
