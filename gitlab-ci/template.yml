@@ -2,6 +2,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - build-api
   - build
+  - production
 
 workflow:
   rules:
@@ -19,6 +20,7 @@ workflow:
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
+  tags: DevBomes
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -41,6 +43,39 @@ workflow:
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
+  tags: DevBomes
+  script:
+    - echo "Deleting oldest container and image..."
+    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
+    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - echo "Deleting oldest image $DOCKERNAME"
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
+    - cd Services/$PROJECT
+    - docker build -t $DOCKERNAME .
+    - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
+    - echo "Compile complete."
+
+.production-template-api:
+  stage: build-api
+  rules:
+    - when: manual
+  tags: production
+  script:
+    - echo "Deleting oldest container and image..."
+    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
+    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - echo "Deleting oldest image $DOCKERNAME"
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
+    - cd Services/$PROJECT
+    - docker build -t $DOCKERNAME .
+    - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
+    - echo "Compile complete."
+
+.production-template-servises:
+  stage: build
+  rules:
+    - when: manual
+  tags: production
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
