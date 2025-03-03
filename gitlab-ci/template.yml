@@ -2,6 +2,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - build-api
   - build
+  - production-api
   - production
 
 workflow:
@@ -56,7 +57,7 @@ workflow:
     - echo "Compile complete."
 
 .production-template-api:
-  stage: build-api
+  stage: production-api
   rules:
     - when: manual
   tags: [production]
@@ -72,7 +73,7 @@ workflow:
     - echo "Compile complete."
 
 .production-template-servises:
-  stage: build
+  stage: production
   rules:
     - when: manual
   tags: [production]
