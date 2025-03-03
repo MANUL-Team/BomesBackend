@@ -1,0 +1,304 @@
+require("dotenv").config();
+
+const ws = require('ws'); // Web Socket
+const TelegramBot = require('node-telegram-bot-api');
+
+const PORT = process.env.PORT;
+
+const API_KEY_BOT = process.env.API_KEY_BOT;
+
+const bot = new TelegramBot(API_KEY_BOT, {
+    polling: true
+});
+
+// PRODUCTION
+// -----------------------------------------------------------------------------
+ const https = require('https');
+ const fs = require('fs');
+ const server = https.createServer({
+     cert: fs.readFileSync('./ssl/domain_name.crt'),
+     key: fs.readFileSync('./ssl/private.key'),
+     chain: fs.readFileSync('./ssl/chain.crt'),
+ });
+ const wss = new ws.Server({server});
+ server.listen(PORT, () => console.log(`Server started on ${PORT} with WSS`));
+// -----------------------------------------------------------------------------
+
+// DEVELOPMENT
+// -----------------------------------------------------------------------------
+//const wss = new ws.Server({
+//    port: PORT
+//}, () => console.log(`Server started on ${PORT} with WS`));
+// -----------------------------------------------------------------------------
+
+
+const services = {};
+const requestsHandlers = {};
+let serviceID = 1;
+const servicesList = []
+
+const clients = {};
+let clientID = 0;
+
+const notify_chats = [];
+const error_notify_chats = [];
+const all_notify_chats = [];
+
+wss.on("connection", (ws, req) => {
+    RegisterClient(ws);
+    ws.on("message", (message) => {
+        try{
+            message = JSON.parse(message);
+
+            let message_data = JSON.stringify(message).split(",");
+            message_data = message_data.filter((line) => !line.includes("null"));
+            let short_message = "";
+            for(let i = 0; i < message_data.length; i++){
+                short_message += message_data[i] + "\n";
+            }
+
+            all_notify_chats.forEach(async (chat) => {
+                await bot.sendMessage(chat, `Новый запрос: \n ${short_message}`);
+            });
+
+            if (message.event === "RegisterService" && !ws.serviceID){
+                RegisterService(message.serviceName, ws, message.requests);
+            }
+            else if (message.event === "ConnectUser"){
+                const request = {
+                    event: "ConnectUser",
+                    clientID: ws.clientID,
+                    identifier: message.identifier,
+                    password: message.password
+                };
+                if (services["UserControlsService"] && services["UserControlsService"].length > 0){
+                    services["UserControlsService"][0].send(JSON.stringify(request));
+                }
+                if (services["MessagingService"] && services["MessagingService"].length > 0){
+                    services["MessagingService"][0].send(JSON.stringify(request));
+                }
+            }
+            else if (message.event === "DisconnectUser") {
+                const request = {
+                    event: "DisconnectUser",
+                    clientID: ws.clientID
+                };
+                if (services["UserControlsService"] && services["UserControlsService"].length > 0){
+                    services["UserControlsService"][0].send(JSON.stringify(request));
+                }
+                if (services["MessagingService"] && services["MessagingService"].length > 0){
+                    services["MessagingService"][0].send(JSON.stringify(request));
+                }
+            }
+            else if (ws.clientID && !ws.serviceID){
+                SendFromClientToService(ws, message);
+            }
+            else if (ws.serviceID && message.clientID){
+                SendFromServiceToClient(ws, message);
+            }
+            else if (ws.serviceID && (message.service || message.serviceID)){
+                SendFromServiceToService(ws, message);
+            }
+            else{
+                console.log("Unknown request!");
+                console.log(message);
+            }
+        }
+        catch(err){
+            console.log("Error: " + err);
+        }
+    });
+    ws.on("close", () => {
+        if (ws.serviceName){
+            RemoveService(ws);
+        }
+        if (ws.clientID){
+            const request = {
+                event: "DisconnectUser",
+                clientID: ws.clientID
+            };
+            if (services["UserControlsService"] && services["UserControlsService"].length > 0){
+                services["UserControlsService"][0].send(JSON.stringify(request));
+            }
+            if (services["MessagingService"] && services["MessagingService"].length > 0){
+                services["MessagingService"][0].send(JSON.stringify(request));
+            }
+            RemoveClient(ws);
+        }
+    });
+});
+
+
+bot.on('text', async msg => {
+    try {
+        if(msg.text == '/register_chat') {
+            const index = notify_chats.indexOf(msg.chat.id);
+            if (index === -1){
+                notify_chats.push(msg.chat.id);
+                await bot.sendMessage(msg.chat.id, `Чат успешно зарегистрирован!`);
+            }
+            else{
+                await bot.sendMessage(msg.chat.id, `Чат уже зарегистрирован!`);
+            }
+        }
+        else if (msg.text == "/remove_chat"){
+            const index = notify_chats.indexOf(msg.chat.id);
+            if (index !== -1){
+                notify_chats.splice(index, 1);
+                await bot.sendMessage(msg.chat.id, `Чат успешно удален!`);
+            }
+            else{
+                await bot.sendMessage(msg.chat.id, `Этот чат и не был зарегистрирован!`);
+            }
+        }
+        else if (msg.text == "/get_error_requests"){
+            const index = error_notify_chats.indexOf(msg.chat.id);
+            if (index === -1){
+                error_notify_chats.push(msg.chat.id);
+                await bot.sendMessage(msg.chat.id, `Теперь вам будут приходить все ошибочные запросы!`);
+            }
+            else{
+                await bot.sendMessage(msg.chat.id, `Вам уже приходят все ошибочные запросы!`);
+            }
+        }
+        else if (msg.text == "/remove_error_requests"){
+            const index = error_notify_chats.indexOf(msg.chat.id);
+            if (index !== -1){
+                error_notify_chats.splice(index, 1);
+                await bot.sendMessage(msg.chat.id, `Теперь вам не будут приходить все ошибочные запросы!`);
+            }
+            else{
+                await bot.sendMessage(msg.chat.id, `Вам и так не приходят все ошибочные запросы!`);
+            }
+        }
+        else if (msg.text == "/get_all_requests"){
+            const index = all_notify_chats.indexOf(msg.chat.id);
+            if (index === -1){
+                all_notify_chats.push(msg.chat.id);
+                await bot.sendMessage(msg.chat.id, `Теперь вам будут приходить все запросы!`);
+            }
+            else{
+                await bot.sendMessage(msg.chat.id, `Вам уже приходят все запросы!`);
+            }
+        }
+        else if (msg.text == "/remove_all_requests"){
+            const index = all_notify_chats.indexOf(msg.chat.id);
+            if (index !== -1){
+                all_notify_chats.splice(index, 1);
+                await bot.sendMessage(msg.chat.id, `Теперь вам не будут приходить все запросы!`);
+            }
+            else{
+                await bot.sendMessage(msg.chat.id, `Вам и так не приходят все запросы!`);
+            }
+        }
+    }
+    catch(error) {
+        console.log(error);
+    }
+});
+
+function RegisterService(serviceName, ws, requests){
+    RemoveClient(ws);
+    for(let i = 0; i < requests.length; i++){
+        requestsHandlers[requests[i]] = serviceName;
+    }
+    ws.serviceName = serviceName;
+    ws.serviceID = serviceID;
+    serviceID++;
+    servicesList.push(ws);
+    if (serviceName in services)
+        services[serviceName].push(ws);
+    else
+        services[serviceName] = [ws];
+    console.log(`Service ${serviceName} successfuly added!`);
+
+    notify_chats.forEach(async (chat) => {
+        await bot.sendMessage(chat, `Сервис ${ws.serviceName} был подключен!`);
+    });
+}
+
+function RemoveService(ws){
+    const index = services[ws.serviceName].findIndex(con => con.serviceID === ws.serviceID);
+    if (index !== -1){
+        services[ws.serviceName].splice(index, 1);
+        console.log(`Service ${ws.serviceName} successfuly removed!`);
+    }
+    const indexInList = servicesList.findIndex(con => con.serviceID === ws.serviceID);
+    if (indexInList !== -1)
+        servicesList.splice(indexInList, 1);
+
+    notify_chats.forEach(async (chat) => {
+        await bot.sendMessage(chat, `Сервис ${ws.serviceName} был отключен!`);
+    });
+}
+
+function RegisterClient(ws){
+    ws.clientID = clientID;
+    clients[clientID] = ws;
+    clientID++;
+}
+
+function RemoveClient(ws){
+    clients[ws.clientID] = undefined;
+    ws.clientID = undefined;
+}
+
+function SendFromClientToService(ws, message){
+    const serviceName = requestsHandlers[message.event];
+
+    if (services[serviceName] && services[serviceName].length > 0){
+        message.clientID = ws.clientID;
+        services[serviceName][0].send(JSON.stringify(message));
+    }
+    else{
+        const errorReply = {
+            event: "Error",
+            data: "Sorry, we cannot answer this request"
+        };
+        ws.send(JSON.stringify(errorReply));
+
+        error_notify_chats.forEach(async (chat) => {
+            await bot.sendMessage(chat, `Ошибочный запрос: \n ${JSON.stringify(message)}`);
+        });
+    }
+}
+
+function SendFromServiceToClient(ws, message){
+    const id = message.clientID;
+    if (clients.hasOwnProperty(id)){
+        message.clientID = undefined;
+        clients[id].send(JSON.stringify(message));
+    }
+}
+
+function SendFromServiceToService(ws, message){
+    if (message.service){
+        if (services[message.service] && services[message.service].length > 0){
+            const serviceName = message.service;
+            message.service = undefined;
+            message.serviceID = ws.serviceID;
+            services[serviceName][0].send(JSON.stringify(message));
+        }
+        else{
+            const errorReply = {
+                event: "Error",
+                data: "Cannot send your data to this service!"
+            }
+            ws.send(JSON.stringify(errorReply));
+        }
+    }
+    else if (message.serviceID){
+        const index = servicesList.findIndex(con => con.serviceID === message.serviceID);
+        if (index !== -1){
+            message.serviceID = ws.serviceID;
+            servicesList[index].send(JSON.stringify(message));
+        }
+        else{
+            const errorReply = {
+                event: "Error",
+                data: "Cannot send your data to this service!"
+            }
+            ws.send(JSON.stringify(errorReply));
+        }
+    }
+}

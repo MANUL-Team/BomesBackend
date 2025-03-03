@@ -29,6 +29,7 @@ workflow:
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
+    - mv index_dev.js index.js
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
@@ -68,6 +69,7 @@ workflow:
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
+    - mv index_prod.js index.js
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
