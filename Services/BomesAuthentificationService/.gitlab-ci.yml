@@ -13,4 +13,6 @@ variables:
 # *В рамках примера это не нужно
 build-authentification-service:
   extends: .build-template-servises
+
+production-authentification-service:
   extends: .production-template-servises

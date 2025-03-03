@@ -13,4 +13,6 @@ variables:
 # *В рамках примера это не нужно
 build-api:
   extends: .build-template-api
+
+production-api:
   extends: .production-template-api

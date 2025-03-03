@@ -13,4 +13,6 @@ variables:
 # *В рамках примера это не нужно
 build-chatscontrols-service:
   extends: .build-template-servises
+
+production-chatscontrols-service:
   extends: .production-template-servises
