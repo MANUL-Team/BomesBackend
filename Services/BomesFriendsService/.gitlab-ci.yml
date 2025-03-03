@@ -11,8 +11,8 @@ variables:
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
-build-chatscontrols-service:
+build-friends-service:
   extends: .build-template-servises
 
-production-chatscontrols-service:
+production-friends-service:
   extends: .production-template-servises
