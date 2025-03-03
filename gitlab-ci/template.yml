@@ -20,7 +20,7 @@ workflow:
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
-  tags: DevBomes
+  tags: [DevBomes]
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -43,7 +43,7 @@ workflow:
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
-  tags: DevBomes
+  tags: [DevBomes]
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -59,7 +59,7 @@ workflow:
   stage: build-api
   rules:
     - when: manual
-  tags: production
+  tags: [production]
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -75,7 +75,7 @@ workflow:
   stage: build
   rules:
     - when: manual
-  tags: production
+  tags: [production]
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
