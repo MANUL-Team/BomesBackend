@@ -137,11 +137,8 @@ async function GetUsers(connection, ws, identifier, password, skip, search, clie
         if (user.password === password){
             let sql;
             let data;
-            let hasSkip = true;
-            if (skip === undefined)
-                hasSkip = false;
-            if (!skip)
-                skip = 0
+            let hasSkip = skip !== undefined;
+            if (!skip) skip = 0
             if (search){
                 sql = "SELECT * FROM `users` WHERE LOWER(username) LIKE '%" + search + "%'";
                 data = [skip];

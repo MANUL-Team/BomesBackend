@@ -177,8 +177,6 @@ function IsUserOnline(connection, ws, identifier, clientID){
             ws.sendUTF(JSON.stringify(reply));
         }
     });
-
-    
 }
 
 function GetOnlineUsers(ws, serviceID){
