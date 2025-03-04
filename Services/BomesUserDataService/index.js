@@ -56,6 +56,9 @@ client.on("connect", (connection) => {
                 if (request_user && request_user.identifier && request_user.password && message.identifier && message.clientID){
                     GetUser(con, connection, request_user.identifier, request_user.password, message.identifier, message.clientID);
                 }
+                else if (message.request_identifier && message.request_password && message.identifier) {
+                    GetUser(con, connection, message.request_identifier, message.request_password, message.identifier, message.clientID);
+                }
                 break;
             case "GetUsers":
                 if (request_user && request_user.identifier && request_user.password && message.clientID){
