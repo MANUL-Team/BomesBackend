@@ -1,11 +1,31 @@
 require("dotenv").config();
 
-const ws = require('ws'); // Web Socket
+const ws = require('ws');
 const TelegramBot = require('node-telegram-bot-api');
+const mysql = require("mysql2");
+const Utils = require("./Utils");
 
 const PORT = process.env.PORT;
 
 const API_KEY_BOT = process.env.API_KEY_BOT;
+
+const connectionConfig = {
+    host: process.env.DATABASE_ADDRESS,
+    user: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
+}
+
+let con = mysql.createConnection(connectionConfig);
+con.connect(function (err) {
+    if (err) console.error(err);
+    else{
+        console.log("Success SQL connection!");
+        con.query("UPDATE `users` SET currentOnline = 0", function(err, result){
+            if (err) console.log(err);
+        });
+    }
+});
 
 const bot = new TelegramBot(API_KEY_BOT, {
     polling: true
@@ -13,21 +33,21 @@ const bot = new TelegramBot(API_KEY_BOT, {
 
 // PRODUCTION
 // -----------------------------------------------------------------------------
-// const https = require('https');
-// const fs = require('fs');
-// const server = https.createServer({
-//     cert: fs.readFileSync('./ssl/domain_name.crt'),
-//     key: fs.readFileSync('./ssl/private.key'),
-//     chain: fs.readFileSync('./ssl/chain.crt'),
-// });
-// const wss = new ws.Server({server});
-// server.listen(PORT, () => console.log(`Server started on ${PORT} with WSS`));
+//  const https = require('https');
+//  const fs = require('fs');
+//  const server = https.createServer({
+//      cert: fs.readFileSync('./ssl/domain_name.crt'),
+//      key: fs.readFileSync('./ssl/private.key'),
+//      chain: fs.readFileSync('./ssl/chain.crt'),
+//  });
+//  const wss = new ws.Server({server});
+//  server.listen(PORT, () => console.log(`Server started on ${PORT} with WSS`));
 // -----------------------------------------------------------------------------
 
 // DEVELOPMENT
 // -----------------------------------------------------------------------------
 const wss = new ws.Server({
-    port: PORT
+   port: PORT
 }, () => console.log(`Server started on ${PORT} with WS`));
 // -----------------------------------------------------------------------------
 
@@ -39,6 +59,8 @@ const servicesList = []
 
 const clients = {};
 let clientID = 0;
+
+const connected_clients = {};
 
 const notify_chats = [];
 const error_notify_chats = [];
@@ -71,9 +93,7 @@ wss.on("connection", (ws, req) => {
                     identifier: message.identifier,
                     password: message.password
                 };
-                if (services["UserControlsService"] && services["UserControlsService"].length > 0){
-                    services["UserControlsService"][0].send(JSON.stringify(request));
-                }
+                ConnectUser(ws, message.identifier, message.password, ws.clientID);
                 if (services["MessagingService"] && services["MessagingService"].length > 0){
                     services["MessagingService"][0].send(JSON.stringify(request));
                 }
@@ -83,6 +103,7 @@ wss.on("connection", (ws, req) => {
                     event: "DisconnectUser",
                     clientID: ws.clientID
                 };
+                connected_clients[ws.clientID] = undefined;
                 if (services["UserControlsService"] && services["UserControlsService"].length > 0){
                     services["UserControlsService"][0].send(JSON.stringify(request));
                 }
@@ -117,9 +138,7 @@ wss.on("connection", (ws, req) => {
                 event: "DisconnectUser",
                 clientID: ws.clientID
             };
-            if (services["UserControlsService"] && services["UserControlsService"].length > 0){
-                services["UserControlsService"][0].send(JSON.stringify(request));
-            }
+            DisconnectUser(ws, ws.clientID);
             if (services["MessagingService"] && services["MessagingService"].length > 0){
                 services["MessagingService"][0].send(JSON.stringify(request));
             }
@@ -302,3 +321,93 @@ function SendFromServiceToService(ws, message){
         }
     }
 }
+
+async function ConnectUser(ws, identifier, password, clientID){
+    if (connected_clients[clientID])
+        return;
+    await Utils.GetUserFromDB(con, identifier).then(value => {
+        if (value.password === password){
+            connected_clients[clientID] = {
+                identifier: identifier,
+                password: password
+            }
+            AddNewOnlineUser(con, user.identifier);
+            const request_to_monitoring_service = {
+                event: "UpdateData",
+                type: "AddOnline",
+                user: {
+                    identifier: identifier,
+                    username: value.username
+                }
+            }
+            if (services["MonitoringService"] && services["MonitoringService"].length > 0){
+                services["MonitoringService"][0].send(JSON.stringify(request_to_monitoring_service));
+            }
+        }
+        else{
+            let reply = {
+                event: "WrongAuthInIdentifier"
+            }
+            ws.send(JSON.stringify(reply));
+        }
+    });
+}
+
+function DisconnectUser(ws, clientID) {
+    if (!connected_clients[clientID])
+        return;
+
+    const identifier = connected_clients[clientID].identifier;
+
+    const sql = "UPDATE `users` SET lastOnline = ? WHERE identifier = ?";
+    const data = [Date.now() / 1000, identifier];
+    con.query(sql, data, function (err, result) {
+        if (err) console.log(err);
+    });
+    RemoveOnlineUser(con, identifier);
+    connected_clients[clientID] = undefined;
+
+    const request_to_monitoring_service = {
+        event: "UpdateData",
+        type: "RemoveOnline",
+        user: {
+            identifier: identifier
+        }
+    }
+    if (services["MonitoringService"] && services["MonitoringService"].length > 0){
+        services["MonitoringService"][0].send(JSON.stringify(request_to_monitoring_service));
+    }
+    
+    const request_to_monitoring_service2 = {
+        event: "RemoveUsersCountListener",
+        clientID: clientID
+    }
+    if (services["MonitoringService"] && services["MonitoringService"].length > 0){
+        services["MonitoringService"][0].send(JSON.stringify(request_to_monitoring_service2));
+    }
+
+    const request_to_monitoring_service3 = {
+        event: "RemoveOnlineListener",
+        clientID: clientID
+    }
+    if (services["MonitoringService"] && services["MonitoringService"].length > 0){
+        services["MonitoringService"][0].send(JSON.stringify(request_to_monitoring_service3));
+    }
+}
+
+function AddNewOnlineUser(connection, identifier){
+    const sql = `UPDATE \`users\` SET currentOnline = currentOnline + 1 WHERE identifier = ?`;
+    const data = [identifier];
+    connection.query(sql, data, function (err, result) {
+        if (err) console.log(err);
+    });
+}
+
+function RemoveOnlineUser(connection, identifier){
+    const sql = `UPDATE \`users\` SET currentOnline = currentOnline - 1 WHERE identifier = ?`;
+    const data = [identifier];
+    connection.query(sql, data, function (err, result) {
+        if (err) console.log(err);
+    });
+}
+
