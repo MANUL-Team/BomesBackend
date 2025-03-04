@@ -48,6 +48,7 @@ client.on("connect", (connection) => {
 
     connection.on("message", (message) => {
         message = JSON.parse(message.utf8Data);
+        console.log(message.event)
         switch(message.event){
             case "GetStickers":
                 GetStickers(con, connection, message.clientID);
