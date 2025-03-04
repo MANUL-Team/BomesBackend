@@ -49,7 +49,7 @@ client.on("connect", (connection) => {
 
     connection.on("message", async (message) => {
         message = JSON.parse(message.utf8Data);
-        console.log(message);
+        const request_user = message.request_user;
         switch(message.event){
             case "CreateChat":
                 if (message.isLocalChat){
@@ -67,21 +67,21 @@ client.on("connect", (connection) => {
                 }
                 break;
             case "GetChatMessages":
-                if (message.table_name && message.identifier && message.password && message.clientID)
-                    await GetChatMessages(con, connection, message.table_name, message.identifier, message.password, message.loadedMessages, message.clientID);
+                if (message.table_name && request_user.identifier && request_user.password && message.clientID)
+                    await GetChatMessages(con, connection, message.table_name, request_user.identifier, request_user.password, message.loadedMessages, message.clientID);
                 break;
             case "GetChatUsers":
-                if (message.identifier && message.password && message.table_name && message.clientID)
-                    await GetChatUsers(con, connection, message.identifier, message.password, message.table_name, message.clientID);
+                if (request_user.identifier && request_user.password && message.table_name && message.clientID)
+                    await GetChatUsers(con, connection, request_user.identifier, request_user.password, message.table_name, message.clientID);
                 break;
             case "RenameChat":
-                if (message.identifier && message.password && message.name && message.chatIdentifier && message.clientID){
-                    await RenameChat(con, connection, message.identifier, message.password, message.name, message.chatIdentifier, message.clientID);
+                if (request_user.identifier && request_user.password && message.name && message.chatIdentifier && message.clientID){
+                    await RenameChat(con, connection, request_user.identifier, request_user.password, message.name, message.chatIdentifier, message.clientID);
                 }
                 break;
             case "SwitchChatAvatar":
-                if (message.identifier && message.password && message.avatar && message.chatIdentifier && message.clientID){
-                    await SwitchChatAvatar(con, connection, message.identifier, message.password, message.avatar, message.chatIdentifier, message.clientID);
+                if (request_user.identifier && request_user.password && message.avatar && message.chatIdentifier && message.clientID){
+                    await SwitchChatAvatar(con, connection, request_user.identifier, request_user.password, message.avatar, message.chatIdentifier, message.clientID);
                 }
                 break;
             default:

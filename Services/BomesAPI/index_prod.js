@@ -46,9 +46,9 @@ const bot = new TelegramBot(API_KEY_BOT, {
 
 // DEVELOPMENT
 // -----------------------------------------------------------------------------
-//const wss = new ws.Server({
+// const wss = new ws.Server({
 //    port: PORT
-//}, () => console.log(`Server started on ${PORT} with WS`));
+// }, () => console.log(`Server started on ${PORT} with WS`));
 // -----------------------------------------------------------------------------
 
 
@@ -64,24 +64,12 @@ const connected_clients = {};
 
 const notify_chats = [];
 const error_notify_chats = [];
-const all_notify_chats = [];
 
 wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
             message = JSON.parse(message);
-
-            let message_data = JSON.stringify(message).split(",");
-            message_data = message_data.filter((line) => !line.includes("null"));
-            let short_message = "";
-            for(let i = 0; i < message_data.length; i++){
-                short_message += message_data[i] + "\n";
-            }
-
-            all_notify_chats.forEach(async (chat) => {
-                await bot.sendMessage(chat, `Новый запрос: \n ${short_message}`);
-            });
 
             if (message.event === "RegisterService" && !ws.serviceID){
                 RegisterService(message.serviceName, ws, message.requests);
@@ -103,10 +91,7 @@ wss.on("connection", (ws, req) => {
                     event: "DisconnectUser",
                     clientID: ws.clientID
                 };
-                connected_clients[ws.clientID] = undefined;
-                if (services["UserControlsService"] && services["UserControlsService"].length > 0){
-                    services["UserControlsService"][0].send(JSON.stringify(request));
-                }
+                DisconnectUser(ws, ws.clientID);
                 if (services["MessagingService"] && services["MessagingService"].length > 0){
                     services["MessagingService"][0].send(JSON.stringify(request));
                 }
@@ -190,26 +175,6 @@ bot.on('text', async msg => {
                 await bot.sendMessage(msg.chat.id, `Вам и так не приходят все ошибочные запросы!`);
             }
         }
-        else if (msg.text == "/get_all_requests"){
-            const index = all_notify_chats.indexOf(msg.chat.id);
-            if (index === -1){
-                all_notify_chats.push(msg.chat.id);
-                await bot.sendMessage(msg.chat.id, `Теперь вам будут приходить все запросы!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Вам уже приходят все запросы!`);
-            }
-        }
-        else if (msg.text == "/remove_all_requests"){
-            const index = all_notify_chats.indexOf(msg.chat.id);
-            if (index !== -1){
-                all_notify_chats.splice(index, 1);
-                await bot.sendMessage(msg.chat.id, `Теперь вам не будут приходить все запросы!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Вам и так не приходят все запросы!`);
-            }
-        }
     }
     catch(error) {
         console.log(error);
@@ -264,9 +229,11 @@ function RemoveClient(ws){
 
 function SendFromClientToService(ws, message){
     const serviceName = requestsHandlers[message.event];
+    const request_user = connected_clients[ws.clientID];
 
     if (services[serviceName] && services[serviceName].length > 0){
         message.clientID = ws.clientID;
+        message.request_user = request_user;
         services[serviceName][0].send(JSON.stringify(message));
     }
     else{
@@ -286,6 +253,7 @@ function SendFromServiceToClient(ws, message){
     const id = message.clientID;
     if (clients.hasOwnProperty(id)){
         message.clientID = undefined;
+        message.request_user = undefined;
         clients[id].send(JSON.stringify(message));
     }
 }
@@ -331,7 +299,7 @@ async function ConnectUser(ws, identifier, password, clientID){
                 identifier: identifier,
                 password: password
             }
-            AddNewOnlineUser(con, user.identifier);
+            AddNewOnlineUser(con, identifier);
             const request_to_monitoring_service = {
                 event: "UpdateData",
                 type: "AddOnline",

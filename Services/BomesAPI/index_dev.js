@@ -229,9 +229,11 @@ function RemoveClient(ws){
 
 function SendFromClientToService(ws, message){
     const serviceName = requestsHandlers[message.event];
+    const request_user = connected_clients[ws.clientID];
 
     if (services[serviceName] && services[serviceName].length > 0){
         message.clientID = ws.clientID;
+        message.request_user = request_user;
         services[serviceName][0].send(JSON.stringify(message));
     }
     else{
@@ -251,6 +253,7 @@ function SendFromServiceToClient(ws, message){
     const id = message.clientID;
     if (clients.hasOwnProperty(id)){
         message.clientID = undefined;
+        message.request_user = undefined;
         clients[id].send(JSON.stringify(message));
     }
 }
