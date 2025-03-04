@@ -49,18 +49,19 @@ client.on("connect", (connection) => {
 
     connection.on("message", (message) => {
         message = JSON.parse(message.utf8Data);
+        const request_user = message.request_user;
         switch(message.event){
             case "AddFriend":
-                AddFriend(con, connection, message.request_identifier, message.request_password, message.identifier);
+                AddFriend(con, connection, request_user.identifier, request_user.password, message.identifier);
                 break;
             case "RemoveFriend":
-                RemoveFriend(con, connection, message.request_identifier, message.request_password, message.identifier);
+                RemoveFriend(con, connection, request_user.identifier, request_user.password, message.identifier);
                 break;
             case "GetFriends":
-                GetFriends(con, connection, message.request_identifier, message.request_password, message.identifier, message.clientID);
+                GetFriends(con, connection, request_user.identifier, request_user.password, message.identifier, message.clientID);
                 break;
             case "GetIncomingFriends":
-                GetIncomingFriends(con, connection, message.identifier, message.password, message.clientID);
+                GetIncomingFriends(con, connection, request_user.identifier, request_user.password, message.clientID);
                 break;
             default:
                 console.log(message);

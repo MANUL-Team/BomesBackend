@@ -50,20 +50,21 @@ client.on("connect", (connection) => {
 
     connection.on("message", (message) => {
         message = JSON.parse(message.utf8Data);
+        const request_user = message.request_user;
         switch(message.event){
             case "GetUser":
-                if (message.request_identifier && message.request_password && message.identifier && message.clientID){
-                    GetUser(con, connection, message.request_identifier, message.request_password, message.identifier, message.clientID);
+                if (request_user.identifier && request_user.password && message.identifier && message.clientID){
+                    GetUser(con, connection, request_user.request_identifier, request_user.request_password, message.identifier, message.clientID);
                 }
                 break;
             case "GetUsers":
-                if (message.identifier && message.password && message.clientID){
-                    GetUsers(con, connection, message.identifier, message.password, message.skip, message.search, message.clientID);
+                if (request_user.identifier && request_user.password && message.clientID){
+                    GetUsers(con, connection, request_user.identifier, request_user.password, message.skip, message.search, message.clientID);
                 }
                 break;
             case "GetUsersByIdentifiers":
-                if (message.identifier && message.password && message.identifiers && message.clientID){
-                    GetUsersByIdentifiers(con, connection, message.identifier, message.password, message.identifiers, message.clientID);
+                if (request_user.identifier && request_user.password && message.identifiers && message.clientID){
+                    GetUsersByIdentifiers(con, connection, request_user.identifier, request_user.password, message.identifiers, message.clientID);
                 }
                 break;
             case "UpdateValue":
@@ -72,13 +73,13 @@ client.on("connect", (connection) => {
                 }
                 break;
             case "GetUserChats":
-                if (message.identifier && message.password && message.clientID){
-                    GetUserChats(con, connection, message.identifier, message.password, message.clientID);
+                if (request_user.identifier && request_user.password && message.clientID){
+                    GetUserChats(con, connection, request_user.identifier, request_user.password, message.clientID);
                 }
                 break;
             case "UpdateUserData":
-                if (message.name && message.identifier && message.clientID){
-                    UpdateUserData(con, connection, message.name, message.description, message.identifier, message.clientID);
+                if (message.name && request_user.identifier && message.clientID){
+                    UpdateUserData(con, connection, message.name, message.description, request_user.identifier, message.clientID);
                 }
                 break;
         }
