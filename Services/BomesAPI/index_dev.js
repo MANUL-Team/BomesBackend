@@ -299,7 +299,6 @@ async function ConnectUser(ws, identifier, password, clientID){
     }
     await Utils.GetUserFromDB(con, identifier).then(value => {
         if (value.password === password){
-            
             AddNewOnlineUser(con, identifier);
             const request_to_monitoring_service = {
                 event: "UpdateData",

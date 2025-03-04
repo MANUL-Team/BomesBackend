@@ -54,7 +54,7 @@ client.on("connect", (connection) => {
         switch(message.event){
             case "GetUser":
                 if (request_user && request_user.identifier && request_user.password && message.identifier && message.clientID){
-                    GetUser(con, connection, request_user.request_identifier, request_user.request_password, message.identifier, message.clientID);
+                    GetUser(con, connection, request_user.identifier, request_user.password, message.identifier, message.clientID);
                 }
                 break;
             case "GetUsers":
