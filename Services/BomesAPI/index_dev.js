@@ -331,7 +331,7 @@ async function ConnectUser(ws, identifier, password, clientID){
                 identifier: identifier,
                 password: password
             }
-            AddNewOnlineUser(con, user.identifier);
+            AddNewOnlineUser(con, identifier);
             const request_to_monitoring_service = {
                 event: "UpdateData",
                 type: "AddOnline",
