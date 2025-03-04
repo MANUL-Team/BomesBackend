@@ -50,7 +50,7 @@ client.on("connect", (connection) => {
 
     connection.on("message", (message) => {
         message = JSON.parse(message.utf8Data);
-        const request_user = message.request_user;
+        let request_user = message.request_user;
         if (!request_user) {
             if (message.request_identifier) {
                 request_user = {
