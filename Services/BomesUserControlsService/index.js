@@ -58,20 +58,11 @@ client.on("connect", (connection) => {
     connection.on("message", (message) => {
         message = JSON.parse(message.utf8Data);
         switch(message.event){
-            case "ConnectUser":
-                ConnectUser(con, connection, message.identifier, message.password, message.clientID);
-                break;
-            case "DisconnectUser":
-                DisconnectUser(con, connection, message.clientID);
-                break;
             case "IsUserOnline":
                 IsUserOnline(con, connection, message.identifier, message.clientID);
                 break;
             case "SetToken":
                 SetToken(con, message.identifier, message.password, message.token);
-                break;
-            case "GetOnlineUsers":
-                GetOnlineUsers(connection, message.serviceID);
                 break;
             default:
                 console.log(message);
@@ -92,78 +83,6 @@ function reconnectingDatabase(){
     });
 }
 
-async function ConnectUser(connection, ws, identifier, password, clientID){
-    const index = onlineUsers.findIndex(user => user.clientID === clientID);
-    if (index !== -1)
-        onlineUsers.splice(index, 1);
-    await Utils.GetUserFromDB(connection, identifier).then(value => {
-        if (value.password === password){
-            let user = {
-                identifier: identifier,
-                clientID: clientID,
-                username: value.username
-            };
-            onlineUsers.push(user);
-            AddNewOnlineUser(con, user.identifier);
-            const request_to_monitoring_service = {
-                service: "MonitoringService",
-                event: "UpdateData",
-                type: "AddOnline",
-                user: {
-                    identifier: identifier,
-                    username: value.username
-                }
-            }
-            ws.sendUTF(JSON.stringify(request_to_monitoring_service));
-        }
-        else{
-            let reply = {
-                event: "WrongAuthInIdentifier",
-                clientID: clientID
-            }
-            ws.sendUTF(JSON.stringify(reply));
-        }
-    });
-}
-
-function DisconnectUser(connection, ws, clientID) {
-    let index = onlineUsers.findIndex(user => user.clientID === clientID);
-    if (index !== -1){
-        const identifier = onlineUsers[index].identifier;
-
-        const sql = "UPDATE `users` SET lastOnline = ? WHERE identifier = ?";
-        const data = [Date.now() / 1000, identifier];
-        connection.query(sql, data, function (err, result) {
-            if (err) console.log(err);
-        });
-        RemoveOnlineUser(con, identifier);
-        onlineUsers.splice(index, 1);
-
-        const request_to_monitoring_service = {
-            service: "MonitoringService",
-            event: "UpdateData",
-            type: "RemoveOnline",
-            user: {
-                identifier: identifier
-            }
-        }
-        ws.sendUTF(JSON.stringify(request_to_monitoring_service));
-    }
-    const request_to_monitoring_service2 = {
-        service: "MonitoringService",
-        event: "RemoveUsersCountListener",
-        clientID: clientID
-    }
-    ws.sendUTF(JSON.stringify(request_to_monitoring_service2));
-
-    const request_to_monitoring_service3 = {
-        service: "MonitoringService",
-        event: "RemoveOnlineListener",
-        clientID: clientID
-    }
-    ws.sendUTF(JSON.stringify(request_to_monitoring_service3));
-}
-
 function IsUserOnline(connection, ws, identifier, clientID){
     const sql = "SELECT COUNT(*) FROM `users` WHERE identifier = ? and currentOnline > 0;";
     connection.query(sql, [identifier], function(err, result){
@@ -177,15 +96,6 @@ function IsUserOnline(connection, ws, identifier, clientID){
             ws.sendUTF(JSON.stringify(reply));
         }
     });
-}
-
-function GetOnlineUsers(ws, serviceID){
-    const reply = {
-        onlineUsers: onlineUsers,
-        event: "ReturnOnlineUsers",
-        serviceID: serviceID
-    };
-    ws.sendUTF(JSON.stringify(reply));
 }
 
 async function SetToken(connection, identifier, password, token){
