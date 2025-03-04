@@ -53,17 +53,17 @@ client.on("connect", (connection) => {
         const request_user = message.request_user;
         switch(message.event){
             case "GetUser":
-                if (request_user.identifier && request_user.password && message.identifier && message.clientID){
+                if (request_user && request_user.identifier && request_user.password && message.identifier && message.clientID){
                     GetUser(con, connection, request_user.request_identifier, request_user.request_password, message.identifier, message.clientID);
                 }
                 break;
             case "GetUsers":
-                if (request_user.identifier && request_user.password && message.clientID){
+                if (request_user && request_user.identifier && request_user.password && message.clientID){
                     GetUsers(con, connection, request_user.identifier, request_user.password, message.skip, message.search, message.clientID);
                 }
                 break;
             case "GetUsersByIdentifiers":
-                if (request_user.identifier && request_user.password && message.identifiers && message.clientID){
+                if (request_user && request_user.identifier && request_user.password && message.identifiers && message.clientID){
                     GetUsersByIdentifiers(con, connection, request_user.identifier, request_user.password, message.identifiers, message.clientID);
                 }
                 break;
@@ -73,7 +73,7 @@ client.on("connect", (connection) => {
                 }
                 break;
             case "GetUserChats":
-                if (request_user.identifier && request_user.password && message.clientID){
+                if (request_user && request_user.identifier && request_user.password && message.clientID){
                     GetUserChats(con, connection, request_user.identifier, request_user.password, message.clientID);
                 }
                 break;
