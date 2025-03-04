@@ -22,7 +22,7 @@ function GetUserFromDB(connection, identifier){
                     resolve(user);
                 }
                 else{
-                    error("ERROR! Identifier: " + identifier);
+                    console.log("ERROR! Identifier: " + identifier);
                 }
             }
         });
