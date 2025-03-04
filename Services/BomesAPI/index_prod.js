@@ -293,12 +293,12 @@ function SendFromServiceToService(ws, message){
 async function ConnectUser(ws, identifier, password, clientID){
     if (connected_clients[clientID])
         return;
+    connected_clients[clientID] = {
+        identifier: identifier,
+        password: password
+    }
     await Utils.GetUserFromDB(con, identifier).then(value => {
         if (value.password === password){
-            connected_clients[clientID] = {
-                identifier: identifier,
-                password: password
-            }
             AddNewOnlineUser(con, identifier);
             const request_to_monitoring_service = {
                 event: "UpdateData",
@@ -317,6 +317,7 @@ async function ConnectUser(ws, identifier, password, clientID){
                 event: "WrongAuthInIdentifier"
             }
             ws.send(JSON.stringify(reply));
+            connected_clients[clientID] = undefined;
         }
     });
 }
