@@ -54,6 +54,7 @@ workflow:
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
+    - sed 's/wss/ws/' .env -i
     - docker build -t $DOCKERNAME .
     - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
