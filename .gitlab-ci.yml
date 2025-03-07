@@ -66,6 +66,7 @@ BomesAPI_prod:
   <<: *BomesAPI_dev
   stage: production-api
   variables:
+    PROJECT: "BomesAPI"
     RUN_SPECIFIC_JOB: "prod-api"
 
 BomesAuthentificationService_dev: &BomesAuthentificationService_dev
@@ -79,6 +80,7 @@ BomesAuthentificationService_prod:
   <<: *BomesAuthentificationService_dev
   stage: production
   variables:
+    PROJECT: "BomesAuthentificationService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesChatControlsService_dev: &BomesChatControlsService_dev
@@ -92,6 +94,7 @@ BomesChatControlsService_prod:
   <<: *BomesChatControlsService_dev
   stage: production
   variables:
+    PROJECT: "BomesChatControlsService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesFriendsService_dev: &BomesFriendsService_dev
@@ -105,6 +108,7 @@ BomesFriendsService_prod:
   <<: *BomesFriendsService_dev
   stage: production
   variables:
+    PROJECT: "BomesFriendsService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesGettingDataService_dev: &BomesGettingDataService_dev
@@ -118,6 +122,7 @@ BomesGettingDataService_prod:
   <<: *BomesGettingDataService_dev
   stage: production
   variables:
+    PROJECT: "BomesGettingDataService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesMailService_dev: &BomesMailService_dev
@@ -131,6 +136,7 @@ BomesMailService_prod:
   <<: *BomesMailService_dev
   stage: production
   variables:
+    PROJECT: "BomesMailService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesMessagingService_dev: &BomesMessagingService_dev
@@ -144,6 +150,7 @@ BomesMessagingService_prod:
   <<: *BomesMessagingService_dev
   stage: production
   variables:
+    PROJECT: "BomesMessagingService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesMonitoringService_dev: &BomesMonitoringService_dev
@@ -157,6 +164,7 @@ BomesMonitoringService_prod:
   <<: *BomesMonitoringService_dev
   stage: production
   variables:
+    PROJECT: "BomesMonitoringService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesNotificationService_dev: &BomesNotificationService_dev
@@ -170,6 +178,7 @@ BomesNotificationService_prod:
   <<: *BomesNotificationService_dev
   stage: production
   variables:
+    PROJECT: "BomesNotificationService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesUserControlsService_dev: &BomesUserControlsService_dev
@@ -183,6 +192,7 @@ BomesUserControlsService_prod:
   <<: *BomesUserControlsService_dev
   stage: production
   variables:
+    PROJECT: "BomesUserControlsService"
     RUN_SPECIFIC_JOB: "prod"
 
 BomesUserDataService_dev: &BomesUserDataService_dev
@@ -191,9 +201,10 @@ BomesUserDataService_dev: &BomesUserDataService_dev
   variables:
     PROJECT: "BomesUserDataService"
     RUN_SPECIFIC_JOB: "dev"
-    
+
 BomesUserDataService_prod:
   <<: *BomesUserDataService_dev
   stage: production
   variables:
+    PROJECT: "BomesUserDataService"
     RUN_SPECIFIC_JOB: "prod"

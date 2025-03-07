@@ -3,7 +3,7 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - production-api
   - production
-
+ 
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
