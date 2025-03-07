@@ -17,8 +17,8 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - build-api
-  - build
+  - dev-api
+  - dev
   - production-api
   - production
 
@@ -54,69 +54,77 @@ variables:
   trigger:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
+    needs:
+    - BomesAPI
 
-BomesAPI:
-  stage: build-api
+BomesAPI_dev: &BomesAPI_dev
+  stage: dev-api
   extends: .trigger_api
+  job: build-api
   variables:
     PROJECT: "BomesAPI"
 
-BomesAuthentificationService:
-  stage: build
+BomesAPI_prod:
+  <<: *BomesAPI_dev
+  stage: production-api
+  job: production-api
+
+BomesAuthentificationService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesAuthentificationService"
 
-BomesChatControlsService:
-  stage: build
+BomesChatControlsService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesChatControlsService"
 
-BomesFriendsService:
-  stage: build
+BomesFriendsService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesFriendsService"
 
-BomesGettingDataService:
-  stage: build
+BomesGettingDataService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesGettingDataService"
 
-BomesMailService:
-  stage: build
+BomesMailService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
 
-BomesMessagingService:
-  stage: build
+BomesMessagingService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesMessagingService"
 
-BomesMonitoringService:
-  stage: build
+BomesMonitoringService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesMonitoringService"
 
-BomesNotificationService:
-  stage: build
+BomesNotificationService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesNotificationService"
 
-BomesUserControlsService:
-  stage: build
+BomesUserControlsService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesUserControlsService"
 
-BomesUserDataService:
-  stage: build
+BomesUserDataService_dev:
+  stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesUserDataService"
