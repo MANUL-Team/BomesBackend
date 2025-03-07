@@ -31,7 +31,7 @@ variables:
   PARENT_LABELS: "$CI_MERGE_REQUEST_LABELS"
 
 .trigger_api:
-  trigger:
+  trigger: &trigger_api
     # Автомагически подбираем нужный файл
     include:
       - local: Services/$PROJECT/.gitlab-ci.yml
@@ -47,8 +47,7 @@ variables:
 .trigger:
   trigger:
     # Автомагически подбираем нужный файл
-    include:
-      - .trigger_api
+    <<: *trigger_api
     needs:
     - job: trigger_api
 
