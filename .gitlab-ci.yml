@@ -64,51 +64,61 @@ BomesAPI:
     PROJECT: "BomesAPI"
 
 BomesAuthentificationService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesAuthentificationService"
 
 BomesChatControlsService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesChatControlsService"
 
 BomesFriendsService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesFriendsService"
 
 BomesGettingDataService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesGettingDataService"
 
 BomesMailService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
 
 BomesMessagingService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesMessagingService"
 
 BomesMonitoringService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesMonitoringService"
 
 BomesNotificationService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesNotificationService"
 
 BomesUserControlsService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesUserControlsService"
 
 BomesUserDataService:
+  stage: build
   extends: .trigger
   variables:
     PROJECT: "BomesUserDataService"
