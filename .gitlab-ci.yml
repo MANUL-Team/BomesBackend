@@ -63,11 +63,13 @@ BomesAPI_dev: &BomesAPI_dev
   job: build-api
   variables:
     PROJECT: "BomesAPI"
+    RUN_SPECIFIC_JOB: "dev-api"
 
 BomesAPI_prod:
   <<: *BomesAPI_dev
   stage: production-api
-  job: production-api
+  variables:
+    RUN_SPECIFIC_JOB: "dev-api"
 
 BomesAuthentificationService_dev:
   stage: dev
