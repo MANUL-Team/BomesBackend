@@ -55,63 +55,59 @@ variables:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
   needs:
-  - build-api
+  - BomesAPI
 
-build-api:
-  stage: build-api
-  BomesAPI:
-    extends: .trigger_api
-    variables:
-      PROJECT: "BomesAPI"
+BomesAPI:
+  extends: .trigger_api
+  variables:
+    PROJECT: "BomesAPI"
 
-build:
-  stage: build
-  BomesAuthentificationService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesAuthentificationService"
+BomesAuthentificationService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesAuthentificationService"
 
-  BomesChatControlsService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesChatControlsService"
+BomesChatControlsService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesChatControlsService"
 
-  BomesFriendsService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesFriendsService"
+BomesFriendsService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesFriendsService"
 
-  BomesGettingDataService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesGettingDataService"
+BomesGettingDataService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesGettingDataService"
 
-  BomesMailService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesMailService"
+BomesMailService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesMailService"
 
-  BomesMessagingService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesMessagingService"
+BomesMessagingService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesMessagingService"
 
-  BomesMonitoringService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesMonitoringService"
+BomesMonitoringService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesMonitoringService"
 
-  BomesNotificationService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesNotificationService"
+BomesNotificationService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesNotificationService"
 
-  BomesUserControlsService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesUserControlsService"
+BomesUserControlsService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesUserControlsService"
 
-  BomesUserDataService:
-    extends: .trigger
-    variables:
-      PROJECT: "BomesUserDataService"
+BomesUserDataService:
+  extends: .trigger
+  variables:
+    PROJECT: "BomesUserDataService"
