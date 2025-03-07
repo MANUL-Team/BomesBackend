@@ -48,8 +48,8 @@ variables:
   trigger:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
-    needs:
-    - job: trigger_api
+  needs:
+  - job: trigger_api
 
 BomesAPI:
   extends: .trigger_api
