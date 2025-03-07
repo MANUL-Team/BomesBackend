@@ -86,6 +86,7 @@ BomesChatControlsService_dev: &BomesChatControlsService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesChatControlsService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesChatControlsService_prod:
   <<: *BomesChatControlsService_dev
@@ -98,6 +99,7 @@ BomesFriendsService_dev: &BomesFriendsService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesFriendsService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesFriendsService_prod:
   <<: *BomesFriendsService_dev
@@ -110,6 +112,7 @@ BomesGettingDataService_dev: &BomesGettingDataService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesGettingDataService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesGettingDataService_prod:
   <<: *BomesGettingDataService_dev
@@ -122,6 +125,7 @@ BomesMailService_dev: &BomesMailService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesMailService_prod:
   <<: *BomesMailService_dev
@@ -134,6 +138,7 @@ BomesMessagingService_dev: &BomesMessagingService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesMessagingService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesMessagingService_prod:
   <<: *BomesMessagingService_dev
@@ -146,6 +151,7 @@ BomesMonitoringService_dev: &BomesMonitoringService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesMonitoringService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesMonitoringService_prod:
   <<: *BomesMonitoringService_dev
@@ -158,6 +164,7 @@ BomesNotificationService_dev: &BomesNotificationService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesNotificationService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesNotificationService_prod:
   <<: *BomesNotificationService_dev
@@ -170,6 +177,7 @@ BomesUserControlsService_dev: &BomesUserControlsService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesUserControlsService"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesUserControlsService_prod:
   <<: *BomesUserControlsService_dev
@@ -182,7 +190,8 @@ BomesUserDataService_dev: &BomesUserDataService_dev
   extends: .trigger
   variables:
     PROJECT: "BomesUserDataService"
-
+    RUN_SPECIFIC_JOB: "dev"
+    
 BomesUserDataService_prod:
   <<: *BomesUserDataService_dev
   stage: production
