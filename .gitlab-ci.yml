@@ -66,13 +66,20 @@ BomesAPI_prod:
   <<: *BomesAPI_dev
   stage: production-api
   variables:
-    RUN_SPECIFIC_JOB: "dev-api"
+    RUN_SPECIFIC_JOB: "prod-api"
 
-BomesAuthentificationService_dev:
+BomesAuthentificationService_dev: &BomesAuthentificationService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesAuthentificationService"
+    RUN_SPECIFIC_JOB: "dev"
+
+BomesAuthentificationService_prod:
+  <<: *BomesAuthentificationService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
 
 BomesChatControlsService_dev:
   stage: dev

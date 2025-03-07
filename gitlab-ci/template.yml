@@ -63,7 +63,8 @@ workflow:
 .production-template-api:
   stage: production-api
   rules:
-    - when: manual
+    - if: '$RUN_SPECIFIC_JOB != "prod-api"'
+      when: manual
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
@@ -81,7 +82,8 @@ workflow:
 .production-template-servises:
   stage: production
   rules:
-    - when: manual
+    - if: '$RUN_SPECIFIC_JOB != "prod"'
+      when: manual
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
