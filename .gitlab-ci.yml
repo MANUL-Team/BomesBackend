@@ -16,6 +16,12 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
+stages:          # List of stages for jobs, and their order of execution
+  - build-api
+  - build
+  - production-api
+  - production
+
 workflow:
   rules:
     # Пайплайн в контексте MR
@@ -49,59 +55,61 @@ variables:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
   needs:
-  - BomesAPI
+  - build-api
 
-BomesAPI:
-  extends: .trigger_api
-  variables:
-    PROJECT: "BomesAPI"
+build-api:
+  BomesAPI:
+    extends: .trigger_api
+    variables:
+      PROJECT: "BomesAPI"
 
-BomesAuthentificationService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesAuthentificationService"
+build:
+  BomesAuthentificationService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesAuthentificationService"
 
-BomesChatControlsService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesChatControlsService"
+  BomesChatControlsService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesChatControlsService"
 
-BomesFriendsService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesFriendsService"
+  BomesFriendsService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesFriendsService"
 
-BomesGettingDataService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesGettingDataService"
+  BomesGettingDataService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesGettingDataService"
 
-BomesMailService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesMailService"
+  BomesMailService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesMailService"
 
-BomesMessagingService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesMessagingService"
+  BomesMessagingService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesMessagingService"
 
-BomesMonitoringService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesMonitoringService"
+  BomesMonitoringService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesMonitoringService"
 
-BomesNotificationService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesNotificationService"
+  BomesNotificationService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesNotificationService"
 
-BomesUserControlsService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesUserControlsService"
+  BomesUserControlsService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesUserControlsService"
 
-BomesUserDataService:
-  extends: .trigger
-  variables:
-    PROJECT: "BomesUserDataService"
+  BomesUserDataService:
+    extends: .trigger
+    variables:
+      PROJECT: "BomesUserDataService"
