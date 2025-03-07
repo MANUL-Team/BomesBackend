@@ -58,12 +58,14 @@ variables:
   - build-api
 
 build-api:
+  stage: build-api
   BomesAPI:
     extends: .trigger_api
     variables:
       PROJECT: "BomesAPI"
 
 build:
+  stage: build
   BomesAuthentificationService:
     extends: .trigger
     variables:
