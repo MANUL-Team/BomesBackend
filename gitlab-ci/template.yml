@@ -49,7 +49,7 @@ workflow:
   tags: [DevBomes]
   needs:
     - project: Services/BomesAPI/.gitlab-ci.yml  # Путь к родительскому проекту
-      job: build_job
+      job: build-api
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
