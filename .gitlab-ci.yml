@@ -58,6 +58,7 @@ variables:
   - BomesAPI
 
 BomesAPI:
+  stage: build-api
   extends: .trigger_api
   variables:
     PROJECT: "BomesAPI"
