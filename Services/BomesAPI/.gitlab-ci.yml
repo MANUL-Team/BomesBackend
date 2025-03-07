@@ -14,5 +14,5 @@ variables:
 build-api:
   extends: .build-template-api
 
-production-api:
-  extends: .production-template-api
+#production-api:
+#  extends: .production-template-api
