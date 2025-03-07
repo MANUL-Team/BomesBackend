@@ -14,10 +14,10 @@ workflow:
   rules:
     # Если есть изменения, то собираем соответствующий микросервис
     - changes:
-        if: '$RUN_SPECIFIC_JOB != "dev-api"'
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
+      if: '$RUN_SPECIFIC_JOB != "dev-api"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
@@ -40,10 +40,10 @@ workflow:
   rules:
     # Если есть изменения, то собираем соответствующий микросервис
     - changes:
-        if: '$RUN_SPECIFIC_JOB != "dev"'
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
+      if: '$RUN_SPECIFIC_JOB != "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
