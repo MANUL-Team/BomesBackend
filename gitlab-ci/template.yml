@@ -17,7 +17,7 @@ workflow:
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
-      if: '$RUN_SPECIFIC_JOB != "dev-api"'
+      if: '$RUN_SPECIFIC_JOB = "dev-api"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
@@ -43,7 +43,7 @@ workflow:
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
-      if: '$RUN_SPECIFIC_JOB != "dev"'
+      if: '$RUN_SPECIFIC_JOB = "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: manual
@@ -63,7 +63,7 @@ workflow:
 .production-template-api:
   stage: production-api
   rules:
-    - if: '$RUN_SPECIFIC_JOB != "prod-api"'
+    - if: '$RUN_SPECIFIC_JOB = "prod-api"'
       when: manual
     - when: never
   tags: [production]
@@ -83,7 +83,7 @@ workflow:
 .production-template-servises:
   stage: production
   rules:
-    - if: '$RUN_SPECIFIC_JOB != "prod"'
+    - if: '$RUN_SPECIFIC_JOB = "prod"'
       when: manual
     - when: never
   tags: [production]
