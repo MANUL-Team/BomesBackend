@@ -27,6 +27,13 @@ con.connect(function (err) {
     }
 });
 
+setInterval(() => {
+    const sql = "SELECT 1;";
+    con.query(sql, function (err, result){
+        if (err) console.log(err);
+    });
+}, 1800000);
+
 const bot = new TelegramBot(API_KEY_BOT, {
     polling: true
 });
