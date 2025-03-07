@@ -49,7 +49,7 @@ variables:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
   needs:
-  - trigger_api
+  - BomesAPI
 
 BomesAPI:
   extends: .trigger_api
