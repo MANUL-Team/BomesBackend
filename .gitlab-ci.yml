@@ -30,7 +30,7 @@ variables:
   PARENT_PIPELINE_SOURCE: "$CI_PIPELINE_SOURCE"
   PARENT_LABELS: "$CI_MERGE_REQUEST_LABELS"
 
-.trigger:
+.trigger_api:
   trigger:
     # Автомагически подбираем нужный файл
     include:
@@ -44,24 +44,18 @@ variables:
       # Переменные из глобального блока variables
       yaml_variables: true
 
-BomesAPI:
-  include:
-  - '/gitlab-ci/template.yml'
+.trigger:
+  trigger:
+    # Автомагически подбираем нужный файл
+    include:
+      - .trigger_api
+    needs:
+    - job: trigger_api
 
-# Ставим глобальную переменную проекта
-# В шаблонах используется для именования Docker-образа
+BomesAPI:
+  extends: .trigger_api
   variables:
     PROJECT: "BomesAPI"
-    DOCKERNAME: "bomes-api"
-    IP: "172.20.1.2"
-
-# Наследуемся, где надо — переопределяем переменные
-# *В рамках примера это не нужно
-  build-api:
-    extends: .build-template-api
-#  extends: .trigger
-#  variables:
-#    PROJECT: "BomesAPI"
 
 BomesAuthentificationService:
   extends: .trigger
