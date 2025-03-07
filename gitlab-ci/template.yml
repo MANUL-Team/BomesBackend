@@ -65,6 +65,7 @@ workflow:
   rules:
     - if: '$RUN_SPECIFIC_JOB != "prod-api"'
       when: manual
+    - when: never
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
@@ -84,6 +85,7 @@ workflow:
   rules:
     - if: '$RUN_SPECIFIC_JOB != "prod"'
       when: manual
+    - when: never
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
