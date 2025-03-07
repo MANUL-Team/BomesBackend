@@ -81,56 +81,110 @@ BomesAuthentificationService_prod:
   variables:
     RUN_SPECIFIC_JOB: "prod"
 
-BomesChatControlsService_dev:
+BomesChatControlsService_dev: &BomesChatControlsService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesChatControlsService"
 
-BomesFriendsService_dev:
+BomesChatControlsService_prod:
+  <<: *BomesChatControlsService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesFriendsService_dev: &BomesFriendsService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesFriendsService"
 
-BomesGettingDataService_dev:
+BomesFriendsService_prod:
+  <<: *BomesFriendsService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesGettingDataService_dev: &BomesGettingDataService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesGettingDataService"
 
-BomesMailService_dev:
+BomesGettingDataService_prod:
+  <<: *BomesGettingDataService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesMailService_dev: &BomesMailService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
 
-BomesMessagingService_dev:
+BomesMailService_prod:
+  <<: *BomesMailService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesMessagingService_dev: &BomesMessagingService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesMessagingService"
 
-BomesMonitoringService_dev:
+BomesMessagingService_prod:
+  <<: *BomesMessagingService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesMonitoringService_dev: &BomesMonitoringService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesMonitoringService"
 
-BomesNotificationService_dev:
+BomesMonitoringService_prod:
+  <<: *BomesMonitoringService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesNotificationService_dev: &BomesNotificationService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesNotificationService"
 
-BomesUserControlsService_dev:
+BomesNotificationService_prod:
+  <<: *BomesNotificationService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesUserControlsService_dev: &BomesUserControlsService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesUserControlsService"
 
-BomesUserDataService_dev:
+BomesUserControlsService_prod:
+  <<: *BomesUserControlsService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
+
+BomesUserDataService_dev: &BomesUserDataService_dev
   stage: dev
   extends: .trigger
   variables:
     PROJECT: "BomesUserDataService"
+
+BomesUserDataService_prod:
+  <<: *BomesUserDataService_dev
+  stage: production
+  variables:
+    RUN_SPECIFIC_JOB: "prod"
