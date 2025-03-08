@@ -12,12 +12,7 @@ workflow:
 .build-template-api:
   stage: build-api
   rules:
-    # Если есть изменения, то собираем соответствующий микросервис
-    - changes:
-        paths:
-          - gitlab-ci/**/*
-          - Services/$PROJECT/**/*
-      if: '$RUN_SPECIFIC_JOB == "dev-api"'
+    - if: '$RUN_SPECIFIC_JOB == "dev-api"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: never
@@ -38,12 +33,7 @@ workflow:
 .build-template-servises:
   stage: build
   rules:
-    # Если есть изменения, то собираем соответствующий микросервис
-    - changes:
-        paths:
-          - gitlab-ci/**/*
-          - Services/$PROJECT/**/*
-      if: '$RUN_SPECIFIC_JOB == "dev"'
+    - if: '$RUN_SPECIFIC_JOB == "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
     - when: never
