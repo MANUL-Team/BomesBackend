@@ -66,7 +66,9 @@ variables:
         - gitlab-ci/**/*
         - Services/$PROJECT/**/*
     when: always
-  - needs: BomesAPI_dev || BomesAPI_prod
+  - needs: BomesAPI_dev
+    when: always
+  - needs:  BomesAPI_prod
     when: always
 
 BomesAPI_dev: &BomesAPI_dev
