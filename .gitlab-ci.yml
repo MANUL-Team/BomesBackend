@@ -49,11 +49,11 @@ variables:
       pipeline_variables: true
       # Переменные из глобального блока variables
       yaml_variables: true
-  changes:
-      paths:
-        - gitlab-ci/**/*
-        - Services/$PROJECT/**/*
-    when: always
+    changes:
+        paths:
+          - gitlab-ci/**/*
+          - Services/$PROJECT/**/*
+      when: always
 
 .trigger:
   trigger:
