@@ -60,14 +60,14 @@ variables:
   trigger:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
-    rules:
-    - changes:
-        paths:
-          - gitlab-ci/**/*
-          - Services/$PROJECT/**/*
-      when: always
-    - needs: BomesAPI_dev || BomesAPI_prod
-      when: always
+  rules:
+  - changes:
+      paths:
+        - gitlab-ci/**/*
+        - Services/$PROJECT/**/*
+    when: always
+  - needs: BomesAPI_dev || BomesAPI_prod
+    when: always
 
 BomesAPI_dev: &BomesAPI_dev
   stage: dev-api
