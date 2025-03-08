@@ -54,7 +54,6 @@ variables:
   trigger:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
-    needs: BomesAPI_dev
 
 BomesAPI_dev: &BomesAPI_dev
   stage: dev-api
