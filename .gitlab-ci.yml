@@ -49,25 +49,25 @@ variables:
       pipeline_variables: true
       # Переменные из глобального блока variables
       yaml_variables: true
- changes:
-    paths:
-      - gitlab-ci/**/*
-      - Services/$PROJECT/**/*
-  when: always
+  changes:
+      paths:
+        - gitlab-ci/**/*
+        - Services/$PROJECT/**/*
+    when: always
 
 .trigger:
   trigger:
     # Автомагически подбираем нужный файл
     <<: *trigger_api
-  changes:
-    paths:
-      - gitlab-ci/**/*
-      - Services/$PROJECT/**/*
-  when: always
-  needs: BomesAPI_dev
-  when: always
-  needs: BomesAPI_prod
-  when: always
+    changes:
+      paths:
+        - gitlab-ci/**/*
+        - Services/$PROJECT/**/*
+    when: always
+    needs: BomesAPI_dev
+    when: always
+    needs: BomesAPI_prod
+    when: always
 
 BomesAPI_dev: &BomesAPI_dev
   stage: dev-api
