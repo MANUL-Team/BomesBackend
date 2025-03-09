@@ -20,7 +20,7 @@ workflow:
       if: '$RUN_SPECIFIC_JOB == "dev-api"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
-    - when: never
+    - when: always # На время
   tags: [DevBomes]
   script:
     - echo "Deleting oldest container and image..."
@@ -46,7 +46,7 @@ workflow:
       if: '$RUN_SPECIFIC_JOB == "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
-    - when: never
+    - when: always # На время
   tags: [DevBomes]
   script:
     - echo "Deleting oldest container and image..."
@@ -65,7 +65,7 @@ workflow:
   rules:
     - if: '$RUN_SPECIFIC_JOB == "prod-api"'
       when: manual
-    - when: never
+    - when: manual # На время
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
@@ -85,7 +85,7 @@ workflow:
   rules:
     - if: '$RUN_SPECIFIC_JOB == "prod"'
       when: always
-    - when: never
+    - when: always # На время
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
