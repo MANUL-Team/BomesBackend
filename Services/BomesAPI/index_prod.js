@@ -62,7 +62,7 @@ const bot = new TelegramBot(API_KEY_BOT, {
 const services = {};
 const requestsHandlers = {};
 let serviceID = 1;
-const servicesList = []
+const servicesList = [];
 
 const clients = {};
 let clientID = 0;
