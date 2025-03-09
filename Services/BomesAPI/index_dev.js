@@ -82,26 +82,10 @@ wss.on("connection", (ws, req) => {
                 RegisterService(message.serviceName, ws, message.requests);
             }
             else if (message.event === "ConnectUser"){
-                const request = {
-                    event: "ConnectUser",
-                    clientID: ws.clientID,
-                    identifier: message.identifier,
-                    password: message.password
-                };
                 ConnectUser(ws, message.identifier, message.password, ws.clientID);
-                if (services["MessagingService"] && services["MessagingService"].length > 0){
-                    services["MessagingService"][0].send(JSON.stringify(request));
-                }
             }
             else if (message.event === "DisconnectUser") {
-                const request = {
-                    event: "DisconnectUser",
-                    clientID: ws.clientID
-                };
                 DisconnectUser(ws, ws.clientID);
-                if (services["MessagingService"] && services["MessagingService"].length > 0){
-                    services["MessagingService"][0].send(JSON.stringify(request));
-                }
             }
             else if (ws.clientID && !ws.serviceID){
                 SendFromClientToService(ws, message);
@@ -126,14 +110,7 @@ wss.on("connection", (ws, req) => {
             RemoveService(ws);
         }
         if (ws.clientID){
-            const request = {
-                event: "DisconnectUser",
-                clientID: ws.clientID
-            };
             DisconnectUser(ws, ws.clientID);
-            if (services["MessagingService"] && services["MessagingService"].length > 0){
-                services["MessagingService"][0].send(JSON.stringify(request));
-            }
             RemoveClient(ws);
         }
     });
