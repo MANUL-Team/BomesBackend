@@ -312,7 +312,7 @@ async function HasPermissionForMessage(connection, identifier, id, chat_name){
             if (err) console.log(err);
             else{
                 const message = result[0];
-                resolve(message.sender === identifier);
+                resolve(message && message.sender === identifier);
             }
         });
     });
