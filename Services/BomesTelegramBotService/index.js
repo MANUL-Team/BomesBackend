@@ -1,6 +1,7 @@
+require("dotenv").config();
+
 const WebSocketClient = require('websocket').client;
 const TelegramBot = require('node-telegram-bot-api');
-
 
 const client = new WebSocketClient();
 
