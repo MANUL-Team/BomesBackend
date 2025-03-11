@@ -11,8 +11,8 @@ variables:
 
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
-build-authentification-service:
+build-telegrambot-service:
   extends: .build-template-servises
 
-production-authentification-service:
+production-telegrambot-service:
   extends: .production-template-servises
