@@ -69,9 +69,6 @@ let clientID = 0;
 
 const connected_clients = {};
 
-const notify_chats = [];
-const error_notify_chats = [];
-
 wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
@@ -117,54 +114,6 @@ wss.on("connection", (ws, req) => {
 });
 
 
-bot.on('text', async msg => {
-    try {
-        if(msg.text == '/register_chat') {
-            const index = notify_chats.indexOf(msg.chat.id);
-            if (index === -1){
-                notify_chats.push(msg.chat.id);
-                await bot.sendMessage(msg.chat.id, `Чат успешно зарегистрирован!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Чат уже зарегистрирован!`);
-            }
-        }
-        else if (msg.text == "/remove_chat"){
-            const index = notify_chats.indexOf(msg.chat.id);
-            if (index !== -1){
-                notify_chats.splice(index, 1);
-                await bot.sendMessage(msg.chat.id, `Чат успешно удален!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Этот чат и не был зарегистрирован!`);
-            }
-        }
-        else if (msg.text == "/get_error_requests"){
-            const index = error_notify_chats.indexOf(msg.chat.id);
-            if (index === -1){
-                error_notify_chats.push(msg.chat.id);
-                await bot.sendMessage(msg.chat.id, `Теперь вам будут приходить все ошибочные запросы!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Вам уже приходят все ошибочные запросы!`);
-            }
-        }
-        else if (msg.text == "/remove_error_requests"){
-            const index = error_notify_chats.indexOf(msg.chat.id);
-            if (index !== -1){
-                error_notify_chats.splice(index, 1);
-                await bot.sendMessage(msg.chat.id, `Теперь вам не будут приходить все ошибочные запросы!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Вам и так не приходят все ошибочные запросы!`);
-            }
-        }
-    }
-    catch(error) {
-        console.log(error);
-    }
-});
-
 function RegisterService(serviceName, ws, requests){
     RemoveClient(ws);
     for(let i = 0; i < requests.length; i++){
@@ -180,9 +129,13 @@ function RegisterService(serviceName, ws, requests){
         services[serviceName] = [ws];
     console.log(`Service ${serviceName} successfuly added!`);
 
-    notify_chats.forEach(async (chat) => {
-        await bot.sendMessage(chat, `Сервис ${ws.serviceName} был подключен!`);
-    });
+    const message = {
+        event: "RegisterNotification",
+        serviceName: serviceName
+    }
+    if (services["TelegramBotService"] && services["TelegramBotService"].length > 0){
+        services["TelegramBotService"][0].send(JSON.stringify(message));
+    }
 }
 
 function RemoveService(ws){
@@ -195,9 +148,13 @@ function RemoveService(ws){
     if (indexInList !== -1)
         servicesList.splice(indexInList, 1);
 
-    notify_chats.forEach(async (chat) => {
-        await bot.sendMessage(chat, `Сервис ${ws.serviceName} был отключен!`);
-    });
+    const message = {
+        event: "RemoveNotification",
+        serviceName: ws.serviceName
+    }
+    if (services["TelegramBotService"] && services["TelegramBotService"].length > 0){
+        services["TelegramBotService"][0].send(JSON.stringify(message));
+    }
 }
 
 function RegisterClient(ws){
@@ -227,9 +184,9 @@ function SendFromClientToService(ws, message){
         };
         ws.send(JSON.stringify(errorReply));
 
-        error_notify_chats.forEach(async (chat) => {
-            await bot.sendMessage(chat, `Ошибочный запрос: \n ${JSON.stringify(message)}`);
-        });
+        if (services["TelegramBotService"] && services["TelegramBotService"].length > 0){
+            services["TelegramBotService"][0].send(JSON.stringify(message));
+        }
     }
 }
 

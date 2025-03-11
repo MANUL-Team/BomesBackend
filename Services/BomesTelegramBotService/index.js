@@ -4,6 +4,7 @@ const TelegramBot = require('node-telegram--api');
 
 const client = new WebSocketClient();
 
+const api_address = process.env.API_ADDRESS;
 const API_KEY_BOT = process.env.API_KEY_BOT;
 const bot = new TelegramBot(API_KEY_BOT, {
     polling: true
@@ -36,6 +37,8 @@ client.on("connect", (connection) => {
         }
     })
 })
+
+client.connect(api_address, 'echo-protocol');
 
 bot.on('text', async msg => {
     try {
