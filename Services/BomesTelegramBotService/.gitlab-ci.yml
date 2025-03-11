@@ -1,0 +1,18 @@
+# Забираем шаблоны
+include:
+  - '/gitlab-ci/template.yml'
+
+# Ставим глобальную переменную проекта
+# В шаблонах используется для именования Docker-образа
+variables:
+  PROJECT: "BomesTelegramBotService"
+  DOCKERNAME: "bomes-telegrambot"
+  IP: "172.20.1.110"
+
+# Наследуемся, где надо — переопределяем переменные
+# *В рамках примера это не нужно
+build-authentification-service:
+  extends: .build-template-servises
+
+production-authentification-service:
+  extends: .production-template-servises

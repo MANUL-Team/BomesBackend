@@ -208,3 +208,17 @@ BomesUserDataService_prod:
   variables:
     PROJECT: "BomesUserDataService"
     RUN_SPECIFIC_JOB: "prod"
+
+BomesTelegramBotService_dev: &BomesTelegramBotService_dev
+  stage: dev
+  extends: .trigger
+  variables:
+    PROJECT: "BomesTelegramBotService"
+    RUN_SPECIFIC_JOB: "dev"
+
+BomesTelegramBotService_prod:
+  <<: *BomesTelegramBotService_dev
+  stage: production
+  variables:
+    PROJECT: "BomesTelegramBotService"
+    RUN_SPECIFIC_JOB: "prod"
