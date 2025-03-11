@@ -18,7 +18,7 @@ client.on("connect", (connection) => {
     const registerService = {
         event: "RegisterService",
         serviceName: "TelegramBotService",
-        requests: ["RegisterNotification"]
+        requests: ["RegisterNotification", "RemoveNotification", "ErrorRequestNotification"]
     };
     connection.sendUTF(JSON.stringify(registerService));
     connection.on('message', (message) => {
