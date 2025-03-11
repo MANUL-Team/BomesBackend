@@ -1,13 +1,10 @@
 require("dotenv").config();
 
 const ws = require('ws');
-const TelegramBot = require('node-telegram-bot-api');
 const mysql = require("mysql2");
 const Utils = require("./Utils");
 
 const PORT = process.env.PORT;
-
-const API_KEY_BOT = process.env.API_KEY_BOT;
 
 const connectionConfig = {
     host: process.env.DATABASE_ADDRESS,
@@ -34,9 +31,6 @@ setInterval(() => {
     });
 }, 1800000);
 
-const bot = new TelegramBot(API_KEY_BOT, {
-    polling: true
-});
 
 // PRODUCTION
 // -----------------------------------------------------------------------------
