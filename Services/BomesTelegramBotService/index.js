@@ -1,5 +1,5 @@
 const WebSocketClient = require('websocket').client;
-const TelegramBot = require('node-telegram--api');
+const TelegramBot = require('node-telegram-bot-api');
 
 
 const client = new WebSocketClient();
