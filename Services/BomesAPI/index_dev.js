@@ -68,6 +68,7 @@ wss.on("connection", (ws, req) => {
     ws.on("message", (message) => {
         try{
             message = JSON.parse(message);
+            console.log(message);
 
             if (message.event === "RegisterService" && !ws.serviceID){
                 RegisterService(message.serviceName, ws, message.requests);
