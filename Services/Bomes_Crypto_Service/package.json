@@ -1,0 +1,15 @@
+{
+  "name": "bomes_crypto_service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "generate_keys": "node index.js",
+    "test": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "node-rsa": "^1.1.1"
+  }
+}
