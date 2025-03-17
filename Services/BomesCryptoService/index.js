@@ -1,6 +1,5 @@
 require("dotenv").config();
 const WebSocketClient = require('websocket').client;
-const Utils = require("./Utils");
 const rsa = require("node-rsa");
 const fs = require("fs");
 
