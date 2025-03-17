@@ -190,7 +190,19 @@ function SendFromServiceToClient(ws, message){
     if (clients.hasOwnProperty(id)){
         message.clientID = undefined;
         message.request_user = undefined;
-        clients[id].send(JSON.stringify(message));
+        if (message.event === "ReturnPublicKey" || message.event === "ReturnEncryptedMessage") {
+            clients[id].send(JSON.stringify(message));
+        }
+        else {
+            if (services["CryptoService"] && services["CryptoService"].length > 0) {
+                const request = {
+                    event: "EncryptMessage",
+                    clientID: clientID,
+                    data: message
+                }
+                services["CryptoService"][0].send(JSON.stringify(request));
+            }
+        }
     }
 }
 

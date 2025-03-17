@@ -29,6 +29,12 @@ client.on("connect", (connection) => {
             case "RemoveKeys":
                 RemoveKeys(message.clientID);
                 break;
+            case "EncryptMessage":
+                EncryptMessage(connection, message.clientID, message.data);
+                break;
+            case "DecryptMessage":
+                DecryptMessage(message.clientID, message.data);
+                break;
             default:
                 console.log(message);
         }
@@ -77,4 +83,29 @@ function GenerateKeysPair(ws, clientID){
 
 function RemoveKeys(clientID) {
     clientsKeys[clientID] = undefined;
+}
+
+function EncryptMessage(ws, clientID, message) {
+    const privateKey = new rsa().importKey(clientsKeys[clientID].privateKey);
+    message.clientID = undefined;
+    const saltFirst = "CA75wevrk234lcqwdV"
+    const saltSecond = "CA75wevrk234lcqwdV"
+    
+    const encrypted = privateKey.encryptPrivate(saltFirst + JSON.stringify(message) + saltSecond, "base64");
+    const request = {
+        event: "ReturnEncryptedMessage",
+        data: encrypted,
+        clientID: clientID
+    }
+    ws.sendUTF(JSON.stringify(request));
+}
+
+function DecryptMessage(clientID, message){
+    const publicKey = new rsa().importKey(clientsKeys[clientID].publicKey);
+    const decrypted = publicKey.decryptPublic(message, "utf8").slice([18],[-18]);
+    const request = {
+        event: "DecryptedMessage",
+        data: decrypted
+    }
+    ws.sendUTF(JSON.stringify(request));
 }
