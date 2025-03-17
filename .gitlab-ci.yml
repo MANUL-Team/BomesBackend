@@ -222,3 +222,17 @@ BomesTelegramBotService_prod:
   variables:
     PROJECT: "BomesTelegramBotService"
     RUN_SPECIFIC_JOB: "prod"
+  
+BomesCryptoService_dev: &BomesCryptoService_dev
+  stage: dev
+  extends: .trigger
+  variables:
+    PROJECT: "BomesCryptoService"
+    RUN_SPECIFIC_JOB: "dev"
+
+BomesCryptoService_prod:
+  <<: *BomesCryptoService_dev
+  stage: production
+  variables:
+    PROJECT: "BomesCryptoService"
+    RUN_SPECIFIC_JOB: "prod"
