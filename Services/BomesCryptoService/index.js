@@ -86,18 +86,20 @@ function RemoveKeys(clientID) {
 }
 
 function EncryptMessage(ws, clientID, message) {
-    const privateKey = new rsa().importKey(clientsKeys[clientID].privateKey);
-    message.clientID = undefined;
-    const saltFirst = "CA75wevrk234lcqwdV"
-    const saltSecond = "CA75wevrk234lcqwdV"
-    
-    const encrypted = privateKey.encryptPrivate(saltFirst + JSON.stringify(message) + saltSecond, "base64");
-    const request = {
-        event: "ReturnEncryptedMessage",
-        data: encrypted,
-        clientID: clientID
+    if (message.event === "SendMessage") {
+        const privateKey = new rsa().importKey(clientsKeys[clientID].privateKey);
+        message.clientID = undefined;
+        const saltFirst = "CA75wevrk234lcqwdV"
+        const saltSecond = "CA75wevrk234lcqwdV"
+        
+        const encrypted = privateKey.encryptPrivate(saltFirst + JSON.stringify(message) + saltSecond, "base64");
+        const request = {
+            event: "ReturnEncryptedMessage",
+            data: encrypted,
+            clientID: clientID
+        }
+        ws.sendUTF(JSON.stringify(request));
     }
-    ws.sendUTF(JSON.stringify(request));
 }
 
 function DecryptMessage(clientID, message){

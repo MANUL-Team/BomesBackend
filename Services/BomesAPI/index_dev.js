@@ -190,7 +190,7 @@ function SendFromServiceToClient(ws, message){
     if (clients.hasOwnProperty(id)){
         message.clientID = undefined;
         message.request_user = undefined;
-        if (message.event === "ReturnPublicKey" || message.event === "ReturnEncryptedMessage") {
+        if (message.event !== "SendMessage") {
             clients[id].send(JSON.stringify(message));
         }
         else {
