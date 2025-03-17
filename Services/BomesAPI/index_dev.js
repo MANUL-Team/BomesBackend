@@ -197,7 +197,7 @@ function SendFromServiceToClient(ws, message){
             if (services["CryptoService"] && services["CryptoService"].length > 0) {
                 const request = {
                     event: "EncryptMessage",
-                    clientID: clientID,
+                    clientID: id,
                     data: message
                 }
                 services["CryptoService"][0].send(JSON.stringify(request));
