@@ -256,6 +256,13 @@ async function ConnectUser(ws, identifier, password, clientID){
                 }
                 services["MessagingService"][0].send(JSON.stringify(request));
             }
+            if (services["CryptoService"] && services["CryptoService"].length > 0) {
+                const request = {
+                    event: "GeneraeteKeys",
+                    clientID: clientID
+                }
+                services["CryptoService"][0].send(JSON.stringify(request));
+            }
         }
         else{
             let reply = {
@@ -317,6 +324,12 @@ function DisconnectUser(ws, clientID) {
             clientID: clientID
         }
         services["MessagingService"][0].send(JSON.stringify(request));
+    }
+    if (services["CryptoService"] && services["CryptoService"].length > 0) {
+        const request = {
+            event: "RemoveKeys"
+        }
+        services["CryptoService"][0].send(JSON.stringify(request));
     }
 }
 
