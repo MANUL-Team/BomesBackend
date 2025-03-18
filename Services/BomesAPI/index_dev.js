@@ -103,7 +103,7 @@ wss.on("connection", (ws, req) => {
             console.log("Error: " + err);
             const reply = {
                 event: "Error",
-                data: "Incorrect key",
+                data: err,
                 clientID: ws.clientID
             }
             SendFromServiceToClient(ws, reply);
