@@ -202,7 +202,7 @@ function SendFromServiceToClient(ws, message){
     if (clients.hasOwnProperty(id)){
         message.clientID = undefined;
         message.request_user = undefined;
-        const data = JSON.stringify(message);
+        let data = JSON.stringify(message);
         if (connected_clients[id]) {
             data = encrypt(data);
         }
