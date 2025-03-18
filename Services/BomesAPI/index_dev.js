@@ -70,9 +70,9 @@ wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
-            if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].key) {
-                message = serverKeys.decrypt(message, ["utf-8"]);
-            }
+            // if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].key) {
+            //     message = serverKeys.decrypt(message, ["utf-8"]);
+            // }
             message = JSON.parse(message);
 
             if (message.event === "RegisterService" && !ws.serviceID){
