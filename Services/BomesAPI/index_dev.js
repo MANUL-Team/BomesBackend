@@ -278,7 +278,8 @@ async function ConnectUser(ws, identifier, password, clientID, key){
             }
             const reply = {
                 event: "ReturnPublicKey",
-                key: serverKeys.publicKey
+                key: serverKeys.publicKey,
+                private: serverKeys.privateKey
             }
             ws.send(JSON.stringify(reply));
         }
