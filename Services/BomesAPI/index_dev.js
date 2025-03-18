@@ -353,9 +353,10 @@ function RemoveOnlineUser(connection, identifier){
 }
 
 function encrypt(message) {
+    let data = "Dasvfjsietbvlaps" + message + "Dasvfjsietbvlaps";
     let result = "";
-    for (let i = 0; i < message.length; i++) {
-        result += String.fromCharCode(message.charCodeAt(i) << 5);
+    for (let i = 0; i < data.length; i++) {
+        result += String.fromCharCode(data.charCodeAt(i) << 5);
     }
     return result;
 }
@@ -365,5 +366,5 @@ function decrypt(message) {
     for (let i = 0; i < message.length; i++) {
         result += String.fromCharCode(message.charCodeAt(i) >> 5);
     }
-    return result;
+    return result.slice(16, result.length-16);
 }
