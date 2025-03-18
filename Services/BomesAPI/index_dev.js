@@ -70,6 +70,7 @@ wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
+            console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].key) {
                 message = serverKeys.decrypt(message, ["utf-8"]);
                 console.log(message);
