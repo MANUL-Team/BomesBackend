@@ -356,7 +356,7 @@ function encrypt(message) {
     let data = "Dasvfjsietbvlaps" + message + "Dasvfjsietbvlaps";
     let result = "";
     for (let i = 0; i < data.length; i++) {
-        result += String.fromCharCode(data.charCodeAt(i) << i*2);
+        result += String.fromCharCode(data.charCodeAt(i) << (i % 5));
     }
     return result;
 }
@@ -364,7 +364,7 @@ function encrypt(message) {
 function decrypt(message) {
     let result = "";
     for (let i = 0; i < message.length; i++) {
-        result += String.fromCharCode(message.charCodeAt(i) >> i*2);
+        result += String.fromCharCode(message.charCodeAt(i) >> (i % 5));
     }
     return result.slice(16, result.length-16);
 }
