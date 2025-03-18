@@ -5,7 +5,11 @@ const mysql = require("mysql2");
 const rsa = require("node-rsa");
 const Utils = require("./Utils");
 
-const serverKeys = new rsa().generateKeyPair();
+let serverKeys = new rsa().generateKeyPair();
+serverKeys = {
+    publicKey: serverKeys.exportKey("public"),
+    privateKey: serverKeys.exportKey("private")
+}
 
 const PORT = process.env.PORT;
 
@@ -73,7 +77,9 @@ wss.on("connection", (ws, req) => {
             message = message.toString();
             console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].key) {
-                message = serverKeys.decrypt(message, "utf-8");
+                const key = new rsa();
+                key.importKey(serverKeys.privateKey);
+                message = key.decrypt(message, "utf-8");
                 console.log(message);
             }
             message = JSON.parse(message);
@@ -272,7 +278,7 @@ async function ConnectUser(ws, identifier, password, clientID, key){
             }
             const reply = {
                 event: "ReturnPublicKey",
-                key: serverKeys.exportKey("public")
+                key: serverKeys.publicKey
             }
             ws.send(JSON.stringify(reply));
         }
