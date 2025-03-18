@@ -109,6 +109,12 @@ wss.on("connection", (ws, req) => {
         }
         catch(err){
             console.log("Error: " + err);
+            const reply = {
+                event: "Error",
+                data: "Incorrect key",
+                clientID: ws.clientID
+            }
+            SendFromServiceToClient(ws, reply);
         }
     });
     ws.on("close", () => {
@@ -278,8 +284,7 @@ async function ConnectUser(ws, identifier, password, clientID, key){
             }
             const reply = {
                 event: "ReturnPublicKey",
-                key: serverKeys.publicKey,
-                private: serverKeys.privateKey
+                key: serverKeys.publicKey
             }
             ws.send(JSON.stringify(reply));
         }
