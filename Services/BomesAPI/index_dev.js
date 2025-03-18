@@ -2,7 +2,10 @@ require("dotenv").config();
 
 const ws = require('ws');
 const mysql = require("mysql2");
+const rsa = require("node-rsa");
 const Utils = require("./Utils");
+
+const serverKeys = new rsa().generateKeyPair();
 
 const PORT = process.env.PORT;
 
@@ -67,14 +70,16 @@ wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
+            if (ws.clientID && connected_clients[ws.clientID].key) {
+                message = serverKeys.decrypt(message, ["utf-8"]);
+            }
             message = JSON.parse(message);
-            console.log(message);
 
             if (message.event === "RegisterService" && !ws.serviceID){
                 RegisterService(message.serviceName, ws, message.requests);
             }
             else if (message.event === "ConnectUser"){
-                ConnectUser(ws, message.identifier, message.password, ws.clientID);
+                ConnectUser(ws, message.identifier, message.password, ws.clientID, message.key);
             }
             else if (message.event === "DisconnectUser") {
                 DisconnectUser(ws, ws.clientID);
@@ -190,19 +195,12 @@ function SendFromServiceToClient(ws, message){
     if (clients.hasOwnProperty(id)){
         message.clientID = undefined;
         message.request_user = undefined;
-        if (message.event !== "SendMessage") {
-            clients[id].send(JSON.stringify(message));
+        const data = JSON.stringify(message);
+        if (connected_clients[id].key) {
+            const userKey = new rsa().importKey(connected_clients[id].key);
+            data = userKey.encrypt(data);
         }
-        else {
-            if (services["CryptoService"] && services["CryptoService"].length > 0) {
-                const request = {
-                    event: "EncryptMessage",
-                    clientID: id,
-                    data: message
-                }
-                services["CryptoService"][0].send(JSON.stringify(request));
-            }
-        }
+        clients[id].send(data);
     }
 }
 
@@ -238,12 +236,13 @@ function SendFromServiceToService(ws, message){
     }
 }
 
-async function ConnectUser(ws, identifier, password, clientID){
+async function ConnectUser(ws, identifier, password, clientID, key){
     if (connected_clients[clientID])
         return;
     connected_clients[clientID] = {
         identifier: identifier,
-        password: password
+        password: password,
+        key: key
     }
     await Utils.GetUserFromDB(con, identifier).then(value => {
         if (value.password === password){
@@ -268,13 +267,11 @@ async function ConnectUser(ws, identifier, password, clientID){
                 }
                 services["MessagingService"][0].send(JSON.stringify(request));
             }
-            if (services["CryptoService"] && services["CryptoService"].length > 0) {
-                const request = {
-                    event: "GeneraeteKeys",
-                    clientID: clientID
-                }
-                services["CryptoService"][0].send(JSON.stringify(request));
+            const reply = {
+                event: "ReturnPublicKey",
+                key: serverKeys.exportKey("public")
             }
+            ws.send(JSON.stringify(reply));
         }
         else{
             let reply = {
@@ -336,12 +333,6 @@ function DisconnectUser(ws, clientID) {
             clientID: clientID
         }
         services["MessagingService"][0].send(JSON.stringify(request));
-    }
-    if (services["CryptoService"] && services["CryptoService"].length > 0) {
-        const request = {
-            event: "RemoveKeys"
-        }
-        services["CryptoService"][0].send(JSON.stringify(request));
     }
 }
 

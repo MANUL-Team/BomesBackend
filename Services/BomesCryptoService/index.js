@@ -41,7 +41,7 @@ client.on("connect", (connection) => {
     });
 });
 
-client.connect(api_address, 'echo-protocol');
+// client.connect(api_address, 'echo-protocol');
 
 
 function GetRequestUser(message) {
