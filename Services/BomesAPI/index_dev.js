@@ -5,12 +5,6 @@ const mysql = require("mysql2");
 const rsa = require("node-rsa");
 const Utils = require("./Utils");
 
-let serverKeys = new rsa().generateKeyPair();
-serverKeys = {
-    publicKey: serverKeys.exportKey("public"),
-    privateKey: serverKeys.exportKey("private")
-}
-
 const PORT = process.env.PORT;
 
 const connectionConfig = {
@@ -76,10 +70,8 @@ wss.on("connection", (ws, req) => {
         try{
             message = message.toString();
             console.log(message);
-            if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].key) {
-                const key = new rsa();
-                key.importKey(serverKeys.privateKey);
-                message = key.decrypt(message, "utf-8");
+            if (ws.clientID && connected_clients[ws.clientID]) {
+                message = decrypt(message);
                 console.log(message);
             }
             message = JSON.parse(message);
@@ -211,9 +203,8 @@ function SendFromServiceToClient(ws, message){
         message.clientID = undefined;
         message.request_user = undefined;
         const data = JSON.stringify(message);
-        if (connected_clients[id].key) {
-            const userKey = new rsa().importKey(connected_clients[id].key);
-            data = userKey.encrypt(data);
+        if (connected_clients[id]) {
+            data = encrypt(data);
         }
         clients[id].send(data);
     }
@@ -256,8 +247,7 @@ async function ConnectUser(ws, identifier, password, clientID, key){
         return;
     connected_clients[clientID] = {
         identifier: identifier,
-        password: password,
-        key: key
+        password: password
     }
     await Utils.GetUserFromDB(con, identifier).then(value => {
         if (value.password === password){
@@ -282,11 +272,6 @@ async function ConnectUser(ws, identifier, password, clientID, key){
                 }
                 services["MessagingService"][0].send(JSON.stringify(request));
             }
-            const reply = {
-                event: "ReturnPublicKey",
-                key: serverKeys.publicKey
-            }
-            ws.send(JSON.stringify(reply));
         }
         else{
             let reply = {
@@ -367,3 +352,18 @@ function RemoveOnlineUser(connection, identifier){
     });
 }
 
+function encrypt(message) {
+    let result = "";
+    for (let i = 0; i < message.length; i++) {
+        result += String.fromCharCode(message.charCodeAt(i) << 5);
+    }
+    return result;
+}
+
+function decrypt(message) {
+    let result = "";
+    for (let i = 0; i < message.length; i++) {
+        result += String.fromCharCode(message.charCodeAt(i) >> 5);
+    }
+    return result;
+}
