@@ -71,6 +71,7 @@ wss.on("connection", (ws, req) => {
     ws.on("message", (message) => {
         try{
             console.log(message);
+            message = Buffer.from('Text of example').toJSON().data;
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
