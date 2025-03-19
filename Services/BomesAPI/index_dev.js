@@ -66,17 +66,13 @@ let clientID = 0;
 
 const connected_clients = {};
 
-function bufferToBase64(buf) {
-    return btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
-}
-
 wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
             console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
-                message = bufferToBase64(message);
+                message = Array.prototype.slice.call(message);
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
