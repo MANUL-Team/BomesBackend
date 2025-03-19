@@ -4,7 +4,6 @@ const ws = require('ws');
 const mysql = require("mysql2");
 const rsa = require("node-rsa");
 const Utils = require("./Utils");
-const v8 = require('v8');
 
 const PORT = process.env.PORT;
 
@@ -67,14 +66,8 @@ let clientID = 0;
 
 const connected_clients = {};
 
-Buffer.prototype.toArrayInteger = function(){
-    if (this.length > 0) {
-        const data = new Array(this.length);
-        for (let i = 0; i < this.length; i=i+1)
-            data[i] = this[i];
-        return data;
-    }
-    return [];
+function bufferToBase64(buf) {
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
 }
 
 wss.on("connection", (ws, req) => {
@@ -83,7 +76,7 @@ wss.on("connection", (ws, req) => {
         try{
             console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
-                message = v8.deserialize(message);
+                message = bufferToBase64(message);
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
