@@ -54,6 +54,8 @@ const wss = new ws.Server({
 // -----------------------------------------------------------------------------
 
 
+const server_keys = generate_keys(256);
+
 const services = {};
 const requestsHandlers = {};
 let serviceID = 1;
@@ -70,8 +72,8 @@ wss.on("connection", (ws, req) => {
         try{
             message = message.toString();
             console.log(message);
-            if (ws.clientID && connected_clients[ws.clientID]) {
-                message = decrypt(message);
+            if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
+                message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
             message = JSON.parse(message);
@@ -80,7 +82,7 @@ wss.on("connection", (ws, req) => {
                 RegisterService(message.serviceName, ws, message.requests);
             }
             else if (message.event === "ConnectUser"){
-                ConnectUser(ws, message.identifier, message.password, ws.clientID, message.key);
+                ConnectUser(ws, message.identifier, message.password, ws.clientID, message.public_key);
             }
             else if (message.event === "DisconnectUser") {
                 DisconnectUser(ws, ws.clientID);
@@ -203,8 +205,8 @@ function SendFromServiceToClient(ws, message){
         message.clientID = undefined;
         message.request_user = undefined;
         let data = JSON.stringify(message);
-        if (connected_clients[id]) {
-            data = encrypt(data);
+        if (connected_clients[id] && connected_clients[id].public_key) {
+            data = encrypt(data, connected_clients[id].public_key);
         }
         clients[id].send(data);
     }
@@ -247,7 +249,8 @@ async function ConnectUser(ws, identifier, password, clientID, key){
         return;
     connected_clients[clientID] = {
         identifier: identifier,
-        password: password
+        password: password,
+        public_key: key
     }
     await Utils.GetUserFromDB(con, identifier).then(value => {
         if (value.password === password){
@@ -272,6 +275,11 @@ async function ConnectUser(ws, identifier, password, clientID, key){
                 }
                 services["MessagingService"][0].send(JSON.stringify(request));
             }
+            const reply = {
+                event: "ReturnServerKey",
+                public_key: server_keys.public_key
+            }
+            ws.send(JSON.stringify(reply));
         }
         else{
             let reply = {
@@ -352,19 +360,72 @@ function RemoveOnlineUser(connection, identifier){
     });
 }
 
-function encrypt(message) {
-    let data = "Dasvfjsietbvlaps" + message + "Dasvfjsietbvlaps";
-    let result = "";
-    for (let i = 0; i < data.length; i++) {
-        result += String.fromCharCode(data.charCodeAt(i) << (i % 5));
-    }
-    return result;
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
 }
 
-function decrypt(message) {
+function generate_keys(key_length){
+    public_key = "------Bomes Public Key Begin------\n";
+    private_key = "------Bomes Private Key Begin------\n";
+    let trashSizeCode = getRandomInt(8, 33);
+    public_key += String.fromCharCode(trashSizeCode + 80);
+    private_key += String.fromCharCode((trashSizeCode + 20) * 5);
+    for(let i = 0; i < key_length; i++){
+        let code = getRandomInt(5, 15);
+        public_key += String.fromCharCode(code + 80);
+        private_key += String.fromCharCode((code + 20) * 5);
+    }
+    public_key += "\n------Bomes Public Key End------";
+    private_key += "\n------Bomes Private Key End------";
+    return {
+        public_key,
+        private_key
+    };
+}
+
+function encrypt(message, public_key) {
+    let key = public_key
+        .replace("------Bomes Public Key Begin------\n", "")
+        .replace("\n------Bomes Public Key End------", "");
+    let trashSize = key.charCodeAt(0) - 80;
+    key = key.slice(1, key.length);
+    let codes = [];
+    for (let i = 0; i < key.length; i++){
+        codes.push(key.charCodeAt(i) - 80);
+    }
+    const trashArray = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let data = "";
+    let addTrashData = () => {
+        for (let i = 0; i < trashSize; i++){
+            data += trashArray[getRandomInt(0, trashArray.length)];
+        }
+    }
+    addTrashData();
+    data += message;
+    addTrashData();
+    let result = [];
+    for (let i = 0; i < data.length; i++) {
+        result.push(data.charCodeAt(i) << codes[i % codes.length]);
+    }
+    return JSON.stringify(result);
+}
+
+function decrypt(message, private_key) {
+    let key = private_key
+        .replace("------Bomes Private Key Begin------\n", "")
+        .replace("\n------Bomes Private Key End------", "");
+    let trashSize = key.charCodeAt(0) / 5 - 20;
+    key = key.slice(1, key.length);
+    let codes = [];
+    for (let i = 0; i < key.length; i++){
+        codes.push(key.charCodeAt(i) / 5 - 20);
+    }
+    message = JSON.parse(message);
     let result = "";
     for (let i = 0; i < message.length; i++) {
-        result += String.fromCharCode(message.charCodeAt(i) >> (i % 5));
+        result += String.fromCharCode(message[i] >> codes[i % codes.length]);
     }
-    return result.slice(16, result.length-16);
+    return result.slice(trashSize, result.length-trashSize);
 }
