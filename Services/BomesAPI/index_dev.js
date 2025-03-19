@@ -82,7 +82,7 @@ wss.on("connection", (ws, req) => {
         try{
             console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
-                message = message.toArrayInteger();
+                message = Array.prototype.slice.call(message, 0);
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
