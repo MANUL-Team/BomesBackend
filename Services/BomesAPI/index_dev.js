@@ -72,7 +72,6 @@ wss.on("connection", (ws, req) => {
         try{
             console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
-                message = [...message];
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
@@ -409,7 +408,7 @@ function encrypt(message, public_key) {
     for (let i = 0; i < data.length; i++) {
         result.push(data.charCodeAt(i) << codes[i % codes.length]);
     }
-    return result;
+    return JSON.stringify(result);
 }
 
 function decrypt(message, private_key) {
@@ -422,6 +421,7 @@ function decrypt(message, private_key) {
     for (let i = 0; i < key.length; i++){
         codes.push(key.charCodeAt(i) / 5 - 20);
     }
+    message = JSON.parse(message);
     let result = "";
     for (let i = 0; i < message.length; i++) {
         result += String.fromCharCode(message[i] >> codes[i % codes.length]);
