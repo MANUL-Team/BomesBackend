@@ -66,13 +66,23 @@ let clientID = 0;
 
 const connected_clients = {};
 
+Buffer.prototype.toArrayInteger = function(){
+    if (this.length > 0) {
+        const data = new Array(this.length);
+        for (let i = 0; i < this.length; i=i+1)
+            data[i] = this[i];
+        return data;
+    }
+    return [];
+}
+
 wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
             console.log(message);
-            message = Buffer.from('Text of example').toJSON().data;
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
+                message = message.toArrayInteger();
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
