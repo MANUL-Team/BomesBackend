@@ -408,7 +408,7 @@ function encrypt(message, public_key) {
     for (let i = 0; i < data.length; i++) {
         result.push(data.charCodeAt(i) << codes[i % codes.length]);
     }
-    return JSON.stringify(result);
+    return result;
 }
 
 function decrypt(message, private_key) {
