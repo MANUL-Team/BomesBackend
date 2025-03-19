@@ -4,6 +4,7 @@ const ws = require('ws');
 const mysql = require("mysql2");
 const rsa = require("node-rsa");
 const Utils = require("./Utils");
+const v8 = require('v8');
 
 const PORT = process.env.PORT;
 
@@ -82,7 +83,7 @@ wss.on("connection", (ws, req) => {
         try{
             console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
-                message = Array.prototype.slice.call(message, 0);
+                message = v8.deserialize(message);
                 message = decrypt(message, server_keys.private_key);
                 console.log(message);
             }
