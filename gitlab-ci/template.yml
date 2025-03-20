@@ -22,7 +22,7 @@ workflow:
     - if: '$RUN_SPECIFIC_JOB == "dev-api"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
-  tags: [DevBomes, DevBomes2]
+  tags: ["DevBomes", "DevBomes2"]
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -49,7 +49,7 @@ workflow:
     - if: '$RUN_SPECIFIC_JOB == "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
-  tags: [DevBomes, DevBomes2]
+  tags: ["DevBomes", "DevBomes2"]
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
