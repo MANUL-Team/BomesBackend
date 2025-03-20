@@ -24,7 +24,7 @@ workflow:
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
-    - DevBomes
+    - ${CI_NODE_INDEX}_runner
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -53,7 +53,7 @@ workflow:
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
-    - DevBomes
+    - ${CI_NODE_INDEX}_runner
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
