@@ -35,8 +35,6 @@ workflow:
 variables:
   PARENT_PIPELINE_SOURCE: "$CI_PIPELINE_SOURCE"
   PARENT_LABELS: "$CI_MERGE_REQUEST_LABELS"
-  1_runner: "DevBomes"
-  2_runner: "DevBomes2"
 
 .trigger_api:
   trigger: &trigger_api
