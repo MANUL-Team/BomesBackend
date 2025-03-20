@@ -63,8 +63,6 @@ BomesAPI_dev: &BomesAPI_dev
   variables:
     PROJECT: "BomesAPI"
     RUN_SPECIFIC_JOB: "dev-api"
-    1_runner: "DevBomes"
-    2_runner: "DevBomes2"
 
 BomesAPI_prod:
   <<: *BomesAPI_dev
