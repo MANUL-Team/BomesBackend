@@ -4,6 +4,10 @@ stages:          # List of stages for jobs, and their order of execution
   - production-api
   - production
  
+variables:
+  CI_NODE_INDEX_0_runner: "DevBomes"
+  CI_NODE_INDEX_1_runner: "DevBomes2"
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
