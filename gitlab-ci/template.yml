@@ -3,10 +3,6 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - production-api
   - production
- 
-variables:
-  CI_NODE_INDEX_0_runner: "DevBomes"
-  CI_NODE_INDEX_1_runner: "DevBomes2"
 
 workflow:
   rules:
@@ -28,7 +24,7 @@ workflow:
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
-    - ${CI_NODE_INDEX}_runner
+    - ${${CI_NODE_INDEX}_runner}
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -57,7 +53,7 @@ workflow:
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
-    - ${CI_NODE_INDEX}_runner
+    - ${${CI_NODE_INDEX}_runner}
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
