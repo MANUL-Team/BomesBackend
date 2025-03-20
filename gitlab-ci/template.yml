@@ -25,7 +25,6 @@ workflow:
   parallel: 2
   tags: 
     - DevBomes
-    - DevBomes2
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
@@ -55,7 +54,6 @@ workflow:
   parallel: 2
   tags: 
     - DevBomes
-    - DevBomes2
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
