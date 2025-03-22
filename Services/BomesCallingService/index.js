@@ -85,12 +85,14 @@ function CreateCall(ws, clientID, owner){
 }
 
 function ConnectCall(ws, clientID, callID, identifier) {
-    let request = {
-        event: "ReturnCallData",
-        callId: callId,
-        clientID: clientID,
-        users: calls[callID].users
+    if (calls[callID]){
+        let request = {
+            event: "ReturnCallData",
+            callId: callId,
+            clientID: clientID,
+            users: calls[callID].users
+        }
+        ws.sendUTF(JSON.stringify(request));
+        calls[callID].users.push(identifier);
     }
-    ws.sendUTF(JSON.stringify(request));
-    calls[callID].users.push(identifier);
 }
