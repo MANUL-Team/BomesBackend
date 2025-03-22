@@ -295,6 +295,15 @@ async function ConnectUser(ws, identifier, password, clientID){
             if (services["MonitoringService"] && services["MonitoringService"].length > 0){
                 services["MonitoringService"][0].send(JSON.stringify(request_to_monitoring_service));
             }
+            if (services["MessagingService"] && services["MessagingService"].length > 0) {
+                const request = {
+                    event: "ConnectUser",
+                    identifier: identifier,
+                    password: password,
+                    clientID: clientID
+                }
+                services["MessagingService"][0].send(JSON.stringify(request));
+            }
         }
         else{
             let reply = {
@@ -329,6 +338,15 @@ function DisconnectUser(ws, clientID) {
     }
     if (services["MonitoringService"] && services["MonitoringService"].length > 0){
         services["MonitoringService"][0].send(JSON.stringify(request_to_monitoring_service));
+    }
+    if (services["MessagingService"] && services["MessagingService"].length > 0) {
+        const request = {
+            event: "DisconnectUser",
+            identifier: identifier,
+            password: password,
+            clientID: clientID
+        }
+        services["MessagingService"][0].send(JSON.stringify(request));
     }
     
     const request_to_monitoring_service2 = {
