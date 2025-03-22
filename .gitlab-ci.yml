@@ -64,7 +64,7 @@ BomesAPI_dev: &BomesAPI_dev
 
 BomesAPI_prod:
   <<: *BomesAPI_dev
-  stage: production-api
+  stage: production
   variables:
     PROJECT: "BomesAPI"
     RUN_SPECIFIC_JOB: "prod-api"

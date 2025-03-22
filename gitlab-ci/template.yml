@@ -18,8 +18,10 @@ workflow:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
       if: '$RUN_SPECIFIC_JOB == "dev-api"'
+      if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
     - if: '$RUN_SPECIFIC_JOB == "dev-api"'
+      if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
@@ -47,8 +49,10 @@ workflow:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
       if: '$RUN_SPECIFIC_JOB == "dev"'
+      if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
     - if: '$RUN_SPECIFIC_JOB == "dev"'
+      if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
@@ -67,9 +71,10 @@ workflow:
     - echo "Compile complete."
 
 .production-template-api:
-  stage: production-api
+  stage: production
   rules:
     - if: '$RUN_SPECIFIC_JOB == "prod-api"'
+      if: '$CI_COMMIT_BRANCH == "release"'
       when: manual
   tags: [production]
   script:
@@ -89,7 +94,8 @@ workflow:
   stage: production
   rules:
     - if: '$RUN_SPECIFIC_JOB == "prod"'
-      when: always
+      if: '$CI_COMMIT_BRANCH == "release"'
+      when: manual
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
