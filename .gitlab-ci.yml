@@ -19,7 +19,6 @@
 stages:          # List of stages for jobs, and their order of execution
   - dev-api
   - dev
-  - production-api
   - production
 
 workflow:
