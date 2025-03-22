@@ -88,7 +88,7 @@ function ConnectCall(ws, clientID, callID, identifier) {
     if (calls[callID]){
         let request = {
             event: "ReturnCallData",
-            callId: callId,
+            callId: callID,
             clientID: clientID,
             users: calls[callID].users
         }
