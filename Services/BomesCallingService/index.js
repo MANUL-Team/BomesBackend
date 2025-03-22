@@ -40,7 +40,7 @@ client.on("connect", (connection) => {
                 CreateCall(connection, message.clientID, message.owner);
                 break;
             case "ConnectCall":
-                ConnectCall(connection, message.clientID, message.callID, request_user.identifier);
+                ConnectCall(connection, message.clientID, message.callID, message.identifier);
                 break;
             case "RemoveCall":
                 break;
