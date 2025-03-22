@@ -19,7 +19,6 @@
 stages:          # List of stages for jobs, and their order of execution
   - dev-api
   - dev
-  - production-api
   - production
 
 workflow:
@@ -64,7 +63,7 @@ BomesAPI_dev: &BomesAPI_dev
 
 BomesAPI_prod:
   <<: *BomesAPI_dev
-  stage: production-api
+  stage: production
   variables:
     PROJECT: "BomesAPI"
     RUN_SPECIFIC_JOB: "prod-api"
