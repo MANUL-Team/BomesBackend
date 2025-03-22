@@ -23,6 +23,7 @@ workflow:
     - if: '$RUN_SPECIFIC_JOB == "dev-api"'
       if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
+    - when: never
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
@@ -54,6 +55,7 @@ workflow:
     - if: '$RUN_SPECIFIC_JOB == "dev"'
       if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
+    - when: never
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
@@ -76,6 +78,7 @@ workflow:
     - if: '$RUN_SPECIFIC_JOB == "prod-api"'
       if: '$CI_COMMIT_BRANCH == "release"'
       when: manual
+    - when: never
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
@@ -96,6 +99,7 @@ workflow:
     - if: '$RUN_SPECIFIC_JOB == "prod"'
       if: '$CI_COMMIT_BRANCH == "release"'
       when: manual
+    - when: never
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
