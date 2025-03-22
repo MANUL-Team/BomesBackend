@@ -20,12 +20,27 @@ client.on("connect", (connection) => {
 
     connection.on("message", (message) => {
         message = JSON.parse(message.utf8Data);
+        let request_user = message.request_user;
+        if (!request_user) {
+            if (message.request_identifier) {
+                request_user = {
+                    identifier: message.request_identifier,
+                    password: message.request_password
+                }
+            }
+            else {
+                request_user = {
+                    identifier: message.identifier,
+                    password: message.password
+                }
+            }
+        }
         switch(message.event){
             case "CreateCall":
                 CreateCall(connection, message.clientID, message.owner);
                 break;
             case "ConnectCall":
-                ConnectCall(connection, message.clientID, message.callID);
+                ConnectCall(connection, message.clientID, message.callID, request_user.identifier);
                 break;
             case "RemoveCall":
                 break;
@@ -69,7 +84,7 @@ function CreateCall(ws, clientID, owner){
     ws.sendUTF(JSON.stringify(request));
 }
 
-function ConnectCall(ws, clientID, callID) {
+function ConnectCall(ws, clientID, callID, identifier) {
     let request = {
         event: "ReturnCallData",
         callId: callId,
@@ -77,4 +92,5 @@ function ConnectCall(ws, clientID, callID) {
         users: calls[callID].users
     }
     ws.sendUTF(JSON.stringify(request));
+    calls[callID].users.push(identifier);
 }
