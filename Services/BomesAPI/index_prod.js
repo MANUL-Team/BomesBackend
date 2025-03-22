@@ -320,6 +320,7 @@ function DisconnectUser(ws, clientID) {
         return;
 
     const identifier = connected_clients[clientID].identifier;
+    const password = connected_clients[clientID].password;
 
     const sql = "UPDATE `users` SET lastOnline = ? WHERE identifier = ?";
     const data = [Date.now() / 1000, identifier];
