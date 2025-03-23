@@ -6,7 +6,15 @@ const TelegramBot = require('node-telegram-bot-api');
 const client = new WebSocketClient();
 
 const api_address = process.env.API_ADDRESS;
+// DEV -------------------------------------
+// const API_KEY_BOT = process.env.DEV_API_KEY_BOT;
+//------------------------------------------
+
+// PROD ------------------------------------
 const API_KEY_BOT = process.env.API_KEY_BOT;
+//------------------------------------------
+
+
 const bot = new TelegramBot(API_KEY_BOT, {
     polling: true
 });
