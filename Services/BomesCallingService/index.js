@@ -28,8 +28,10 @@ client.on("connect", (connection) => {
                 ConnectCall(connection, message.clientID, message.callID, message.identifier);
                 break;
             case "RemoveCall":
+                RemoveCall(connection, message.clientID, message.callID, message.identifier);
                 break;
             case "DisconnectCall":
+                DisconnectCall(connection, message.clientID, message.callID, message.identifier);
                 break;
             default:
                 console.log(message);
@@ -58,7 +60,8 @@ function CreateCall(ws, clientID, owner){
     let callId = generateRandomString(20);
     let call = {
         callId,
-        users: [owner]
+        users: [owner],
+        owner
     }
     calls[callId] = call;
     let request = {
@@ -79,5 +82,21 @@ function ConnectCall(ws, clientID, callID, identifier) {
         }
         ws.sendUTF(JSON.stringify(request));
         calls[callID].users.push(identifier);
+    }
+}
+
+function RemoveCall(ws, clientID, callID, identifier) {
+    let call = calls[callID];
+    if (call.owner === identifier) {
+        calls[callID] = undefined;
+    }
+}
+
+function DisconnectCall(ws, clientID, callID, identifier){
+    if (calls[callID]) {
+        const index = calls[clientID].users.indexOf(identifier);
+        if (index !== -1){
+            calls[clientID].users.splice(index, 1);
+        }
     }
 }
