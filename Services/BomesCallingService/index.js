@@ -120,9 +120,11 @@ function DisconnectCall(clientID){
             if (index !== -1){
                 call.users.splice(index, 1);
             }
-            if (call.users.length === 0) {
-                RemoveCall(clientID);
-            }
+            setTimeout(() => {
+                if (call.users.length === 0) {
+                    RemoveCall(clientID);
+                }
+            }, 3000);
             client.callID = undefined;
         }
     }
