@@ -128,12 +128,14 @@ function DisconnectCall(clientID){
             if (index !== -1){
                 call.users.splice(index, 1);
             }
-            setTimeout(() => {
-                if (call.users.length === 0) {
-                    console.log("Removing call: " + call.callID);
-                    calls[call.callID] = undefined;
-                }
-            }, 3000);
+            if (call.users.length === 0){
+                setTimeout(() => {
+                    if (call.users.length === 0) {
+                        console.log("Removing call: " + call.callID);
+                        calls[call.callID] = undefined;
+                    }
+                }, 3000);
+            }
             client.callID = undefined;
         }
     }
