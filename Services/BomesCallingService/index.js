@@ -94,7 +94,7 @@ function ConnectCall(ws, clientID, callID, identifier, username, avatar) {
             users: calls[callID].users
         }
         ws.sendUTF(JSON.stringify(request));
-        calls[callID].users.push({identifier, clientID});
+        calls[callID].users.push({identifier, clientID, username, avatar});
     }
 }
 
