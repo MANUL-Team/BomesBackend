@@ -81,12 +81,18 @@ function CreateCall(ws, clientID, owner){
 function ConnectCall(ws, clientID, callID, identifier, username, avatar) {
     if (calls[callID]){
         console.log("Connecting to call " + callID + ", user: " + identifier);
-        clients[clientID] = {
-            identifier,
-            callID,
-            username,
-            avatar
-        };
+        const connectingUser = {identifier, clientID, username, avatar};
+
+        calls[callID].users.forEach(client => {
+            const message = {
+                event: "CallFromOther",
+                user: connectingUser,
+                clientID: client.clientID
+            };
+            ws.sendUTF(JSON.stringify(message));
+        });
+
+        clients[clientID] = connectingUser;
         let request = {
             event: "ReturnCallData",
             callID: callID,
@@ -94,7 +100,7 @@ function ConnectCall(ws, clientID, callID, identifier, username, avatar) {
             users: calls[callID].users
         }
         ws.sendUTF(JSON.stringify(request));
-        calls[callID].users.push({identifier, clientID, username, avatar});
+        calls[callID].users.push(connectingUser);
     }
 }
 
