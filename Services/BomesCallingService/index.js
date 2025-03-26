@@ -26,7 +26,7 @@ client.on("connect", (connection) => {
                 CreateCall(connection, message.clientID, message.identifier);
                 break;
             case "ConnectCall":
-                ConnectCall(connection, message.clientID, message.callID, message.identifier);
+                ConnectCall(connection, message.clientID, message.callID, message.identifier, message.username, message.avatar);
                 break;
             case "RemoveCall":
                 RemoveCall(message.clientID);
@@ -78,12 +78,14 @@ function CreateCall(ws, clientID, owner){
     ws.sendUTF(JSON.stringify(request));
 }
 
-function ConnectCall(ws, clientID, callID, identifier) {
+function ConnectCall(ws, clientID, callID, identifier, username, avatar) {
     if (calls[callID]){
         console.log("Connecting to call " + callID + ", user: " + identifier);
         clients[clientID] = {
             identifier,
-            callID
+            callID,
+            username,
+            avatar
         };
         let request = {
             event: "ReturnCallData",
