@@ -9,6 +9,7 @@ const client = new WebSocketClient();
 
 
 let calls = {};
+let clients = {};
 
 client.on("connect", (connection) => {
     const registerService = {
@@ -22,16 +23,16 @@ client.on("connect", (connection) => {
         message = JSON.parse(message.utf8Data);
         switch(message.event){
             case "CreateCall":
-                CreateCall(connection, message.clientID, message.owner);
+                CreateCall(connection, message.clientID, message.identifier);
                 break;
             case "ConnectCall":
                 ConnectCall(connection, message.clientID, message.callID, message.identifier);
                 break;
             case "RemoveCall":
-                RemoveCall(connection, message.clientID, message.callID, message.identifier);
+                RemoveCall(message.clientID);
                 break;
             case "DisconnectCall":
-                DisconnectCall(connection, message.clientID, message.callID, message.identifier);
+                DisconnectCall(message.clientID);
                 break;
             default:
                 console.log(message);
@@ -57,16 +58,21 @@ function generateRandomString(length) {
 }
 
 function CreateCall(ws, clientID, owner){
-    let callId = generateRandomString(20);
+    let callID = generateRandomString(20);
+    console.log("Creating call: " + callID + ", owner: " + owner);
     let call = {
-        callId,
-        users: [owner],
+        callID,
+        users: [{identifier: owner, clientID}],
         owner
     }
-    calls[callId] = call;
+    calls[callID] = call;
+    clients[clientID] = {
+        identifier: owner,
+        callID
+    };
     let request = {
         event: "CallCreated",
-        callId: callId,
+        callID: callID,
         clientID: clientID
     }
     ws.sendUTF(JSON.stringify(request));
@@ -74,29 +80,51 @@ function CreateCall(ws, clientID, owner){
 
 function ConnectCall(ws, clientID, callID, identifier) {
     if (calls[callID]){
+        console.log("Connecting to call " + callID + ", user: " + identifier);
+        clients[clientID] = {
+            identifier,
+            callID
+        };
         let request = {
             event: "ReturnCallData",
-            callId: callID,
+            callID: callID,
             clientID: clientID,
             users: calls[callID].users
         }
         ws.sendUTF(JSON.stringify(request));
-        calls[callID].users.push(identifier);
+        calls[callID].users.push({identifier, clientID});
     }
 }
 
-function RemoveCall(ws, clientID, callID, identifier) {
-    let call = calls[callID];
-    if (call.owner === identifier) {
-        calls[callID] = undefined;
-    }
-}
-
-function DisconnectCall(ws, clientID, callID, identifier){
-    if (calls[callID]) {
-        const index = calls[clientID].users.indexOf(identifier);
-        if (index !== -1){
-            calls[clientID].users.splice(index, 1);
+function RemoveCall(clientID) {
+    const client = clients[clientID];
+    if (client && client.callID) {
+        let call = calls[client.callID];
+        console.log("Removing call: " + call.callID);
+        if (call && call.owner === client.identifier) {
+            for(let i = 0; i < call.users.length; i++){
+                clients[call.users[i].clientID].callID = undefined;
+            }
+            calls[callID] = undefined;
         }
     }
 }
+
+function DisconnectCall(clientID){
+    const client = clients[clientID];
+    if (client && client.callID){
+        const call = calls[client.callID];
+        if (call) {
+            console.log("Disconnecting from call: " + call.callID + ", user: " + client.identifier);
+            const index = call.users.findIndex(u => u.clientID === clientID);
+            if (index !== -1){
+                call.users.splice(index, 1);
+            }
+            if (call.users.length === 0) {
+                RemoveCall(clientID);
+            }
+            client.callID = undefined;
+        }
+    }
+}
+

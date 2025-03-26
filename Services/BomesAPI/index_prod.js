@@ -344,6 +344,14 @@ function DisconnectUser(ws, clientID) {
         }
         services["MessagingService"][0].send(JSON.stringify(request));
     }
+
+    if (services["CallingService"] && services["CallingService"].length > 0) {
+        const request = {
+            event: "DisconnectCall",
+            clientID: clientID
+        }
+        services["CallingService"][0].send(JSON.stringify(request));
+    }
 }
 
 function AddNewOnlineUser(connection, identifier){
