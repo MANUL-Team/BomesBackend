@@ -122,7 +122,7 @@ function DisconnectCall(clientID){
             }
             setTimeout(() => {
                 if (call.users.length === 0) {
-                    RemoveCall(clientID);
+                    calls[call.callID] = undefined;
                 }
             }, 3000);
             client.callID = undefined;
