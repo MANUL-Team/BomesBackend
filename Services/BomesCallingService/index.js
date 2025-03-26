@@ -81,7 +81,7 @@ function CreateCall(ws, clientID, owner){
 function ConnectCall(ws, clientID, callID, identifier, username, avatar) {
     if (calls[callID]){
         console.log("Connecting to call " + callID + ", user: " + identifier);
-        const connectingUser = {identifier, clientID, username, avatar};
+        const connectingUser = {identifier, callID, clientID, username, avatar};
 
         calls[callID].users.forEach(client => {
             const message = {
