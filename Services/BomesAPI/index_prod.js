@@ -71,12 +71,12 @@ wss.on("connection", (ws, req) => {
     RegisterClient(ws);
     ws.on("message", (message) => {
         try{
-            console.log(message);
             if (ws.clientID && connected_clients[ws.clientID] && connected_clients[ws.clientID].public_key) {
                 message = CryptoUtils.decrypt(message, server_keys.private_key);
                 console.log(message);
             }
             message = JSON.parse(message);
+            console.log(message);
 
             if (message.event === "RegisterService" && !ws.serviceID){
                 RegisterService(message.serviceName, ws, message.requests);
