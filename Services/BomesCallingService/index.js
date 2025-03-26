@@ -105,7 +105,7 @@ function RemoveCall(clientID) {
             for(let i = 0; i < call.users.length; i++){
                 clients[call.users[i].clientID].callID = undefined;
             }
-            calls[callID] = undefined;
+            calls[call.callID] = undefined;
         }
     }
 }
