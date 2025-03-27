@@ -15,7 +15,7 @@ client.on("connect", (connection) => {
     const registerService = {
         event: "RegisterService",
         serviceName: "CallingService",
-        requests: ["CreateCall", "ConnectCall", "RemoveCall", "DisconnectCall"]
+        requests: ["CreateCall", "ConnectCall", "RemoveCall", "DisconnectCall", "IamSpeak"]
     };
     connection.sendUTF(JSON.stringify(registerService));
 
@@ -33,6 +33,9 @@ client.on("connect", (connection) => {
                 break;
             case "DisconnectCall":
                 DisconnectCall(message.clientID);
+                break;
+            case "IamSpeak":
+                IamSpeak(message.identifier, message.clientID);
                 break;
             default:
                 console.log(message);
@@ -141,3 +144,21 @@ function DisconnectCall(clientID){
     }
 }
 
+function IamSpeak(identifier, clientID) {
+    const client = clients[clientID];
+    if (client && client.callID) {
+        let call = calls[client.callID];
+        if (call) {
+            for(let i = 0; i < call.users.length; i++){
+                if (call.users[i].clientID !== clientID) {
+                    const request = {
+                        event: "IamSpeak",
+                        identifier: identifier,
+                        clientID: call.users[i].clientID
+                    }
+                    ws.sendUTF(JSON.stringify(request));
+                }
+            }
+        }
+    }
+}
