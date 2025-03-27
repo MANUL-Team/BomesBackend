@@ -133,7 +133,7 @@ function DisconnectCall(ws, clientID){
                 for(let i = 0; i < call.users.length; i++){
                     const request = {
                         event: "Disconnected",
-                        identifier: identifier,
+                        identifier: client.identifier,
                         clientID: call.users[i].clientID
                     }
                     ws.sendUTF(JSON.stringify(request));
