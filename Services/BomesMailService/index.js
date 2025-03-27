@@ -42,5 +42,10 @@ client.on("connect", (connection) => {
 client.connect(api_address, 'echo-protocol');
 
 function SendMail(mail){
-    transporter.sendMail(mail);
+    try{
+        transporter.sendMail(mail);
+    }
+    catch(err) {
+        console.log("Can't send this mail: " + err);
+    }
 }
