@@ -32,10 +32,10 @@ client.on("connect", (connection) => {
                 RemoveCall(message.clientID);
                 break;
             case "DisconnectCall":
-                DisconnectCall(message.clientID);
+                DisconnectCall(connection, message.clientID);
                 break;
             case "IamSpeak":
-                IamSpeak(message.identifier, message.clientID);
+                IamSpeak(connection, message.identifier, message.clientID);
                 break;
             default:
                 console.log(message);
@@ -121,7 +121,7 @@ function RemoveCall(clientID) {
     }
 }
 
-function DisconnectCall(clientID){
+function DisconnectCall(ws, clientID){
     const client = clients[clientID];
     if (client && client.callID){
         const call = calls[client.callID];
@@ -130,6 +130,14 @@ function DisconnectCall(clientID){
             const index = call.users.findIndex(u => u.clientID === clientID);
             if (index !== -1){
                 call.users.splice(index, 1);
+                for(let i = 0; i < call.users.length; i++){
+                    const request = {
+                        event: "Disconnected",
+                        identifier: identifier,
+                        clientID: call.users[i].clientID
+                    }
+                    ws.sendUTF(JSON.stringify(request));
+                }
             }
             if (call.users.length === 0){
                 setTimeout(() => {
@@ -144,7 +152,7 @@ function DisconnectCall(clientID){
     }
 }
 
-function IamSpeak(identifier, clientID) {
+function IamSpeak(ws, identifier, clientID) {
     const client = clients[clientID];
     if (client && client.callID) {
         let call = calls[client.callID];
