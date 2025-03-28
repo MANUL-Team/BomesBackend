@@ -7,11 +7,11 @@ const client = new WebSocketClient();
 
 const api_address = process.env.API_ADDRESS;
 // DEV -------------------------------------
-// const API_KEY_BOT = process.env.DEV_API_KEY_BOT;
+const API_KEY_BOT = process.env.DEV_API_KEY_BOT;
 //------------------------------------------
 
 // PROD ------------------------------------
-const API_KEY_BOT = process.env.API_KEY_BOT;
+// const API_KEY_BOT = process.env.API_KEY_BOT;
 //------------------------------------------
 
 
