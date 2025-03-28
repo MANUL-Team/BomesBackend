@@ -15,9 +15,9 @@ const API_KEY_BOT = process.env.DEV_API_KEY_BOT;
 //------------------------------------------
 
 
-const bot = new TelegramBot(API_KEY_BOT, {
-    polling: true
-});
+// const bot = new TelegramBot(API_KEY_BOT, {
+//     polling: true
+// });
 
 const notify_chats = [];
 const error_notify_chats = [];
@@ -49,53 +49,53 @@ client.on("connect", (connection) => {
 
 client.connect(api_address, 'echo-protocol');
 
-bot.on('text', async msg => {
-    try {
-        if(msg.text == '/register_chat') {
-            const index = notify_chats.indexOf(msg.chat.id);
-            if (index === -1){
-                notify_chats.push(msg.chat.id);
-                await bot.sendMessage(msg.chat.id, `Чат успешно зарегистрирован!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Чат уже зарегистрирован!`);
-            }
-        }
-        else if (msg.text == "/remove_chat"){
-            const index = notify_chats.indexOf(msg.chat.id);
-            if (index !== -1){
-                notify_chats.splice(index, 1);
-                await bot.sendMessage(msg.chat.id, `Чат успешно удален!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Этот чат и не был зарегистрирован!`);
-            }
-        }
-        else if (msg.text == "/get_error_requests"){
-            const index = error_notify_chats.indexOf(msg.chat.id);
-            if (index === -1){
-                error_notify_chats.push(msg.chat.id);
-                await bot.sendMessage(msg.chat.id, `Теперь вам будут приходить все ошибочные запросы!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Вам уже приходят все ошибочные запросы!`);
-            }
-        }
-        else if (msg.text == "/remove_error_requests"){
-            const index = error_notify_chats.indexOf(msg.chat.id);
-            if (index !== -1){
-                error_notify_chats.splice(index, 1);
-                await bot.sendMessage(msg.chat.id, `Теперь вам не будут приходить все ошибочные запросы!`);
-            }
-            else{
-                await bot.sendMessage(msg.chat.id, `Вам и так не приходят все ошибочные запросы!`);
-            }
-        }
-    }
-    catch(error) {
-        console.log(error);
-    }
-});
+// bot.on('text', async msg => {
+//     try {
+//         if(msg.text == '/register_chat') {
+//             const index = notify_chats.indexOf(msg.chat.id);
+//             if (index === -1){
+//                 notify_chats.push(msg.chat.id);
+//                 await bot.sendMessage(msg.chat.id, `Чат успешно зарегистрирован!`);
+//             }
+//             else{
+//                 await bot.sendMessage(msg.chat.id, `Чат уже зарегистрирован!`);
+//             }
+//         }
+//         else if (msg.text == "/remove_chat"){
+//             const index = notify_chats.indexOf(msg.chat.id);
+//             if (index !== -1){
+//                 notify_chats.splice(index, 1);
+//                 await bot.sendMessage(msg.chat.id, `Чат успешно удален!`);
+//             }
+//             else{
+//                 await bot.sendMessage(msg.chat.id, `Этот чат и не был зарегистрирован!`);
+//             }
+//         }
+//         else if (msg.text == "/get_error_requests"){
+//             const index = error_notify_chats.indexOf(msg.chat.id);
+//             if (index === -1){
+//                 error_notify_chats.push(msg.chat.id);
+//                 await bot.sendMessage(msg.chat.id, `Теперь вам будут приходить все ошибочные запросы!`);
+//             }
+//             else{
+//                 await bot.sendMessage(msg.chat.id, `Вам уже приходят все ошибочные запросы!`);
+//             }
+//         }
+//         else if (msg.text == "/remove_error_requests"){
+//             const index = error_notify_chats.indexOf(msg.chat.id);
+//             if (index !== -1){
+//                 error_notify_chats.splice(index, 1);
+//                 await bot.sendMessage(msg.chat.id, `Теперь вам не будут приходить все ошибочные запросы!`);
+//             }
+//             else{
+//                 await bot.sendMessage(msg.chat.id, `Вам и так не приходят все ошибочные запросы!`);
+//             }
+//         }
+//     }
+//     catch(error) {
+//         console.log(error);
+//     }
+// });
 
 function RegisterNotification(serviceName) {
     notify_chats.forEach(async (chat) => {
