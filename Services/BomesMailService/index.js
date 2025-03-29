@@ -20,8 +20,14 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+let reconnectionInterval
 
 client.on("connect", (connection) => {
+    if (reconnetionInterval) {
+        clearInterval(reconnetionInterval)
+        reconnetionInterval = undefined
+    }
+
     const registerService = {
         event: "RegisterService",
         serviceName: "MailService",
@@ -36,6 +42,14 @@ client.on("connect", (connection) => {
                 SendMail(message.mail);
                 break;
         }
+    
+    });
+    connection.on("close", (code, desc) => {
+        reconnetionInterval = setInterval(() => {
+            if (!connection.connected) {
+                client.connect(api_address, 'echo-protocol');
+            }
+        }, 3000)
     });
 });
 
