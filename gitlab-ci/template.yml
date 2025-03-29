@@ -27,16 +27,16 @@ workflow:
     - DevBomes${CI_NODE_INDEX}
   script:
     - echo "Deleting oldest container and image..."
-    # - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
-    # - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
-    # - echo "Deleting oldest image $DOCKERNAME"
-    # - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
-    # - cd Services/$PROJECT
-    # - mv index_dev.js index.js
-    # - mv .env_dev .env
-    # - docker build -t $DOCKERNAME .
-    # - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
-    # - echo "Compile complete."
+    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
+    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - echo "Deleting oldest image $DOCKERNAME"
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
+    - cd Services/$PROJECT
+    - mv index_dev.js index.js
+    - mv .env_dev .env
+    - docker build -t $DOCKERNAME .
+    - docker run -dit --name $DOCKERNAME -p 8000:8000 --net docker_bomes --ip $IP $DOCKERNAME
+    - echo "Compile complete."
 
 .build-template-servises:
   stage: build
@@ -56,15 +56,15 @@ workflow:
     - DevBomes${CI_NODE_INDEX}
   script:
     - echo "Deleting oldest container and image..."
-    # - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
-    # - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
-    # - echo "Deleting oldest image $DOCKERNAME"
-    # - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
-    # - cd Services/$PROJECT
-    # - sed 's/wss/ws/' .env -i
-    # - docker build -t $DOCKERNAME .
-    # - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
-    # - echo "Compile complete."
+    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
+    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - echo "Deleting oldest image $DOCKERNAME"
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
+    - cd Services/$PROJECT
+    - sed 's/wss/ws/' .env -i
+    - docker build -t $DOCKERNAME .
+    - docker run -dit --name $DOCKERNAME --net docker_bomes --ip $IP $DOCKERNAME
+    - echo "Compile complete."
 
 .production-template-api:
   stage: production-api
@@ -89,7 +89,7 @@ workflow:
   stage: production
   rules:
     - if: '$RUN_SPECIFIC_JOB == "prod"'
-      when: manual
+      when: always
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."
