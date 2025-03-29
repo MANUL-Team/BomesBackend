@@ -38,7 +38,13 @@ setInterval(() => {
 
 const client = new WebSocketClient();
 
+let reconnectionInterval
+
 client.on("connect", (connection) => {
+    if (reconnectionInterval) {
+        clearInterval(reconnectionInterval)
+        reconnectionInterval = undefined
+    }
     const registerService = {
         event: "RegisterService",
         serviceName: "GettingDataService",
@@ -61,6 +67,14 @@ client.on("connect", (connection) => {
             default:
                 console.log(message);
         }
+    });
+    
+    connection.on("close", (code, desc) => {
+        reconnectionInterval = setInterval(() => {
+            if (!connection.connected) {
+                client.connect(api_address, 'echo-protocol');
+            }
+        }, 3000)
     });
 });
 

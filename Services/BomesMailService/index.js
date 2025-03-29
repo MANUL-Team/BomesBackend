@@ -44,6 +44,7 @@ client.on("connect", (connection) => {
         }
     
     });
+    
     connection.on("close", (code, desc) => {
         reconnectionInterval = setInterval(() => {
             if (!connection.connected) {

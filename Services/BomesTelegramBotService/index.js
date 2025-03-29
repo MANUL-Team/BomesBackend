@@ -24,7 +24,13 @@ const notify_chats = [];
 const error_notify_chats = [];
 const all_notify_chats = [];
 
+let reconnectionInterval
+
 client.on("connect", (connection) => {
+    if (reconnectionInterval) {
+        clearInterval(reconnectionInterval)
+        reconnectionInterval = undefined
+    }
     const registerService = {
         event: "RegisterService",
         serviceName: "TelegramBotService",
@@ -45,7 +51,15 @@ client.on("connect", (connection) => {
                 break;
             default: console.log(message)
         }
-    })
+    });
+
+    connection.on("close", (code, desc) => {
+        reconnectionInterval = setInterval(() => {
+            if (!connection.connected) {
+                client.connect(api_address, 'echo-protocol');
+            }
+        }, 3000)
+    });
 })
 
 client.connect(api_address, 'echo-protocol');

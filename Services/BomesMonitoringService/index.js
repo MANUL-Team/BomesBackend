@@ -62,7 +62,13 @@ const client = new WebSocketClient();
 const usersCountListeners = [];
 const onlineListeners = [];
 
+let reconnectionInterval
+
 client.on("connect", (connection) => {
+    if (reconnectionInterval) {
+        clearInterval(reconnectionInterval)
+        reconnectionInterval = undefined
+    }
     const registerService = {
         event: "RegisterService",
         serviceName: "MonitoringService",
@@ -130,6 +136,14 @@ client.on("connect", (connection) => {
                 GetCurrentNumberOfUsers(connection, message.clientID)
                 break;
         }
+    });
+
+    connection.on("close", (code, desc) => {
+        reconnectionInterval = setInterval(() => {
+            if (!connection.connected) {
+                client.connect(api_address, 'echo-protocol');
+            }
+        }, 3000)
     });
 });
 
