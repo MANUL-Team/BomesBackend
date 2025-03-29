@@ -19,8 +19,6 @@ workflow:
           - Services/$PROJECT/**/*
       if: '$RUN_SPECIFIC_JOB == "dev-api"'
       when: always
-    - if: '$RUN_SPECIFIC_JOB == "dev-api"'
-      when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
@@ -47,8 +45,6 @@ workflow:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
       if: '$RUN_SPECIFIC_JOB == "dev"'
-      when: always
-    - if: '$RUN_SPECIFIC_JOB == "dev"'
       when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
@@ -89,7 +85,7 @@ workflow:
   stage: production
   rules:
     - if: '$RUN_SPECIFIC_JOB == "prod"'
-      when: always
+      when: manual
   tags: [production]
   script:
     - echo "Deleting oldest container and image..."

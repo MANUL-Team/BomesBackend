@@ -17,10 +17,8 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - dev-api
   - dev
   - production
-  - production-api
 
 workflow:
   rules:
@@ -56,7 +54,7 @@ variables:
     <<: *trigger_api
 
 BomesAPI_dev: &BomesAPI_dev
-  stage: dev-api
+  stage: dev
   extends: .trigger_api
   variables:
     PROJECT: "BomesAPI"
@@ -64,7 +62,7 @@ BomesAPI_dev: &BomesAPI_dev
 
 BomesAPI_prod:
   <<: *BomesAPI_dev
-  stage: production-api
+  stage: production
   variables:
     PROJECT: "BomesAPI"
     RUN_SPECIFIC_JOB: "prod-api"
