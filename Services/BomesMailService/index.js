@@ -23,9 +23,9 @@ const transporter = nodemailer.createTransport({
 let reconnectionInterval
 
 client.on("connect", (connection) => {
-    if (reconnetionInterval) {
-        clearInterval(reconnetionInterval)
-        reconnetionInterval = undefined
+    if (reconnectionInterval) {
+        clearInterval(reconnectionInterval)
+        reconnectionInterval = undefined
     }
 
     const registerService = {
@@ -45,7 +45,7 @@ client.on("connect", (connection) => {
     
     });
     connection.on("close", (code, desc) => {
-        reconnetionInterval = setInterval(() => {
+        reconnectionInterval = setInterval(() => {
             if (!connection.connected) {
                 client.connect(api_address, 'echo-protocol');
             }
