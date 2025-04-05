@@ -164,6 +164,11 @@ async function AddFriend(connection, ws, request_identifier, request_password, i
                         imageUrl: ""
                     };
                     ws.sendUTF(JSON.stringify(pushRequest));
+                    const sql = `UPDATE \`users\` SET popularity = popularity + 5 WHERE identifier = ?`;
+                    const data = [friend.identifier];
+                    connection.query(sql, data, function (err, result) {
+                        if (err) console.log(err);
+                    });
                 }
                 dataMy = [JSON.stringify(me.friends), me.identifier];
                 dataFriend = [JSON.stringify(friend.friends), friend.identifier];
@@ -229,6 +234,11 @@ async function RemoveFriend(connection, ws, request_identifier, request_password
                         imageUrl: ""
                     };
                     ws.sendUTF(JSON.stringify(pushRequest));
+                    const sql = `UPDATE \`users\` SET popularity = popularity - 5 WHERE identifier = ?`;
+                    const data = [friend.identifier];
+                    connection.query(sql, data, function (err, result) {
+                        if (err) console.log(err);
+                    });
                 }
                 dataMy = [JSON.stringify(me.friends), me.identifier];
                 dataFriend = [JSON.stringify(friend.friends), friend.identifier];
