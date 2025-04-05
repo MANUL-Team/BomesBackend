@@ -155,6 +155,13 @@ async function GetUser(connection, ws, request_identifier, request_password, ide
                     clientID: clientID
                 }
                 ws.sendUTF(JSON.stringify(reply));
+                if (request_identifier !== identifier) {
+                    const sql = `UPDATE \`users\` SET popularity = popularity + 1 WHERE identifier = ?`;
+                    const data = [identifier];
+                    connection.query(sql, data, function (err, result) {
+                        if (err) console.log(err);
+                    });
+                }
             });
         }
     });
@@ -176,7 +183,7 @@ async function GetUsers(connection, ws, identifier, password, skip, search, clie
                 data = [skip];
             }
             if (hasSkip)
-                sql += " ORDER BY id LIMIT ?, 20"
+                sql += " ORDER BY popularity DESC, id LIMIT ?, 20"
             
             connection.query(sql, data, function(err, result){
                 if (err) console.log(err);
