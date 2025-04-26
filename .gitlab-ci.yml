@@ -234,3 +234,17 @@ BomesCallingService_prod:
   variables:
     PROJECT: "BomesCallingService"
     RUN_SPECIFIC_JOB: "prod"
+
+BomesWebCore_dev: &BomesWebCore_dev
+  stage: dev
+  extends: .trigger
+  variables:
+    PROJECT: "BomesWebCore"
+    RUN_SPECIFIC_JOB: "dev"
+
+BomesWebCore_prod:
+  <<: *BomesWebCore_dev
+  stage: production
+  variables:
+    PROJECT: "BomesWebCore"
+    RUN_SPECIFIC_JOB: "prod"

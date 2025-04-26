@@ -9,6 +9,7 @@ app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
 
 app.get('/', (req, res) => {
+    console.log("IP: " + req.ip);
     res.send("Successful request!");
 });
 
