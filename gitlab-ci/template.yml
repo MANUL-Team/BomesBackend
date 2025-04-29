@@ -44,5 +44,5 @@ workflow:
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
-      - $DOCKERNAME.tar.gz
+      - Services/$PROJECT/$DOCKERNAME.tar.gz
     expire_in: 1 week
