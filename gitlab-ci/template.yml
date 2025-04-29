@@ -41,8 +41,9 @@ workflow:
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > $DOCKERNAME.tar.gz
     - ls -lash
+    - mv $DOCKERNAME.tar.gz ../../
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
-      - Services/$PROJECT/$DOCKERNAME.tar.gz
+      - $DOCKERNAME.tar.gz
     expire_in: 1 week
