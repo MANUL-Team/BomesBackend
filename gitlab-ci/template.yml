@@ -29,7 +29,6 @@ workflow:
       when: always
     - when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
-  parallel: 2
   tags: 
     - DevBomes${CI_NODE_INDEX}
   script:
