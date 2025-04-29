@@ -1,4 +1,4 @@
-FROM node:23-alpine3.20
+COPY –from=node:23-alpine3.20
 
 COPY . /API
 
