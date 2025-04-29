@@ -1,4 +1,4 @@
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - deploy-dev
 
@@ -6,7 +6,7 @@ workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
 
-# Шаблон сборки образа 
+# Шаблоны сборки образа. Здесь ничего не трогаем!!!
 .deploy-template:
   stage: deploy-dev
   rules:
@@ -20,13 +20,12 @@ workflow:
 .build-template-servises:
   stage: build
   rules:
-    # Если есть изменения, то собираем соответствующий микросервис
+    # Если есть изменения в сервисе или в темплейте пайплайна(этот файл), то собираем соответствующий микросервис
     - changes:
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
       when: always
-    # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   tags: 
     - DevBomes1
   script:

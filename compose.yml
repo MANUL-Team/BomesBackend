@@ -1,13 +1,18 @@
 version: "2"
 
 services:
+
+# При добавлении сервиса копируем блок ниже
+
+###
   bomes-api:
-    image: bomes-api
+    image: bomes-api # <-- image: (Имя контейнера)
     ports: 
-      - 8000:8000
+      - 8000:8000 # <-- Проброс портов наружу, если нужны. Если нет удаляем блок ports
     networks:
       docker_bomes:
-        ipv4_address: 172.20.1.2
+        ipv4_address: 172.20.1.2 # <-- Надеюсь тут очевидно. IP контейнера внутри сети докера. Пул адресов 172.20.1.0/24
+###
 
   bomes-webcore:
     image: bomes-webcore

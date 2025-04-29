@@ -2,14 +2,11 @@
 include:
   - '/gitlab-ci/template.yml'
 
-# Ставим глобальную переменную проекта
-# В шаблонах используется для именования Docker-образа
+# Ставим переменные дочернего пайплайна
 variables:
-  PROJECT: "BomesWebCore"
-  DOCKERNAME: "bomes-webcore"
-  IP: "172.20.1.140"
+  PROJECT: "BomesWebCore" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-webcore" # <-- DOCKERNAME: "(Имя контейнера)"
 
-# Наследуемся, где надо — переопределяем переменные
-# *В рамках примера это не нужно
+# jobs внутри дочернего пайплайна
 BomesWebCore_build:
   extends: .build-template-servises

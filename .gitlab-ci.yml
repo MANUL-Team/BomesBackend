@@ -30,30 +30,28 @@ variables:
       # Переменные из глобального блока variables
       yaml_variables: true
 
-BomesAPI_build:
+
+# При добавлении сервиса копируем блок ниже и вставляем свои названия. Смотреть также .gitlab-ci.yml нового сервиса и compose.yml
+
+###
+BomesAPI_build: #<-- Здесь (Название сервиса)_build
   stage: build-docker
   extends: .trigger
   variables:
-    PROJECT: "BomesAPI"
-    RUN_SPECIFIC_JOB: "dev"
-    SPECIFIC_SETTINGS_DOCKER: -p 8000:8000
+    PROJECT: "BomesAPI" #<-- Здесь PROJECT: "(Название сервиса)"
+###
 
 BomesWebCore_build:
   stage: build-docker
   extends: .trigger
   variables:
     PROJECT: "BomesWebCore"
-    RUN_SPECIFIC_JOB: "dev"
 
 BomesWebDeploy:
   stage: deploy-dev
-  dependencies: 
-    - BomesAPI_build
-    - BomesWebCore_build
   script:
     - mv /tmp/*.tar.gz ./
     - ls -lash
     - gunzip *.tar.gz
     - for var in $(ls | grep .tar); do docker load -i "$var"; done
     - docker compose start
-    - echo "Compile complete."
