@@ -12,7 +12,7 @@ variables:
 # Наследуемся, где надо — переопределяем переменные
 # *В рамках примера это не нужно
 build-api:
-  extends: .build-template-api
+  extends: .build-template-servises
 
 production-api:
   extends: .production-template-api

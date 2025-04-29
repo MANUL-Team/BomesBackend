@@ -1,0 +1,28 @@
+version: "2"
+
+services:
+  bomes-api:
+    image: bomes-api
+    ports: 
+      - 8000:8000
+    networks:
+      docker_bomes:
+        ipv4_address: 172.20.1.2
+
+  bomes-webcore:
+    image: bomes-webcore
+    ports: 
+      - 3000:3000
+    networks:
+      docker_bomes:
+        ipv4_address: 172.20.1.140
+    depends_on:
+      - bomes-api
+
+networks:
+  docker_bomes:
+    ipam:
+      driver: bridge
+      config:
+       - subnet: 172.20.1.0/24
+         gateway: 172.20.1.1
