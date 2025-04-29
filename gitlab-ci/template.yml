@@ -42,7 +42,7 @@ workflow:
     - docker save $DOCKERNAME | gzip > $DOCKERNAME.tar.gz
     - ls -lash
   artifacts:
-    name: "$DOCKERNAME"
+    name: "$CI_JOB_NAME"
     paths:
       - $DOCKERNAME.tar.gz
     expire_in: 1 week
