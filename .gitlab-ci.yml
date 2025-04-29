@@ -47,7 +47,7 @@ BomesWebCore_build:
 
 BomesWebDeploy:
   stage: deploy-dev
-  needs: 
+  dependencies: 
     - BomesAPI_build
     - BomesWebCore_build
   script:
