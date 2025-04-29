@@ -39,11 +39,11 @@ workflow:
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
-    - docker save $DOCKERNAME | gzip > "$CI_JOB_NAME".tar.gz
+    - docker save $DOCKERNAME | gzip > $CI_JOB_NAME.tar.gz
     - ls -lash
-    - mv "$CI_JOB_NAME".tar.gz ../../
+    - mv $CI_JOB_NAME.tar.gz ../../
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
-      - "$CI_JOB_NAME".tar.gz
+      - $CI_JOB_NAME.tar.gz
     expire_in: 1 week
