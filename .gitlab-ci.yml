@@ -32,7 +32,7 @@ variables:
 
 BomesAPI_build:
   stage: build-docker
-  extends: .trigger_api
+  extends: .trigger
   variables:
     PROJECT: "BomesAPI"
     RUN_SPECIFIC_JOB: "dev-api"
@@ -40,7 +40,7 @@ BomesAPI_build:
 
 BomesWebCore_build:
   stage: build-docker
-  extends: .trigger_api
+  extends: .trigger
   variables:
     PROJECT: "BomesWebCore"
     RUN_SPECIFIC_JOB: "dev-api"
