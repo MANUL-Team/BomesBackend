@@ -25,9 +25,8 @@ workflow:
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
-      if: '$RUN_SPECIFIC_JOB == "dev"'
       when: always
-    - when: always
+    - when: delayed
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   tags: 
     - DevBomes1
