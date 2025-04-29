@@ -26,7 +26,6 @@ workflow:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
       when: always
-    - when: delayed
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   tags: 
     - DevBomes1
