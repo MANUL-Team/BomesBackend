@@ -48,6 +48,7 @@ BomesWebCore_build:
 BomesWebDeploy:
   stage: deploy-dev
   script:
+    - ls -lash
     - gunzip *.tar.gz
     - docker load -i *.tar
     - docker run -dit --name $DOCKERNAME $SPECIFIC_SETTINGS_DOCKER --net docker_bomes --ip $IP $DOCKERNAME
