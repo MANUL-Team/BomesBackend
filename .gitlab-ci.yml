@@ -47,6 +47,9 @@ BomesWebCore_build:
 
 BomesWebDeploy:
   stage: deploy-dev
+  needs: 
+    - BomesAPI_build
+    - BomesWebCore_build
   script:
     - ls -lash
     - gunzip *.tar.gz
