@@ -47,8 +47,6 @@ BomesWebCore_build:
 
 BomesWebDeploy:
   stage: deploy-dev
-  rules:
-      when: always
   script:
     - gunzip *.tar.gz
     - docker load -i *.tar
