@@ -47,4 +47,10 @@ BomesWebCore_build:
 
 BomesWebDeploy:
   stage: deploy-dev
-  extends: .deploy-template
+  rules:
+      when: always
+  script:
+    - gunzip *.tar.gz
+    - docker load -i *.tar
+    - docker run -dit --name $DOCKERNAME $SPECIFIC_SETTINGS_DOCKER --net docker_bomes --ip $IP $DOCKERNAME
+    - echo "Compile complete."
