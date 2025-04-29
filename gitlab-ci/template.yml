@@ -30,7 +30,7 @@ workflow:
     - when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   tags: 
-    - DevBomes${CI_NODE_INDEX}
+    - DevBomes1
   script:
     - echo "Deleting oldest container and image..."
     - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
