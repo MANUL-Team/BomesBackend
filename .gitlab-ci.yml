@@ -35,7 +35,7 @@ BomesAPI_build:
   extends: .trigger
   variables:
     PROJECT: "BomesAPI"
-    RUN_SPECIFIC_JOB: "dev-api"
+    RUN_SPECIFIC_JOB: "dev"
     SPECIFIC_SETTINGS_DOCKER: -p 8000:8000
 
 BomesWebCore_build:
@@ -43,7 +43,7 @@ BomesWebCore_build:
   extends: .trigger
   variables:
     PROJECT: "BomesWebCore"
-    RUN_SPECIFIC_JOB: "dev-api"
+    RUN_SPECIFIC_JOB: "dev"
 
 BomesWebDeploy:
   stage: deploy-dev
