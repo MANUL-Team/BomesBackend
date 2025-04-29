@@ -12,8 +12,8 @@ workflow:
   rules:
       when: always
   script:
-    - gunzip *.tar.gz
-    - docker load -i *.tar
+    - gunzip /tmp/*.tar.gz
+    - docker load -i /tmp/*.tar
     - docker run -dit --name $DOCKERNAME $SPECIFIC_SETTINGS_DOCKER --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."
 
@@ -39,11 +39,5 @@ workflow:
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
-    - docker save $DOCKERNAME | gzip > $CI_JOB_NAME.tar.gz
-    - ls -lash
-    - mv $CI_JOB_NAME.tar.gz ../../
-  artifacts:
-    name: "$CI_JOB_NAME"
-    paths:
-      - $CI_JOB_NAME.tar.gz
-    expire_in: 1 week
+    - docker save $DOCKERNAME | gzip > /tmp/$DOCKERNAME.tar.gz
+    - ls -lash ../../

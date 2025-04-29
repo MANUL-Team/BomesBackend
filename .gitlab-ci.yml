@@ -51,6 +51,7 @@ BomesWebDeploy:
     - BomesAPI_build
     - BomesWebCore_build
   script:
+    - mv /tmp/*.tar.gz ./
     - ls -lash
     - gunzip *.tar.gz
     - docker load -i *.tar
