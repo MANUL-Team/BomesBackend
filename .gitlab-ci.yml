@@ -54,6 +54,6 @@ BomesWebDeploy:
     - mv /tmp/*.tar.gz ./
     - ls -lash
     - gunzip *.tar.gz
-    - docker load -i *.tar
+    - for var in $(ls | grep .tar); do docker load -i "$var"; done
     - docker run -dit --name $DOCKERNAME $SPECIFIC_SETTINGS_DOCKER --net docker_bomes --ip $IP $DOCKERNAME
     - echo "Compile complete."

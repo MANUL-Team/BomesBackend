@@ -40,4 +40,4 @@ workflow:
     - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > /tmp/$DOCKERNAME.tar.gz
-    - ls -lash ../../
+    - ls -lash /tmp
