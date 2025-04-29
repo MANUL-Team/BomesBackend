@@ -40,6 +40,7 @@ workflow:
     - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > $DOCKERNAME.tar.gz
+    - ls -lash
   artifacts:
     name: "$DOCKERNAME"
     paths:
