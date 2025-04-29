@@ -39,8 +39,6 @@ workflow:
     - echo "Deleting oldest image $DOCKERNAME"
     - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
-    - sed 's/wss/ws/' .env -i
-    - sed 's/192.168.31.18/192.168.31.55/' .env -i
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > $DOCKERNAME.tar.gz
   artifacts:
