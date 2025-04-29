@@ -13,6 +13,3 @@ variables:
 # *В рамках примера это не нужно
 build-webcore:
   extends: .build-template-servises
-
-production-webcore:
-  extends: .production-template-servises
