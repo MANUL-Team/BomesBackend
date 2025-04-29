@@ -27,6 +27,7 @@ workflow:
           - Services/$PROJECT/**/*
       if: '$RUN_SPECIFIC_JOB == "dev"'
       when: always
+    - when: always
     # В иных случаях оставляем как manual, чтобы разработчик мог запустить по своему желанию
   parallel: 2
   tags: 
