@@ -63,6 +63,7 @@ app.post("/get_users", (req, res) => {
     database.query(sql, data, (err, results) => {
         if (err) Utils.error(err);
         else {
+            Utils.log("Success get users!");
             Utils.log(results);
             res.send(JSON.stringify(results));
         }
