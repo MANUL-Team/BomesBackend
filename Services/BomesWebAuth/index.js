@@ -53,6 +53,7 @@ app.get("/test_request", (req, res) => {
 
 app.post("/get_users", (req, res) => {
     if (!req.body) return res.sendStatus(400);
+    Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
     const user_email = req.email;
     const sql = 'SELECT * FROM test_table WHERE email = ?;';
     const data = [user_email];
@@ -62,8 +63,6 @@ app.post("/get_users", (req, res) => {
             res.send(results);
         }
     });
-    Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
-
 });
 
 // Запуск сервера
@@ -83,6 +82,10 @@ request.post(
                     {
                         type: "GET",
                         value: "/test_request"
+                    },
+                    {
+                        type: "POST",
+                        value: "/get_users"
                     }
                 ]
             })
