@@ -48,6 +48,7 @@ app.post("/register_service", (req, res) => {
                 request.post(
                     {
                         url: `http://${server_ip}:${server_port}${server_requests[i].value}`,
+                        // body перенаправляется форматированно: json с полем data, значение которого - json-строка
                         form: {
                             data: JSON.stringify(r.body)
                         }
@@ -60,7 +61,7 @@ app.post("/register_service", (req, res) => {
             });
         }
     }
-    Utils.log("Registered new service!");
+    Utils.log(`Registered new service! Requests: ${server_requests}`);
     res.sendStatus(200);
 });
 
