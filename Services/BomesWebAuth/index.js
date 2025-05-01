@@ -56,16 +56,16 @@ app.post("/get_users", (req, res) => {
     Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
     req.body = JSON.parse(req.body.data);
     const user_email = req.body.email;
-    Utils.log(`Email: ${user_email}`);
-    Utils.log(`Body: ${JSON.stringify(req.body)}`);
     const sql = 'SELECT * FROM test_table WHERE email = ?;';
     const data = [user_email];
     database.query(sql, data, (err, results) => {
         if (err) Utils.error(err);
         else {
-            Utils.log("Success get users!");
-            Utils.log(results);
-            res.send(JSON.stringify(results));
+            const answer = {
+                message: "Success to get users",
+                data: results
+            }
+            res.send(JSON.stringify(answer));
         }
     });
 });
