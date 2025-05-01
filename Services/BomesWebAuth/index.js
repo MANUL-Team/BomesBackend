@@ -60,7 +60,7 @@ app.post("/get_users", (req, res) => {
     database.query(sql, data, (err, results) => {
         if (err) Utils.error(err);
         else {
-            res.send(results);
+            res.send(JSON.stringify(results));
         }
     });
 });
