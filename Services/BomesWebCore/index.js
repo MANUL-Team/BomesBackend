@@ -61,7 +61,7 @@ app.post("/register_service", (req, res) => {
             });
         }
     }
-    Utils.log(`Registered new service! Requests: ${server_requests}`);
+    Utils.log(`Registered new service! Requests: ${JSON.stringify(server_requests)}`);
     res.sendStatus(200);
 });
 
