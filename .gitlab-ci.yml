@@ -59,8 +59,8 @@ BomesWebDeploy:
   - job: BomesWebCore_build
   - job: BomesWebAuth_build
   script:
-    - mv /tmp/*.tar.gz ./
+    - mv /tmp/*.tar.gz ./ || echo "No new container to deploy"
     - ls -lash
-    - gunzip *.tar.gz
-    - for var in $(ls | grep .tar); do docker load -i "$var"; done
+    - gunzip *.tar.gz || echo "No new container to deploy"
+    - for var in $(ls | grep .tar); do docker load -i "$var"; done || echo "No new container to deploy"
     - docker compose start
