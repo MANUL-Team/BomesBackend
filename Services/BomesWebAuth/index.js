@@ -58,7 +58,7 @@ app.post("/get_users", (req, res) => {
     const user_email = req.body.email;
     Utils.log(`Email: ${user_email}`);
     Utils.log(`Body: ${JSON.stringify(req.body)}`);
-    const sql = 'SELECT * FROM test_table WHERE email = ?;';
+    const sql = 'SELECT * FROM test_table WHERE email = ? LIMIT 100;';
     const data = [user_email];
     database.query(sql, data, (err, results) => {
         if (err) Utils.error(err);
