@@ -26,6 +26,7 @@ workflow:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
       when: always
+    - when: manual
   tags: 
     - DevBomes1
   script:

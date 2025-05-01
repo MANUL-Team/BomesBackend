@@ -55,6 +55,7 @@ BomesWebAuth_build:
 
 BomesWebDeploy:
   stage: deploy-dev
+  allow_failure: true
   script:
     - mv /tmp/*.tar.gz ./
     - ls -lash
