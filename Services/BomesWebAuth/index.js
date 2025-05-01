@@ -51,6 +51,21 @@ app.get("/test_request", (req, res) => {
     res.send("Success from auth");
 });
 
+app.post("/get_users", (req, res) => {
+    if (!req.body) return res.sendStatus(400);
+    const user_email = req.email;
+    const sql = 'SELECT * FROM test_table WHERE email = ?;';
+    const data = [user_email];
+    database.query(sql, data, (err, results) => {
+        if (err) Utils.error(err);
+        else {
+            res.send(results);
+        }
+    });
+    Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
+
+});
+
 // Запуск сервера
 app.listen(PORT, () => {
     Utils.log(`Сервер запущен на порту ${PORT}`);
