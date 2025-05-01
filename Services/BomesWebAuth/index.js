@@ -110,6 +110,10 @@ request.post(
                     {
                         type: "POST",
                         value: "/get_users"
+                    },
+                    {
+                        type: "POST",
+                        value: "/add_user"
                     }
                 ]
             })
