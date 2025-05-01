@@ -31,8 +31,7 @@ database.connect(function (err) {
 });
 
 const emails = ["Hello", "TestTest", "Abrakadabra"];
-
-for (let i = 0; i < 10000000; i++) {
+for (let i = 0; i < 10; i++) {
     const sql = 'INSERT INTO test_table (email, password) VALUES (?, ?);';
     const data = [emails[i % emails.length], emails[i % emails.length]];
     database.query(sql, data, (err, results) => {
