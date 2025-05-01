@@ -48,7 +48,9 @@ app.post("/register_service", (req, res) => {
                 request.post(
                     {
                         url: `http://${server_ip}:${server_port}${server_requests[i].value}`,
-                        form: JSON.stringify(r.body)
+                        form: {
+                            data: JSON.stringify(r.body)
+                        }
                     },
                     (err, response, body) => {
                         if (err) return rs.status(400).send({error: err});
