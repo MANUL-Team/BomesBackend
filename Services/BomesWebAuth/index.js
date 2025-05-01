@@ -56,7 +56,7 @@ app.post("/get_users", (req, res) => {
     Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
     const user_email = req.body.email;
     Utils.log(`Email: ${user_email}`);
-    Utils.log(`Body: ${req.body}`);
+    Utils.log(`Body: ${JSON.stringify(req.body)}`);
     const sql = 'SELECT * FROM test_table WHERE email = ?;';
     const data = [user_email];
     database.query(sql, data, (err, results) => {
