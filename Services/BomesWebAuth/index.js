@@ -3,7 +3,7 @@ const cors = require("cors");
 const request = require('request');
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -25,7 +25,7 @@ app.listen(port, () => {
 
 request.post(
     {
-        url: 'http://172.17.0.3:3000/register_service',
+        url: 'http://172.20.1.140:3000/register_service',
         form: {
             data: JSON.stringify({
                 port,
