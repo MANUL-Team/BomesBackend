@@ -65,7 +65,7 @@ app.post("/get_users", (req, res) => {
                 message: "Success to get users",
                 data: results
             }
-            res.send(JSON.stringify(answer));
+            res.send(answer);
         }
     });
 });
