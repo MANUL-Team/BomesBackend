@@ -70,6 +70,25 @@ app.post("/get_users", (req, res) => {
     });
 });
 
+app.post("/add_user", (req, res) => {
+    if (!req.body) return res.sendStatus(400);
+    Utils.log(`Add user, IP: ${req.ip.slice(7)}`);
+    req.body = JSON.parse(req.body.data);
+    const user_email = req.body.email;
+    const user_password = req.body.password;
+    const sql = 'INSERT INTO test_table (email, password) VALUES (?, ?);';
+    const data = [user_email, user_password];
+    database.query(sql, data, (err, results) => {
+        if (err) Utils.error(err);
+        else {
+            const answer = {
+                message: "Success to add user"
+            }
+            res.send(answer);
+        }
+    });
+});
+
 // Запуск сервера
 app.listen(PORT, () => {
     Utils.log(`Сервер запущен на порту ${PORT}`);
