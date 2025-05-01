@@ -1,35 +1,34 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const request = require('request');
 const Utils = require("./Utils.js");
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT;
+
+const CORE_ADDRESS = process.env.CORE_ADDRESS;
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
-
-app.get('/', (req, res) => {
-    Utils.log("IP: " + req.ip.slice(7));
-    res.send("Successful request!");
-});
 
 app.get("/test_request", (req, res) => {
     Utils.log("Test request, IP: " + req.ip.slice(7));
     res.send("Success from auth");
 });
 
-app.listen(port, () => {
-    Utils.log(`Сервер запущен на порту ${port}`);
+app.listen(PORT, () => {
+    Utils.log(`Сервер запущен на порту ${PORT}`);
 });
 
 request.post(
     {
-        url: 'http://172.20.1.140:3000/register_service',
+        url: `http://${CORE_ADDRESS}/register_service`,
         form: {
             data: JSON.stringify({
-                port,
+                port: PORT,
                 requests: [
                     {
                         type: "GET",

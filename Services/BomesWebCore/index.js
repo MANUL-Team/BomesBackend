@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const request = require('request');
 const Utils = require("./Utils.js");
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -51,6 +53,6 @@ app.post("/register_service", (req, res) => {
     res.sendStatus(200);
 });
 
-app.listen(port, () => {
-    Utils.log(`Сервер запущен на порту ${port}`);
+app.listen(PORT, () => {
+    Utils.log(`Сервер запущен на порту ${PORT}`);
 });
