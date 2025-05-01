@@ -46,6 +46,7 @@ app.post("/register_service", (req, res) => {
             });
         }
     }
+    console.log("Registered new service!");
     res.sendStatus(200);
 });
 
