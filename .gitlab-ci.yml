@@ -22,7 +22,8 @@ variables:
     include:
       - local: Services/$PROJECT/.gitlab-ci.yml
     # Родительский пайплайн ждет выполнения всех дочерних
-    strategy: depend
+    strategy:
+      parallel: children
     # Передаем переменные в дочерние пайплайны
     forward:
       # Переменные CI, например, секреты
