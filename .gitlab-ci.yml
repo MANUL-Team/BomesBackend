@@ -47,6 +47,12 @@ BomesWebCore_build:
   variables:
     PROJECT: "BomesWebCore"
 
+BomesWebAuth_build:
+  stage: build-docker
+  extends: .trigger
+  variables:
+    PROJECT: "BomesWebAuth"
+
 BomesWebDeploy:
   stage: deploy-dev
   script:

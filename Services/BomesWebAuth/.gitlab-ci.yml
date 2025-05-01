@@ -1,0 +1,12 @@
+# Забираем шаблоны
+include:
+  - '/gitlab-ci/template.yml'
+
+# Ставим переменные дочернего пайплайна
+variables:
+  PROJECT: "BomesWebAuth" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-webauth" # <-- DOCKERNAME: "(Имя контейнера)"
+
+# jobs внутри дочернего пайплайна
+BomesWebAuth_build:
+  extends: .build-template-servises
