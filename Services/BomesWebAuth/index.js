@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const request = require('request');
-const Utils = require("/Utils.js");
+const Utils = require("./Utils.js");
 
 const app = express();
 const port = 3000;
