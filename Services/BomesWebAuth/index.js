@@ -54,6 +54,7 @@ app.get("/test_request", (req, res) => {
 app.post("/get_users", (req, res) => {
     if (!req.body) return res.sendStatus(400);
     Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
+    req.body = JSON.parse(req.body);
     const user_email = req.body.email;
     Utils.log(`Email: ${user_email}`);
     Utils.log(`Body: ${JSON.stringify(req.body)}`);
