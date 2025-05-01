@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const request = require('request');
+const Utils = require("/Utils.js");
 
 const app = express();
 const port = 3000;
@@ -10,17 +11,17 @@ app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
 
 app.get('/', (req, res) => {
-    console.log("IP: " + req.ip.slice(7));
+    Utils.log("IP: " + req.ip.slice(7));
     res.send("Successful request!");
 });
 
 app.get("/test_request", (req, res) => {
-    console.log("Test request, IP: " + req.ip.slice(7));
+    Utils.log("Test request, IP: " + req.ip.slice(7));
     res.send("Success from auth");
 });
 
 app.listen(port, () => {
-    console.log(`Сервер запущен на порту ${port}`);
+    Utils.log(`Сервер запущен на порту ${port}`);
 });
 
 request.post(
@@ -41,7 +42,7 @@ request.post(
     (err, response, body) => {
         if (err) console.log(err);
         else {
-            console.log("REGISTERED!");
+            Utils.log("REGISTERED!");
         }
     }
 );

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const request = require('request');
+const Utils = require("/Utils.js");
 
 const app = express();
 const port = 3000;
@@ -10,7 +11,7 @@ app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
 
 app.get('/', (req, res) => {
-    console.log("IP: " + req.ip.slice(7));
+    Utils.log("IP: " + req.ip.slice(7));
     res.sendStatus(200);
 });
 
@@ -46,10 +47,10 @@ app.post("/register_service", (req, res) => {
             });
         }
     }
-    console.log("Registered new service!");
+    Utils.log("Registered new service!");
     res.sendStatus(200);
 });
 
 app.listen(port, () => {
-    console.log(`Сервер запущен на порту ${port}`);
+    Utils.log(`Сервер запущен на порту ${port}`);
 });
