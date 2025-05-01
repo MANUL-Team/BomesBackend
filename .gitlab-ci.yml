@@ -57,9 +57,9 @@ BomesWebDeploy:
   stage: deploy-dev
   allow_failure: true
   needs:
-  - job: BombesAPI_build
-  - job: BombesWebCore_build
-  - job: BombesWebAuth_build
+  - job: BomesAPI_build
+  - job: BomesWebCore_build
+  - job: BomesWebAuth_build
   script:
     - mv /tmp/*.tar.gz ./
     - ls -lash
