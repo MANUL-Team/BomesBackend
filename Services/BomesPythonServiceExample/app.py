@@ -1,5 +1,6 @@
 from flask import Flask
 import requests
+from gevent.pywsgi import WSGIServer
  
 app = Flask(__name__)
 PORT = 3000
@@ -28,5 +29,6 @@ def register_service():
  
 if __name__ == "__main__":
     from waitress import serve
-    serve(app, host="0.0.0.0", port=PORT)
+    http_server = WSGIServer(('', PORT), app)
+    http_server.serve_forever()
     register_service()

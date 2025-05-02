@@ -9,8 +9,8 @@ COPY . /app
 
 # Установка зависимостей
 RUN pip install Flask
-RUN pip install waitress
 RUN pip install requests
+RUN pip install gevent
 
 # Открытие порта для взаимодействия с приложением
 EXPOSE 3000
