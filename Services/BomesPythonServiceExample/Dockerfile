@@ -8,7 +8,6 @@ WORKDIR /app
 COPY . /app
 
 # Установка зависимостей
-RUN pip install —trusted-host pypi.python.org -r requirements.txt
 RUN pip install Flask
 
 # Открытие порта для взаимодействия с приложением
