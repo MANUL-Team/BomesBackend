@@ -1,5 +1,5 @@
 # Выбор базового образа с Python
-FROM python:3.14-rc-alpine3.20
+FROM python:3.12-alpine
 
 # Установка рабочей директории
 WORKDIR /app
