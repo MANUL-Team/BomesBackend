@@ -14,4 +14,4 @@ RUN pip install Flask
 EXPOSE 3001
 
 # Запуск приложения
-CMD [«python», «app.py»]
+CMD ["python", "app.py"]
