@@ -52,6 +52,8 @@ services:
     image: bomes-pythonexample # <-- image: (Имя контейнера)
     restart: unless-stopped
     env_file: "all_docker.env"
+    ports: 
+      - 3001:3001
     networks:
       docker_bomes:
         ipv4_address: 172.20.1.30
