@@ -8,7 +8,7 @@ const request = require('request');
 const Utils = require("./Utils.js"); // Импорт утилитных функций. См. файл Utils.js
 const mysql = require("mysql2");
 
-const app = express()
+const app = express();
 
 const PORT = process.env.PORT;
 const CORE_ADDRESS = process.env.CORE_ADDRESS;
