@@ -9,6 +9,7 @@ COPY . /app
 
 # Установка зависимостей
 RUN pip install Flask
+RUN pip install waitress
 
 # Открытие порта для взаимодействия с приложением
 EXPOSE 3001
