@@ -8,5 +8,5 @@ variables:
   DOCKERNAME: "bomes-webtelegrambot" # <-- DOCKERNAME: "(Имя контейнера)"
 
 # jobs внутри дочернего пайплайна
-BomesWebAuth_build:
+BomesWebTelegramBot_build:
   extends: .build-template-servises
