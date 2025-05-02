@@ -5,7 +5,7 @@ import json
  
 app = Flask(__name__)
 PORT = 3000
-CORE_ADDRESS = ""
+CORE_ADDRESS = "172.20.1.140:3000"
 
 @app.route("/get_python_example", methods=['GET'])
 def get_python_example():
@@ -16,7 +16,6 @@ def post_python_example():
     return request.form
 
 def register_service():
-    print("Registrating service...")
     data = {
         "data": json.dumps({
             "port": PORT,
@@ -32,7 +31,7 @@ def register_service():
             ]
         })
     }
-    response = requests.post("http://172.20.1.140:3000/register_service", data=data)
+    response = requests.post(f"http://{CORE_ADDRESS}/register_service", data=data)
  
 if __name__ == "__main__":
     register_service()
