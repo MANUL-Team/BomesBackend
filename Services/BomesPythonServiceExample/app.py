@@ -1,6 +1,7 @@
 from flask import Flask
 import requests
 from gevent.pywsgi import WSGIServer
+import json
  
 app = Flask(__name__)
 PORT = 3000
@@ -17,13 +18,15 @@ def python_example():
 def register_service():
     print("Registrating service...")
     data = {
-        "port": PORT,
-        "requests": [
-            {
-                "type": "GET",
-                "value": "/python_example"
-            }
-        ]
+        "data": json.dumps({
+            "port": PORT,
+            "requests": [
+                {
+                    "type": "GET",
+                    "value": "/python_example"
+                }
+            ]
+        });
     }
     response = requests.post("http://172.20.1.140:3000/register_service", data=data)
  
