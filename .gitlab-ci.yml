@@ -51,6 +51,12 @@ BomesWebAuth_build:
   variables:
     PROJECT: "BomesWebAuth"
 
+BomesWebTelegramBot_build:
+  stage: build-docker
+  extends: .trigger
+  variables:
+    PROJECT: "BomesTelegramBot"
+
 BomesWebDeploy:
   stage: deploy-dev
   allow_failure: true

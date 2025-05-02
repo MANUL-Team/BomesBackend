@@ -1,0 +1,11 @@
+include:
+  - '/gitlab-ci/template.yml'
+
+# Ставим переменные дочернего пайплайна
+variables:
+  PROJECT: "BomesWebTelegramBot" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-webtelegrambot" # <-- DOCKERNAME: "(Имя контейнера)"
+
+# jobs внутри дочернего пайплайна
+BomesWebAuth_build:
+  extends: .build-template-servises
