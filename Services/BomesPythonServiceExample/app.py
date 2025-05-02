@@ -28,6 +28,7 @@ def register_service():
     response = requests.post("http://172.20.1.140:3000/register_service", data=data)
  
 if __name__ == "__main__":
+    register_service()
     http_server = WSGIServer(('', PORT), app)
     http_server.serve_forever()
-    register_service()
+    
