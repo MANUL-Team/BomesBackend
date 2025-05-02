@@ -14,6 +14,7 @@ def python_example():
     return "PythonExample"
 
 def register_service():
+    print("Registrating service...")
     data = {
         "port": PORT,
         "requests": [
