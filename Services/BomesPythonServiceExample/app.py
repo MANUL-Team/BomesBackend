@@ -8,11 +8,11 @@ PORT = 3000
 CORE_ADDRESS = ""
 
 @app.route("/get_python_example", methods=['GET'])
-def python_example():
+def get_python_example():
     return "PythonExample"
 
 @app.route("/post_python_example", methods=['POST'])
-def python_example():
+def post_python_example():
     return request.form
 
 def register_service():
