@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import requests
 from gevent.pywsgi import WSGIServer
 import json
@@ -6,14 +6,14 @@ import json
 app = Flask(__name__)
 PORT = 3000
 CORE_ADDRESS = ""
- 
-@app.route("/")
-def hello():
-    return "Hello, World!"
 
-@app.route("/python_example")
+@app.route("/get_python_example", methods=['GET'])
 def python_example():
     return "PythonExample"
+
+@app.route("/post_python_example", methods=['POST'])
+def python_example():
+    return request.form
 
 def register_service():
     print("Registrating service...")
