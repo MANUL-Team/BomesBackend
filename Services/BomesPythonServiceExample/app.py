@@ -3,7 +3,7 @@ import requests
  
 app = Flask(__name__)
 PORT = 3000
-CORE_ADDRESS = "172.20.1.140:3000"
+CORE_ADDRESS = ""
  
 @app.route("/")
 def hello():
@@ -23,7 +23,7 @@ def register_service():
             }
         ]
     }
-    response = requests.post(f"http://{CORE_ADDRESS}/register_service", data=data)
+    response = requests.post("http://172.20.1.140:3000/register_service", data=data)
  
 if __name__ == "__main__":
     from waitress import serve
