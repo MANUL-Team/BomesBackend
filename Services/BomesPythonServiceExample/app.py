@@ -23,7 +23,11 @@ def register_service():
             "requests": [
                 {
                     "type": "GET",
-                    "value": "/python_example"
+                    "value": "/get_python_example"
+                },
+                {
+                    "type": "POST",
+                    "value": "/post_python_example"
                 }
             ]
         })
