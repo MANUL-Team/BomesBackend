@@ -26,7 +26,7 @@ def register_service():
                     "value": "/python_example"
                 }
             ]
-        });
+        })
     }
     response = requests.post("http://172.20.1.140:3000/register_service", data=data)
  
