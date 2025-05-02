@@ -1,3 +1,4 @@
+# Забираем шаблоны
 include:
   - '/gitlab-ci/template.yml'
 
