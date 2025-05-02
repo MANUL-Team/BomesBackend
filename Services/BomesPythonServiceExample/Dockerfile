@@ -10,9 +10,10 @@ COPY . /app
 # Установка зависимостей
 RUN pip install Flask
 RUN pip install waitress
+RUN pip install requests
 
 # Открытие порта для взаимодействия с приложением
-EXPOSE 3001
+EXPOSE 3000
 
 # Запуск приложения
 CMD ["python", "app.py"]
