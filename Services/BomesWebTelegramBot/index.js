@@ -80,17 +80,26 @@ app.get("/test_request", (req, res) => {
 
 
 app.post("/register_notification", (req, res) => {
-   
+    if (!req.body) return res.sendStatus(400);
+    Utils.log(`Register notification, IP: ${req.ip.slice(7)}`);
+    req.body = JSON.parse(req.body.data);
+    RegisterNotification(req)
 });
 
 
 app.post("/remove_notification", (req, res) => {
-    
+    if (!req.body) return res.sendStatus(400);
+    Utils.log(`Remove notification, IP: ${req.ip.slice(7)}`);
+    req.body = JSON.parse(req.body.data);
+    RemoveNotification(req)
 });
 
 
 app.post("/error_request_notification", (req, res) => {
-    
+    if (!req.body) return res.sendStatus(400);
+    Utils.log(`Error request notification, IP: ${req.ip.slice(7)}`);
+    req.body = JSON.parse(req.body.data);
+    ErrorRequestNotification(req)
 });
 
 // Запуск сервера
