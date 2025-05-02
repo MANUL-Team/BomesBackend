@@ -1,0 +1,12 @@
+# Забираем шаблоны
+include:
+  - '/gitlab-ci/template.yml'
+
+# Ставим переменные дочернего пайплайна
+variables:
+  PROJECT: "BomesPythonServiceExample" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-pythonexample" # <-- DOCKERNAME: "(Имя контейнера)"
+
+# jobs внутри дочернего пайплайна
+BomesPythonServiceExample_build:
+  extends: .build-template-servises
