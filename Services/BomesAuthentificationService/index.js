@@ -51,7 +51,7 @@ app.post("/register", (req, res) => {
         const code = Utils.getRandomInt(100000, 999999);
 
         // Send mail...
-        sendToHttp(
+        sendPostToHttp(
             `http://${MAIL_ADDRESS}/send_mail`,
             {
                 mail: {
@@ -131,7 +131,7 @@ app.listen(PORT, () => {
 
 // Отправка запроса на регистрацию в ядро
 
-sendToHttp(
+sendPostToHttp(
     `http://${CORE_ADDRESS}/register_service`, 
     {
         port: PORT,
@@ -156,7 +156,7 @@ sendToHttp(
     }
 );
 
-function sendToHttp(address, data, onresult) {
+function sendPostToHttp(address, data, onresult) {
     request.post(
         {
             url: address,
