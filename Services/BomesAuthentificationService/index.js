@@ -91,7 +91,19 @@ app.post("/login", (req, res) => {
     const user = req.body.user;
     if (!user) return res.status(400).send("Where user?");
     if (!user.email || !user.password)  return res.status(400).send("Where one or more of these: user.email, user.password?");
-
+    const getUserSQL = "SELECT * FROM `Users` WHERE email = ?";
+    const getUserData = [user.email];
+    database.query(getUserSQL, getUserData, (err, result) => {
+        if (err) return Utils.error(err);
+        if (!result.length) return res.send("User not found!");
+        const databaseUser = result[0];
+        if (databaseUser.password !== user.password) return res.send("Wrong password!");
+        databaseUser.password = undefined;
+        res.send({
+            message: "Successful login",
+            data: databaseUser
+        });
+    });
 });
 
 // Запуск сервера
