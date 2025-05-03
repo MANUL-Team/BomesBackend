@@ -63,6 +63,11 @@ BomesMailService_build:
   variables:
     PROJECT: "BomesMailService"
 
+Sleep:
+  stage: deploy-dev
+  script:
+    - sleep 5
+
 BomesWebDeploy:
   stage: deploy-dev
   needs:

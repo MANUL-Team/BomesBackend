@@ -2,7 +2,6 @@ stages:
   - build
   - deploy-dev
 
-
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
