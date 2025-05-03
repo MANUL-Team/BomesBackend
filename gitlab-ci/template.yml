@@ -1,6 +1,5 @@
 stages:
   - build
-  - sleep_pipeline
   - deploy-dev
 
 workflow:
