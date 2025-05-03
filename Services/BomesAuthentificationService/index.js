@@ -36,6 +36,7 @@ app.use(cors({credentials: true, origin: true}));
 // #################################
 
 app.post("/register", (req, res) => {
+    req.body = JSON.parse(req.body.data);
     if (!req.body) return res.status(400).send("Where body?");
     const user = req.body.user;
     if (!user) return res.status(400).send("Where user?");
