@@ -151,7 +151,7 @@ sendPostToHttp(
         ]
     },
     (err, response, body) => {
-        if (err) return console.log(err);
+        if (err) return Utils.error(err);
         Utils.log("REGISTERED!");
     }
 );
