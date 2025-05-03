@@ -27,6 +27,13 @@ variables:
       pipeline_variables: true
       # Переменные из глобального блока variables
       yaml_variables: true
+    rules:
+      # Если есть изменения в сервисе или в темплейте пайплайна(этот файл), то собираем соответствующий микросервис
+      - changes:
+          paths:
+            - gitlab-ci/**/*
+            - Services/$PROJECT/**/*
+
 
 
 # При добавлении сервиса копируем блок ниже и вставляем свои названия. Смотреть также .gitlab-ci.yml нового сервиса и compose.yml
@@ -37,12 +44,6 @@ BomesAPI_build: #<-- Здесь (Название сервиса)_build
   extends: .trigger
   variables:
     PROJECT: "BomesAPI" #<-- Здесь PROJECT: "(Название сервиса)"
-  rules: &rules_service
-    # Если есть изменения в сервисе или в темплейте пайплайна(этот файл), то собираем соответствующий микросервис
-    - changes:
-        paths:
-          - gitlab-ci/**/*
-          - Services/$PROJECT/**/*
 ###
 
 BomesWebCore_build:
@@ -50,28 +51,24 @@ BomesWebCore_build:
   extends: .trigger
   variables:
     PROJECT: "BomesWebCore"
-  <<: *rules_service
 
 BomesAuthentificationService_build:
   stage: build-docker
   extends: .trigger
   variables:
     PROJECT: "BomesAuthentificationService"
-  <<: *rules_service
 
 BomesWebTelegramBot_build:
   stage: build-docker
   extends: .trigger
   variables:
     PROJECT: "BomesWebTelegramBot"
-  <<: *rules_service
 
 BomesMailService_build:
   stage: build-docker
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
-  <<: *rules_service
 
 BomesWebDeploy:
   stage: deploy-dev
