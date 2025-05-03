@@ -73,12 +73,6 @@ BomesMailService_build:
 BomesWebDeploy:
   stage: deploy-dev
   allow_failure: true
-  needs:
-  - job: BomesAPI_build
-  - job: BomesWebCore_build
-  - job: BomesAuthentificationService_build
-  - job: BomesWebTelegramBot_build
-  - job: BomesMailService_build
   script:
     - mv /tmp/*.tar.gz ./ || echo "No new container to deploy"
     - ls -lash
