@@ -6,7 +6,6 @@ workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
 
-
 # Шаблоны сборки образа. Здесь ничего не трогаем!!!
 .deploy-template:
   stage: deploy-dev

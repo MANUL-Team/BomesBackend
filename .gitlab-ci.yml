@@ -21,6 +21,7 @@ variables:
     # Автомагически подбираем нужный файл
     include:
       - local: Services/$PROJECT/.gitlab-ci.yml
+    strategy: depend
     # Передаем переменные в дочерние пайплайны
     forward:
       # Переменные CI, например, секреты
@@ -62,9 +63,10 @@ BomesMailService_build:
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
-    
+
 BomesWebDeploy:
   stage: deploy-dev
+  allow_failure: true
   needs:
   - job: BomesAPI_build
   - job: BomesWebCore_build
