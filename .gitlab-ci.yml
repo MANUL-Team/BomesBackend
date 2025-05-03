@@ -21,6 +21,7 @@ variables:
     # Автомагически подбираем нужный файл
     include:
       - local: Services/$PROJECT/.gitlab-ci.yml
+    strategy: depend 
     # Передаем переменные в дочерние пайплайны
     forward:
       # Переменные CI, например, секреты
@@ -33,6 +34,8 @@ variables:
         paths:
           - gitlab-ci/**/*
           - Services/$PROJECT/**/*
+      when: always
+    - when: manual
 
 
 
