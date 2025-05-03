@@ -54,7 +54,7 @@ app.post("/register", (req, res) => {
                 // Send mail...
 
                 const addToConfirmationsSQL = "REPLACE INTO `Confirmations` SET `email` = ?, `code` = ?";
-                const addToConfirmationsData = [user.email, user.password, user.fullname, code];
+                const addToConfirmationsData = [user.email, code];
                 database.query(addToConfirmationsSQL, addToConfirmationsData, (err, result) => {
                     if (err) Utils.error(err);
                 });
