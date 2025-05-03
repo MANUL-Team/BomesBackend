@@ -27,12 +27,12 @@ variables:
       pipeline_variables: true
       # Переменные из глобального блока variables
       yaml_variables: true
-    rules:
-      # Если есть изменения в сервисе или в темплейте пайплайна(этот файл), то собираем соответствующий микросервис
-      - changes:
-          paths:
-            - gitlab-ci/**/*
-            - Services/$PROJECT/**/*
+  rules:
+    # Если есть изменения в сервисе или в темплейте пайплайна(этот файл), то собираем соответствующий микросервис
+    - changes:
+        paths:
+          - gitlab-ci/**/*
+          - Services/$PROJECT/**/*
 
 
 
