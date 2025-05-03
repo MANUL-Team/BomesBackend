@@ -56,7 +56,7 @@ app.post("/register", (req, res) => {
             {
                 mail: {
                     from: '"Администрация Bomes" <mainadmin@bomes.ru>',
-                    to: email,
+                    to: user.email,
                     subject: 'Код для подтверждения почты: ' + code,
                     text: 'Ваш код для подтверждения почты' + code,
                     html: '<h1>Подтвердите почту используя код: <b>' + code + '</b></h1>',
