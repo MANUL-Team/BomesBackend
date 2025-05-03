@@ -8,5 +8,8 @@ variables:
   DOCKERNAME: "bomes-api" # <-- DOCKERNAME: "(Имя контейнера)"
 
 # jobs внутри дочернего пайплайна
-BomesAPI_build:
+BomesAPI_build:  # <-- (Название сервиса)_build
   extends: .build-template-servises
+
+SleepPipeline:
+  extends: .sleep_pipeline

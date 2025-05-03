@@ -1,5 +1,6 @@
 stages:
   - build
+  - sleep_pipeline
   - deploy-dev
 
 workflow:
@@ -39,3 +40,13 @@ workflow:
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > /tmp/$DOCKERNAME.tar.gz
     - ls -lash /tmp
+
+.sleep_pipeline:
+  stage: sleep_pipeline
+  rules:
+    - when: always
+  tags: 
+    - DevBomes1
+  script:
+    - ls -lash /tmp
+    - sleep 2

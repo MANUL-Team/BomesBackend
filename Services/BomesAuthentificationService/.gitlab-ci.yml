@@ -10,3 +10,6 @@ variables:
 # jobs внутри дочернего пайплайна
 BomesAuthentificationService_build:
   extends: .build-template-servises
+
+SleepPipeline:
+  extends: .sleep_pipeline
