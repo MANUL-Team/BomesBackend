@@ -37,7 +37,7 @@ app.use(cors({credentials: true, origin: true}));
 
 app.post("/register", (req, res) => {
     if (!req.body) return res.status(400).send("Where body?");
-    const user = req.user;
+    const user = req.body.user;
     if (!user) return res.status(400).send("Where user?");
     if (!user.email || !user.password || !user.fullname) return res.status(400).send("Where one or more of these: user.email, user.password, user.fullname?");
     const getUserSQL = "SELECT * FROM `Users` WHERE email = ?";
