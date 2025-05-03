@@ -57,6 +57,12 @@ BomesWebTelegramBot_build:
   variables:
     PROJECT: "BomesWebTelegramBot"
 
+BomesMailService_build:
+  stage: build-docker
+  extends: .trigger
+  variables:
+    PROJECT: "BomesMailService"
+
 BomesWebDeploy:
   stage: deploy-dev
   allow_failure: true
@@ -65,6 +71,7 @@ BomesWebDeploy:
   - job: BomesWebCore_build
   - job: BomesAuthentificationService_build
   - job: BomesWebTelegramBot_build
+  - job: BomesMailService_build
   script:
     - mv /tmp/*.tar.gz ./ || echo "No new container to deploy"
     - ls -lash

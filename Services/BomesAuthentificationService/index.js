@@ -12,6 +12,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 const CORE_ADDRESS = process.env.CORE_ADDRESS;
+const MAIL_ADDRESS = process.env.MAIL_ADDRESS;
 const database_host = process.env.DATABASE_ADDRESS;
 const database_user = process.env.DATABASE_USERNAME;
 const database_password = process.env.DATABASE_PASSWORD;
@@ -37,10 +38,10 @@ app.use(cors({credentials: true, origin: true}));
 
 app.post("/register", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where body?");
+    if (!req.body) return res.status(400).send("Where is body?");
     const user = req.body.user;
-    if (!user) return res.status(400).send("Where user?");
-    if (!user.email) return res.status(400).send("Where user.email?");
+    if (!user) return res.status(400).send("Where is user?");
+    if (!user.email) return res.status(400).send("Where is user.email?");
     const getUserSQL = "SELECT 1 FROM `Users` WHERE email = ?";
     const getUserData = [user.email];
     database.query(getUserSQL, getUserData, (err, result) => {
@@ -50,6 +51,23 @@ app.post("/register", (req, res) => {
         const code = Utils.getRandomInt(100000, 999999);
 
         // Send mail...
+        sendToHttp(
+            `http://${MAIL_ADDRESS}/send_mail`,
+            {
+                mail: {
+                    from: '"Администрация Bomes" <mainadmin@bomes.ru>',
+                    to: email,
+                    subject: 'Код для подтверждения почты: ' + code,
+                    text: 'Ваш код для подтверждения почты' + code,
+                    html: '<h1>Подтвердите почту используя код: <b>' + code + '</b></h1>',
+                }
+            },
+            (err, response, body) => {
+                if (err) return Utils.error(err);
+                Utils.log(`Mail result: ${body}`);
+
+            }
+        );
 
         const addToConfirmationsSQL = "REPLACE INTO `Confirmations` SET `email` = ?, `code` = ?";
         const addToConfirmationsData = [user.email, code];
@@ -61,11 +79,11 @@ app.post("/register", (req, res) => {
 
 app.post("/confirm_email", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where body?");
+    if (!req.body) return res.status(400).send("Where is body?");
     const confirmation_data = req.body.confirmation_data;
-    if (!confirmation_data) return res.status(400).send("Where confirmation_data?");
+    if (!confirmation_data) return res.status(400).send("Where is confirmation_data?");
     if (!confirmation_data.email || !confirmation_data.password || !confirmation_data.fullname || !confirmation_data.code)
-        return res.status(400).send("Where one or more of these: confirmation_data.email, confirmation_data.password, confirmation_data.fullname, confirmation_data.code?");
+        return res.status(400).send("Where is one or more of these: confirmation_data.email, confirmation_data.password, confirmation_data.fullname, confirmation_data.code?");
     const getConfirmationSQL = "SELECT 1 FROM `Confirmations` WHERE email = ? AND code = ?";
     const getConfirmationData = [confirmation_data.email, confirmation_data.code];
     database.query(getConfirmationSQL, getConfirmationData, (err, result) => {
@@ -87,10 +105,10 @@ app.post("/confirm_email", (req, res) => {
 
 app.post("/login", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where body?");
+    if (!req.body) return res.status(400).send("Where is body?");
     const user = req.body.user;
-    if (!user) return res.status(400).send("Where user?");
-    if (!user.email || !user.password)  return res.status(400).send("Where one or more of these: user.email, user.password?");
+    if (!user) return res.status(400).send("Where is user?");
+    if (!user.email || !user.password)  return res.status(400).send("Where is one or more of these: user.email, user.password?");
     const getUserSQL = "SELECT * FROM `Users` WHERE email = ?";
     const getUserData = [user.email];
     database.query(getUserSQL, getUserData, (err, result) => {
@@ -112,34 +130,38 @@ app.listen(PORT, () => {
 });
 
 // Отправка запроса на регистрацию в ядро
-request.post(
+
+sendToHttp(
+    `http://${CORE_ADDRESS}/register_service`, 
     {
-        url: `http://${CORE_ADDRESS}/register_service`,
-        form: {
-            // Вся информация в виде json-строки в поле data
-            data: JSON.stringify({
-                port: PORT,
-                requests: [
-                    {
-                        type: "POST",
-                        value: "/register"
-                    },
-                    {
-                        type: "POST",
-                        value: "/confirm_email"
-                    },
-                    {
-                        type: "POST",
-                        value: "/login"
-                    }
-                ]
-            })
-        }
+        port: PORT,
+        requests: [
+            {
+                type: "POST",
+                value: "/register"
+            },
+            {
+                type: "POST",
+                value: "/confirm_email"
+            },
+            {
+                type: "POST",
+                value: "/login"
+            }
+        ]
     },
     (err, response, body) => {
-        if (err) console.log(err);
-        else {
-            Utils.log("REGISTERED!");
-        }
+        if (err) return console.log(err);
+        Utils.log("REGISTERED!");
     }
 );
+
+function sendToHttp(address, data, onresult) {
+    request.post(
+        {
+            url: address,
+            form: {data: JSON.stringify(data)}
+        },
+        onresult
+    );
+}
