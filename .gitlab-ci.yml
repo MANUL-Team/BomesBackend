@@ -45,11 +45,11 @@ BomesWebCore_build:
   variables:
     PROJECT: "BomesWebCore"
 
-BomesWebAuth_build:
+BomesAuthentificationService_build:
   stage: build-docker
   extends: .trigger
   variables:
-    PROJECT: "BomesWebAuth"
+    PROJECT: "BomesAuthentificationService"
 
 BomesWebTelegramBot_build:
   stage: build-docker

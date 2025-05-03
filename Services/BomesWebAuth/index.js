@@ -35,49 +35,6 @@ app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
 // #################################
 
-// Обработка тестового запроса
-app.get("/test_request", (req, res) => {
-    Utils.log(`Test request, IP: ${req.ip.slice(7)}`);
-    res.send("Success from auth");
-});
-
-app.post("/get_users", (req, res) => {
-    if (!req.body) return res.sendStatus(400);
-    Utils.log(`Get users, IP: ${req.ip.slice(7)}`);
-    req.body = JSON.parse(req.body.data);
-    const user_email = req.body.email;
-    const sql = 'SELECT * FROM test_table WHERE email = ?;';
-    const data = [user_email];
-    database.query(sql, data, (err, results) => {
-        if (err) Utils.error(err);
-        else {
-            const answer = {
-                message: "Success to get users",
-                data: results
-            }
-            res.send(answer);
-        }
-    });
-});
-
-app.post("/add_user", (req, res) => {
-    if (!req.body) return res.sendStatus(400);
-    Utils.log(`Add user, IP: ${req.ip.slice(7)}`);
-    req.body = JSON.parse(req.body.data);
-    const user_email = req.body.email;
-    const user_password = req.body.password;
-    const sql = 'INSERT INTO test_table (email, password) VALUES (?, ?);';
-    const data = [user_email, user_password];
-    database.query(sql, data, (err, results) => {
-        if (err) Utils.error(err);
-        else {
-            const answer = {
-                message: "Success to add user"
-            }
-            res.send(answer);
-        }
-    });
-});
 
 // Запуск сервера
 app.listen(PORT, () => {

@@ -4,8 +4,8 @@ include:
 
 # Ставим переменные дочернего пайплайна
 variables:
-  PROJECT: "BomesWebAuth" # <-- PROJECT: "(Название сервиса)"
-  DOCKERNAME: "bomes-webauth" # <-- DOCKERNAME: "(Имя контейнера)"
+  PROJECT: "BomesAuthentificationService" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-authentification" # <-- DOCKERNAME: "(Имя контейнера)"
 
 # jobs внутри дочернего пайплайна
 BomesWebAuth_build:

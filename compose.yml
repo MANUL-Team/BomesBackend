@@ -28,8 +28,8 @@ services:
     depends_on:
       - bomes-api
 
-  bomes-webauth:
-    image: bomes-webauth # <-- image: (Имя контейнера)
+  bomes-authentification:
+    image: bomes-authentification # <-- image: (Имя контейнера)
     restart: unless-stopped
     env_file: "all_docker.env"
     networks:
