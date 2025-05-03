@@ -40,7 +40,7 @@ app.post("/register", (req, res) => {
     if (!req.body) return res.status(400).send("Where body?");
     const user = req.body.user;
     if (!user) return res.status(400).send("Where user?");
-    if (!user.email || !user.password || !user.fullname) return res.status(400).send("Where one or more of these: user.email, user.password, user.fullname?");
+    if (!user.email) return res.status(400).send("Where user.email?");
     const getUserSQL = "SELECT 1 FROM `Users` WHERE email = ?";
     const getUserData = [user.email];
     database.query(getUserSQL, getUserData, (err, result) => {
@@ -53,7 +53,7 @@ app.post("/register", (req, res) => {
 
                 // Send mail...
 
-                const addToConfirmationsSQL = "REPLACE INTO `Confirmations` SET `email` = ?, `password` = ?, `fullname` = ?, `code` = ?";
+                const addToConfirmationsSQL = "REPLACE INTO `Confirmations` SET `email` = ?, `code` = ?";
                 const addToConfirmationsData = [user.email, user.password, user.fullname, code];
                 database.query(addToConfirmationsSQL, addToConfirmationsData, (err, result) => {
                     if (err) Utils.error(err);
@@ -68,18 +68,24 @@ app.post("/confirm_email", (req, res) => {
     if (!req.body) return res.status(400).send("Where body?");
     const confirmation_data = req.body.confirmation_data;
     if (!confirmation_data) return res.status(400).send("Where confirmation_data?");
-    if (!confirmation_data.email || !confirmation_data.code) return res.status(400).send("Where one or more of these: confirmation_data.email, confirmation_data.code?");
+    if (!confirmation_data.email || !confirmation_data.password || !confirmation_data.fullname || !confirmation_data.code)
+        return res.status(400).send("Where one or more of these: confirmation_data.email, confirmation_data.password, confirmation_data.fullname, confirmation_data.code?");
     const getConfirmationSQL = "SELECT 1 FROM `Confirmations` WHERE email = ? AND code = ?";
     const getConfirmationData = [confirmation_data.email, confirmation_data.code];
     database.query(getConfirmationSQL, getConfirmationData, (err, result) => {
         if (err) Utils.error(err);
         else {
-            if (!result.length) res.send("Wrong code!");
+            if (!result.length) res.send("Wrong email or code!");
             else {
                 res.send("Good code!");
                 const removeConfirmationsSQL = "DELETE FROM `Confirmations` WHERE email = ?";
                 const removeConfirmationsData = [confirmation_data.email];
                 database.query(removeConfirmationsSQL, removeConfirmationsData, (err, result) => {
+                    if (err) Utils.error(err);
+                });
+                const addToUsersSQL = "INSERT INTO `Users` (email, password, fullname) VALUES (?, ?, ?)";
+                const addToUsersData = [confirmation_data.email, confirmation_data.password, confirmation_data.fullname];
+                database.query(addToUsersSQL, addToUsersData, (err, result) => {
                     if (err) Utils.error(err);
                 });
             }
