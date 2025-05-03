@@ -7,7 +7,7 @@ from dotenv import dotenv_values
 config = dotenv_values()
 
 app = Flask(__name__)
-PORT = config["PORT"]
+PORT = int(config["PORT"])
 CORE_ADDRESS = config["CORE_ADDRESS"]
 
 @app.route("/get_python_example", methods=['GET'])
