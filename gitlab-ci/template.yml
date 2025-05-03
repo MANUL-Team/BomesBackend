@@ -31,10 +31,10 @@ workflow:
     - DevBomes1
   script:
     - echo "Deleting oldest container and image..."
-    - docker stop $DOCKERNAME || echo "$DOCKERNAME is stoped"
-    - docker rm $DOCKERNAME || echo "$DOCKERNAME is removed"
+    - docker stop bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME is stoped"
+    - docker rm bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME is removed"
     - echo "Deleting oldest image $DOCKERNAME"
-    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
+    - docker rmi bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > /tmp/$DOCKERNAME.tar.gz
