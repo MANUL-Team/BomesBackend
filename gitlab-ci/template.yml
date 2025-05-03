@@ -34,7 +34,7 @@ workflow:
     - docker stop bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME is stoped"
     - docker rm bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME is removed"
     - echo "Deleting oldest image $DOCKERNAME"
-    - docker rmi bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME image is removed"
+    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
     - cd Services/$PROJECT
     - docker build -t $DOCKERNAME .
     - docker save $DOCKERNAME | gzip > /tmp/$DOCKERNAME.tar.gz
