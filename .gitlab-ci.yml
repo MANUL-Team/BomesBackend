@@ -62,12 +62,7 @@ BomesMailService_build:
   extends: .trigger
   variables:
     PROJECT: "BomesMailService"
-
-Sleep:
-  stage: deploy-dev
-  script:
-    - sleep 5
-
+    
 BomesWebDeploy:
   stage: deploy-dev
   needs:
