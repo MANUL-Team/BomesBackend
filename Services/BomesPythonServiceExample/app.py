@@ -5,11 +5,11 @@ import json
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+config = dotenv_values()
 
 app = Flask(__name__)
-PORT = os.getenv("PORT")
-CORE_ADDRESS = os.getenv("CORE_ADDRESS")
+PORT = config["PORT"]
+CORE_ADDRESS = config["CORE_ADDRESS"]
 
 @app.route("/get_python_example", methods=['GET'])
 def get_python_example():
