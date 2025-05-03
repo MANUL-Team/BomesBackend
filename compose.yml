@@ -55,6 +55,18 @@ services:
     networks:
       docker_bomes:
         ipv4_address: 172.20.1.30
+    depends_on:
+      - bomes-webcore
+  
+  bomes-javascriptexample:
+    image: bomes-javascriptexample # <-- image: (Имя контейнера)
+    restart: unless-stopped
+    env_file: "all_docker.env"
+    networks:
+      docker_bomes:
+        ipv4_address: 172.20.1.40
+    depends_on:
+      - bomes-webcore
 
 networks:
   docker_bomes:

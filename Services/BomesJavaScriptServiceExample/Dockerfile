@@ -1,8 +1,8 @@
 FROM node:current-alpine
 
-COPY . /BomesAuthentification
+COPY . /BomesJavaScriptExample
 
-WORKDIR /BomesAuthentification
+WORKDIR /BomesJavaScriptExample
 
 RUN npm i
 
