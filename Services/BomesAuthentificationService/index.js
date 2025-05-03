@@ -35,6 +35,32 @@ app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
 // #################################
 
+app.post("/register", (req, res) => {
+    if (!req.body) return res.status(400).send("Where body?");
+    const user = req.user;
+    if (!user) return res.status(400).send("Where user?");
+    if (!user.email || !user.password || !user.fullname) return res.status(400).send("Where one or more of these: user.email, user.password, user.fullname?");
+    const getUserSQL = "SELECT * FROM `Users` WHERE email = ?";
+    const getUserData = [user.email];
+    database.query(getUserSQL, getUserData, (err, result) => {
+        if (err) Utils.error(err);
+        else {
+            if (result.length) res.send("Email already used!");
+            else{
+                res.send("Good email!");
+                const code = Utils.getRandomInt(100000, 999999);
+
+                // Send mail...
+
+                const addToConfirmationsSQL = "REPLACE INTO `Confirmations` SET `email` = ?, `password` = ?, `fullname` = ?, `code` = ?";
+                const addToConfirmationsData = [user.email, user.password, user.fullname, code];
+                database.query(addToConfirmationsSQL, addToConfirmationsData, (err, result) => {
+                    if (err) Utils.error(err);
+                });
+            }
+        }
+    });
+});
 
 // Запуск сервера
 app.listen(PORT, () => {
@@ -51,16 +77,8 @@ request.post(
                 port: PORT,
                 requests: [
                     {
-                        type: "GET",
-                        value: "/test_request"
-                    },
-                    {
                         type: "POST",
-                        value: "/get_users"
-                    },
-                    {
-                        type: "POST",
-                        value: "/add_user"
+                        value: "/register"
                     }
                 ]
             })
