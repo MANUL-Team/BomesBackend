@@ -4,7 +4,7 @@ include:
 
 # Ставим переменные дочернего пайплайна
 variables:
-  PROJECT: "BomesJavaScriptExample" # <-- PROJECT: "(Название сервиса)"
+  PROJECT: "BomesJavaScriptServiceExample" # <-- PROJECT: "(Название сервиса)"
   DOCKERNAME: "bomes-javascriptexample" # <-- DOCKERNAME: "(Имя контейнера)"
 
 # jobs внутри дочернего пайплайна

@@ -63,11 +63,11 @@ BomesPythonServiceExample_build:
   variables:
     PROJECT: "BomesPythonServiceExample"
 
-BomesJavaScriptExample_build:
+BomesJavaScriptServiceExample_build:
   stage: build-docker
   extends: .trigger
   variables:
-    PROJECT: "BomesJavaScriptExample"
+    PROJECT: "BomesJavaScriptServiceExample"
 
 BomesWebDeploy:
   stage: deploy-dev
