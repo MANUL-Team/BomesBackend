@@ -1,5 +1,5 @@
 // Импорт библиотек, установка констант и стандартных настроек express, подключение к базе данных
-// #################################
+// ###################################################################################################
 require("dotenv").config();
 
 const express = require("express");
@@ -34,7 +34,7 @@ database.connect(function (err) {
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors({credentials: true, origin: true}));
-// #################################
+// ###################################################################################################
 
 app.post("/register", (req, res) => {
     req.body = JSON.parse(req.body.data);
