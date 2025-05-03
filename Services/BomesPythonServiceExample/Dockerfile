@@ -1,5 +1,5 @@
 # Выбор базового образа с Python
-FROM python:3.12-slim
+FROM python:3.12-alpine
 
 # Установка рабочей директории
 WORKDIR /app
@@ -9,9 +9,11 @@ COPY . /app
 
 # Установка зависимостей
 RUN pip install Flask
+RUN pip install requests
+RUN pip install gevent
 
 # Открытие порта для взаимодействия с приложением
-EXPOSE 3001
+EXPOSE 3000
 
 # Запуск приложения
-CMD [«python», «app.py»]
+CMD ["python", "app.py"]
