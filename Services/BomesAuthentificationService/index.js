@@ -77,8 +77,8 @@ app.post("/confirm_email", (req, res) => {
             if (!result.length) res.send("Wrong code!");
             else {
                 res.send("Good code!");
-                const removeConfirmationsSQL = "DELETE FROM `Confirmations` WHERE email = ? AND code = ?";
-                const removeConfirmationsData = [confirmation_data.email, confirmation_data.code];
+                const removeConfirmationsSQL = "DELETE FROM `Confirmations` WHERE email = ?";
+                const removeConfirmationsData = [confirmation_data.email];
                 database.query(removeConfirmationsSQL, removeConfirmationsData, (err, result) => {
                     if (err) Utils.error(err);
                 });
