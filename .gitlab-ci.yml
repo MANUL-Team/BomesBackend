@@ -69,7 +69,7 @@ BomesWebDeploy:
   needs:
   - job: BomesAPI_build
   - job: BomesWebCore_build
-  - job: BomesWebAuth_build
+  - job: BomesAuthentificationService_build
   - job: BomesWebTelegramBot_build
   script:
     - mv /tmp/*.tar.gz ./ || echo "No new container to deploy"
