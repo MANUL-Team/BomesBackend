@@ -36,6 +36,7 @@ variables:
           - Services/$PROJECT/**/*
       when: always
     - when: manual
+  allow_failure: true
 
 
 
@@ -75,7 +76,6 @@ BomesMailService_build:
 
 BomesWebDeploy:
   stage: deploy-dev
-  allow_failure: true
   script:
     - mv /tmp/*.tar.gz ./ || echo "No new container to deploy"
     - ls -lash
