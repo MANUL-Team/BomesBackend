@@ -2,10 +2,14 @@ from flask import Flask, request
 import requests
 from gevent.pywsgi import WSGIServer
 import json
- 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = Flask(__name__)
-PORT = 3000
-CORE_ADDRESS = "172.20.1.140:3000"
+PORT = os.getenv("PORT")
+CORE_ADDRESS = os.getenv("CORE_ADDRESS")
 
 @app.route("/get_python_example", methods=['GET'])
 def get_python_example():

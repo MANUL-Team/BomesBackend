@@ -11,6 +11,7 @@ COPY . /app
 RUN pip install Flask
 RUN pip install requests
 RUN pip install gevent
+RUN pip install python-dotenv
 
 # Открытие порта для взаимодействия с приложением
 EXPOSE 3000
