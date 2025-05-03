@@ -56,12 +56,6 @@ BomesWebTelegramBot_build:
   extends: .trigger
   variables:
     PROJECT: "BomesWebTelegramBot"
-  
-BomesPythonServiceExample_build:
-  stage: build-docker
-  extends: .trigger
-  variables:
-    PROJECT: "BomesPythonServiceExample"
 
 BomesWebDeploy:
   stage: deploy-dev
