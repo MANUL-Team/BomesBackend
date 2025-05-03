@@ -65,7 +65,6 @@ BomesMailService_build:
 
 BomesWebDeploy:
   stage: deploy-dev
-  allow_failure: true
   needs:
   - job: BomesAPI_build
   - job: BomesWebCore_build
