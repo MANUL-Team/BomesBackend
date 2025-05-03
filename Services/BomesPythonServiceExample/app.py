@@ -2,8 +2,7 @@ from flask import Flask, request
 import requests
 from gevent.pywsgi import WSGIServer
 import json
-import os
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
 config = dotenv_values()
 
