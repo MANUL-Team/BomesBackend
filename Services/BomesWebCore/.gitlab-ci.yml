@@ -10,6 +10,3 @@ variables:
 # jobs внутри дочернего пайплайна
 BomesWebCore_build:
   extends: .build-template-servises
-
-SleepPipeline:
-  extends: .sleep_pipeline

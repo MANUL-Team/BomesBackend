@@ -10,6 +10,3 @@ variables:
 # jobs внутри дочернего пайплайна
 BomesWebTelegramBot_build:
   extends: .build-template-servises
-
-SleepPipeline:
-  extends: .sleep_pipeline

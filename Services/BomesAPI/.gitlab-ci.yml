@@ -10,6 +10,3 @@ variables:
 # jobs внутри дочернего пайплайна
 BomesAPI_build:  # <-- (Название сервиса)_build
   extends: .build-template-servises
-
-SleepPipeline:
-  extends: .sleep_pipeline
