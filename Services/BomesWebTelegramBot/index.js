@@ -8,6 +8,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 const app = express();
 
+const CORE_ADDRESS = process.env.CORE_ADDRESS;
 const PORT = process.env.PORT;
 const api_address = process.env.API_ADDRESS;
 const API_KEY_BOT = process.env.API_KEY_BOT;
