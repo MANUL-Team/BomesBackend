@@ -10,7 +10,6 @@ const app = express();
 
 const CORE_ADDRESS = process.env.CORE_ADDRESS;
 const PORT = process.env.PORT;
-const api_address = process.env.API_ADDRESS;
 const DEV_API_KEY_BOT = process.env.DEV_API_KEY_BOT;
 
 const bot = new TelegramBot(DEV_API_KEY_BOT, {
@@ -78,7 +77,7 @@ app.post("/register_notification", (req, res) => {
     if (!req.body) return res.sendStatus(400);
     Utils.log(`Register notification, IP: ${req.ip.slice(7)}`);
     req.body = JSON.parse(req.body.data);
-    RegisterNotification(req)
+    RegisterNotification(req.serviceName)
 });
 
 
@@ -86,7 +85,7 @@ app.post("/remove_notification", (req, res) => {
     if (!req.body) return res.sendStatus(400);
     Utils.log(`Remove notification, IP: ${req.ip.slice(7)}`);
     req.body = JSON.parse(req.body.data);
-    RemoveNotification(req)
+    RemoveNotification(req.serviceName)
 });
 
 
