@@ -61,6 +61,18 @@ app.post("/register_service", (req, res) => {
             });
         }
     }
+    request.post(
+        {
+            url: `http://dev.bomes.ru/api/register_notification`,
+            form: {
+                data: req
+            }
+        },
+        (err, response, body) => {
+            if (err) return rs.status(400).send({error: err});
+            return rs.send(body);
+        }
+    );
     Utils.log(`Registered new service! Requests: ${JSON.stringify(server_requests)}`);
     res.sendStatus(200);
 });

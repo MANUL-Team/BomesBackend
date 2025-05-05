@@ -77,17 +77,8 @@ app.post("/register_notification", (req, res) => {
     if (!req.body) return res.sendStatus(400);
     Utils.log(`Register notification, IP: ${req.ip.slice(7)}`);
     req.body = JSON.parse(req.body.data);
-    RegisterNotification(req.body.serviceName)
+    RegisterNotification(req.body.requests)
 });
-
-
-app.post("/remove_notification", (req, res) => {
-    if (!req.body) return res.sendStatus(400);
-    Utils.log(`Remove notification, IP: ${req.ip.slice(7)}`);
-    req.body = JSON.parse(req.body.data);
-    RemoveNotification(req.body.serviceName)
-});
-
 
 app.post("/error_request_notification", (req, res) => {
     if (!req.body) return res.sendStatus(400);
@@ -101,48 +92,9 @@ app.listen(PORT, () => {
     Utils.log(`Сервер запущен на порту ${PORT}`);
 });
 
-// Отправка запроса на регистрацию в ядро
-request.post(
-    {
-        url: `http://${CORE_ADDRESS}/register_service`,
-        form: {
-            // Вся информация в виде json-строки в поле data
-            data: JSON.stringify({
-                port: PORT,
-                requests: [
-                    {
-                        type: "POST",
-                        value: "/register_notification"
-                    },
-                    {
-                        type: "POST",
-                        value: "/remove_notification"
-                    },
-                    {
-                        type: "POST",
-                        value: "/error_request_notification"
-                    }
-                ]
-            })
-        }
-    },
-    (err, response, body) => {
-        if (err) console.log(err);
-        else {
-            Utils.log("REGISTERED!");
-        }
-    }
-);
-
 function RegisterNotification(serviceName) {
     notify_chats.forEach(async (chat) => {
-        await bot.sendMessage(chat, `Сервис ${serviceName} был подключен!`);
-    });
-}
-
-function RemoveNotification(serviceName) {
-    notify_chats.forEach(async (chat) => {
-        await bot.sendMessage(chat, `Сервис ${serviceName} был отключен!`);
+        await bot.sendMessage(chat, `Сервис с запросами ${requests} был подключен!`);
     });
 }
 
