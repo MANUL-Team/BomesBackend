@@ -74,13 +74,6 @@ bot.on('text', async msg => {
     }
 });
 
-// Обработка тестового запроса
-app.get("/test_request", (req, res) => {
-    Utils.log(`Test request, IP: ${req.ip.slice(7)}`);
-    res.send("Success from auth");
-});
-
-
 app.post("/register_notification", (req, res) => {
     if (!req.body) return res.sendStatus(400);
     Utils.log(`Register notification, IP: ${req.ip.slice(7)}`);
@@ -118,10 +111,6 @@ request.post(
             data: JSON.stringify({
                 port: PORT,
                 requests: [
-                    {
-                        type: "GET",
-                        value: "/test_request"
-                    },
                     {
                         type: "POST",
                         value: "/register_notification"
