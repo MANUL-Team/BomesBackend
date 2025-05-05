@@ -11,9 +11,9 @@ const app = express();
 const CORE_ADDRESS = process.env.CORE_ADDRESS;
 const PORT = process.env.PORT;
 const api_address = process.env.API_ADDRESS;
-const API_KEY_BOT = process.env.API_KEY_BOT;
+const DEV_API_KEY_BOT = process.env.DEV_API_KEY_BOT;
 
-const bot = new TelegramBot(API_KEY_BOT, {
+const bot = new TelegramBot(DEV_API_KEY_BOT, {
     polling: true
 });
 
