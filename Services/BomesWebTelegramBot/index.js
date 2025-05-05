@@ -102,37 +102,41 @@ app.listen(PORT, () => {
 });
 
 // Отправка запроса на регистрацию в ядро
-request.post(
+
+sendPostToHttp(
+    `http://${CORE_ADDRESS}/register_service`, 
     {
-        url: `http://${CORE_ADDRESS}/register_service`,
-        form: {
-            // Вся информация в виде json-строки в поле data
-            data: JSON.stringify({
-                port: PORT,
-                requests: [
-                    {
-                        type: "POST",
-                        value: "/register_notification"
-                    },
-                    {
-                        type: "POST",
-                        value: "/remove_notification"
-                    },
-                    {
-                        type: "POST",
-                        value: "/error_request_notification"
-                    }
-                ]
-            })
-        }
+        port: PORT,
+        requests: [
+            {
+                type: "POST",
+                value: "/register_notification"
+            },
+            {
+                type: "POST",
+                value: "/remove_notification"
+            },
+            {
+                type: "POST",
+                value: "/error_request_notification"
+            }
+        ]
     },
     (err, response, body) => {
-        if (err) console.log(err);
-        else {
-            Utils.log("REGISTERED!");
-        }
+        if (err) return Utils.error(err);
+        Utils.log("REGISTERED!");
     }
 );
+
+function sendPostToHttp(address, data, onresult) {
+    request.post(
+        {
+            url: address,
+            form: {data: JSON.stringify(data)}
+        },
+        onresult
+    );
+}
 
 function RegisterNotification(serviceName) {
     notify_chats.forEach(async (chat) => {
