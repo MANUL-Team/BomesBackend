@@ -65,7 +65,6 @@ app.post("/register", (req, res) => {
             (err, response, body) => {
                 if (err) return Utils.error(err);
                 Utils.log(`Mail result: ${body}`);
-
             }
         );
 

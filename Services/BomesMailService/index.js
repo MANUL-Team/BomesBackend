@@ -33,16 +33,16 @@ app.use(cors({credentials: true, origin: true}));
 
 app.post("/send_mail", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where is body?");
+    if (!req.body) return res.status(400).send({message: "Where is body?"});
     const mail = req.body.mail;
-    if (!mail) return res.status(400).send("Where is mail?");
+    if (!mail) return res.status(400).send({message: "Where is mail?"});
     if (!mail.from || !mail.to || !mail.subject || !mail.text || !mail.html)
-        return res.status(400).send("Where is one or more of these: mail.from, mail.to, mail.subject, mail.text, mail.html?");
+        return res.status(400).send({message: "Where is one or more of these: mail.from, mail.to, mail.subject, mail.text, mail.html?"});
     transporter.sendMail(mail, (err, info) => {
         if (err) Utils.log(err);
         else {
             Utils.log(info);
-            res.send("Successful send");
+            res.send({message: "Successful send"});
         }
     });
 });
