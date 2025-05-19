@@ -38,16 +38,16 @@ app.use(cors({credentials: true, origin: true}));
 
 app.post("/register", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where is body?");
+    if (!req.body) return res.status(400).send({message: "Where is body?"});
     const user = req.body.user;
-    if (!user) return res.status(400).send("Where is user?");
-    if (!user.email) return res.status(400).send("Where is user.email?");
+    if (!user) return res.status(400).send({message: "Where is user?"});
+    if (!user.email) return res.status(400).send({message: "Where is user.email?"});
     const getUserSQL = "SELECT 1 FROM `Users` WHERE email = ?";
     const getUserData = [user.email];
     database.query(getUserSQL, getUserData, (err, result) => {
         if (err) return Utils.error(err);
-        if (result.length) return res.send("Email already used!");
-        res.send("Good email!");
+        if (result.length) return res.send({message: "Email already used!"});
+        res.send({message: "Good email!"});
         const code = Utils.getRandomInt(100000, 999999);
 
         // Send mail...
@@ -79,17 +79,17 @@ app.post("/register", (req, res) => {
 
 app.post("/confirm_email", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where is body?");
+    if (!req.body) return res.status(400).send({message: "Where is body?"});
     const confirmation_data = req.body.confirmation_data;
-    if (!confirmation_data) return res.status(400).send("Where is confirmation_data?");
+    if (!confirmation_data) return res.status(400).send({message: "Where is confirmation_data?"});
     if (!confirmation_data.email || !confirmation_data.password || !confirmation_data.fullname || !confirmation_data.code)
-        return res.status(400).send("Where is one or more of these: confirmation_data.email, confirmation_data.password, confirmation_data.fullname, confirmation_data.code?");
+        return res.status(400).send({message: "Where is one or more of these: confirmation_data.email, confirmation_data.password, confirmation_data.fullname, confirmation_data.code?"});
     const getConfirmationSQL = "SELECT 1 FROM `Confirmations` WHERE email = ? AND code = ?";
     const getConfirmationData = [confirmation_data.email, confirmation_data.code];
     database.query(getConfirmationSQL, getConfirmationData, (err, result) => {
         if (err) return Utils.error(err);
-        if (!result.length) return res.send("Wrong email or code!");
-        res.send("Good code!");
+        if (!result.length) return res.send({message: "Wrong email or code!"});
+        res.send({message: "Good code!"});
         const removeConfirmationsSQL = "DELETE FROM `Confirmations` WHERE email = ?";
         const removeConfirmationsData = [confirmation_data.email];
         database.query(removeConfirmationsSQL, removeConfirmationsData, (err, result) => {
@@ -105,17 +105,17 @@ app.post("/confirm_email", (req, res) => {
 
 app.post("/login", (req, res) => {
     req.body = JSON.parse(req.body.data);
-    if (!req.body) return res.status(400).send("Where is body?");
+    if (!req.body) return res.status(400).send({message: "Where is body?"});
     const user = req.body.user;
-    if (!user) return res.status(400).send("Where is user?");
-    if (!user.email || !user.password)  return res.status(400).send("Where is one or more of these: user.email, user.password?");
+    if (!user) return res.status(400).send({message: "Where is user?"});
+    if (!user.email || !user.password)  return res.status(400).send({message: "Where is one or more of these: user.email, user.password?"});
     const getUserSQL = "SELECT * FROM `Users` WHERE email = ?";
     const getUserData = [user.email];
     database.query(getUserSQL, getUserData, (err, result) => {
         if (err) return Utils.error(err);
-        if (!result.length) return res.send("User not found!");
+        if (!result.length) return res.send({message: "User not found!"});
         const databaseUser = result[0];
-        if (databaseUser.password !== user.password) return res.send("Wrong password!");
+        if (databaseUser.password !== user.password) return res.send({message: "Wrong password!"});
         databaseUser.password = undefined;
         res.send({
             message: "Successful login",
