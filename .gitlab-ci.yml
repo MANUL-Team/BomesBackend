@@ -81,4 +81,4 @@ BomesWebDeploy:
     - ls -lash
     - gunzip *.tar.gz || echo "No new container to deploy"
     - for var in $(ls | grep .tar); do docker load -i "$var"; done || echo "No new container to deploy"
-    - docker compose up -d
+    # - docker compose up -d
