@@ -77,4 +77,4 @@ BomesMailService_build:
 BomesWebDeploy:
   stage: deploy-dev
   script:
-    - for yaml in $(ls /root/k3s_deploy/*.yaml); do sudo kubectl apply -f $yaml; done
+    - for yaml in $(sudo ls /root/k3s_deploy/*.yaml); do sudo kubectl apply -f $yaml; done
