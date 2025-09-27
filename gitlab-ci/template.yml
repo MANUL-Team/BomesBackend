@@ -29,9 +29,7 @@ workflow:
   tags: 
     - DevBomes1
   script:
-    - docker stop bomesbackend-$DOCKERNAME-1 || true
-    - docker rm bomesbackend-$DOCKERNAME-1 || true
-    - docker rmi $DOCKERNAME || true
+    - docker rmi bomes-hub:5000/$DOCKERNAME || true
     - cd Services/$PROJECT
     - docker build -t bomes-hub:5000/$DOCKERNAME .
     - docker push bomes-hub:5000/$DOCKERNAME
