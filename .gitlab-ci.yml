@@ -77,4 +77,4 @@ BomesMailService_build:
 BomesWebDeploy:
   stage: deploy-dev
   script:
-    - for yaml in $(sudo ls -la /root/k3s_deploy/ | grep .yaml | awk '{print $9}'); do sudo kubectl apply -f /root/k3s_deploy/$yaml; done
+    - for yaml in $(sudo ls -la /root/k3s_deploy/ | grep .yaml | awk '{print $9}'); do sudo kubectl apply -f /root/k3s_deploy/$yaml; sudo kubectl rollout restart deployment/$(sudo cat /root/k3s_deploy/$yaml | grep metadata -A 1 | grep name | grep -v service | grep -v ingress  | awk '{print $2}'); done
