@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: bomes-webcore
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: bomes-webcore
+    template:
+        metadata:
+            labels:
+                app: bomes-webcore
+        spec:
+            containers:
+                - name: bomes-webcore
+                  image: bomes-hub:5000/bomes-webcore:latest
+                  env:
+                      - name: TZ
+                        value: Europe/Moscow
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: bomes-webcore-service
+spec:
+    selector:
+        app: bomes-webcore
+    ports:
+        - port: 3000
+          targetPort: 3000

@@ -15,7 +15,6 @@ workflow:
     - gunzip /tmp/*.tar.gz
     - docker load -i /tmp/*.tar
     - docker run -dit --name $DOCKERNAME $SPECIFIC_SETTINGS_DOCKER --net docker_bomes --ip $IP $DOCKERNAME
-    - echo "Compile complete."
 
 .build-template-servises:
   stage: build
@@ -30,12 +29,9 @@ workflow:
   tags: 
     - DevBomes1
   script:
-    - echo "Deleting oldest container and image..."
-    - docker stop bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME is stoped"
-    - docker rm bomesbackend-$DOCKERNAME-1 || echo "$DOCKERNAME is removed"
-    - echo "Deleting oldest image $DOCKERNAME"
-    - docker rmi $DOCKERNAME || echo "$DOCKERNAME image is removed"
+    - docker stop bomesbackend-$DOCKERNAME-1 || true
+    - docker rm bomesbackend-$DOCKERNAME-1 || true
+    - docker rmi $DOCKERNAME || true
     - cd Services/$PROJECT
-    - docker build -t $DOCKERNAME .
-    - docker save $DOCKERNAME | gzip > /tmp/$DOCKERNAME.tar.gz
-    - ls -lash /tmp
+    - docker build -t bomes-hub:5000/$DOCKERNAME .
+    - docker push bomes-hub:5000/$DOCKERNAME

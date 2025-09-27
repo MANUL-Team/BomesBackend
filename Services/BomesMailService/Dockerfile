@@ -1,8 +1,8 @@
 FROM node:current-alpine
 
-COPY . /BomesMail
+COPY . /main
 
-WORKDIR /BomesMail
+WORKDIR /main
 
 RUN npm i
 

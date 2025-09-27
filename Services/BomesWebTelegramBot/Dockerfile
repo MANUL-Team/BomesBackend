@@ -1,8 +1,8 @@
 FROM node:current-alpine
 
-COPY . /BomesTelegramBot
+COPY . /main
 
-WORKDIR /BomesTelegramBot
+WORKDIR /main
 
 RUN npm i
 

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: bomes-authentification
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: bomes-authentification
+    template:
+        metadata:
+            labels:
+                app: bomes-authentification
+        spec:
+            containers:
+                - name: bomes-authentification
+                  image: bomes-hub:5000/bomes-authentification:latest
+                  env:
+                      - name: CORE_ADDRESS
+                        value: "bomes-webcore-service:3000"
+                      - name: TZ
+                        value: Europe/Moscow

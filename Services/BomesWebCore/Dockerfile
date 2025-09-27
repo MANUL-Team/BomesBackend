@@ -1,8 +1,8 @@
 FROM node:23-alpine3.20
 
-COPY . /BomesWebCore
+COPY . /main
 
-WORKDIR /BomesWebCore
+WORKDIR /main
 
 RUN npm i
 
