@@ -21,9 +21,9 @@ async def get_users(request):
 
 app = web.Application()
 app.add_routes([
-    web.get('/', handle),
-    web.get('/{name}', handle),
-    web.get('/get_users', get_users)
+    web.get('/api/', handle),
+    web.get('/api/{name}', handle),
+    web.get('/api/get_users', get_users)
 ])
 
 if __name__ == '__main__':
