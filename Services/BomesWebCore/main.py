@@ -2,7 +2,7 @@ from aiohttp import web
 import mysql.connector
 
 database = mysql.connector.connect(user='bomes', password='bomes',
-                              host='dev.bomes.ru',
+                              host='192.168.31.55',
                               database='BomesDatabase')
 
 async def handle(request):
