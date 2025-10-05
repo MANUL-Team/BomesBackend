@@ -6,6 +6,7 @@ database = mysql.connector.connect(user='bomes', password='bomes',
                               database='BomesDatabase')
 
 async def handle(request):
+    print("Request!")
     name = request.match_info.get('name', "World")
     text = f"Hello, {name}!"
     return web.Response(text=text)
@@ -21,9 +22,9 @@ async def get_users(request):
 
 app = web.Application()
 app.add_routes([
-    web.get('/api/', handle),
-    web.get('/api/{name}', handle),
-    web.get('/api/get_users', get_users)
+    web.get('/api/v1/', handle),
+    web.get('/api/v1/{name}', handle),
+    web.get('/api/v1/get_users', get_users)
 ])
 
 if __name__ == '__main__':
