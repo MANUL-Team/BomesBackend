@@ -41,13 +41,16 @@ async def get_token(request):
         return web.Response(text=f"Data is incorrect!")
 
 async def anything(request):
-    auth_header = request.headers.get('Authorization')
-    token = auth_header.split()[-1]
-    email = check_token(token)
-    if email:
-        return web.Response(text=f"Hello, {email}")
-    else:
-        return web.Response(text=f"Please, check your token. It is an incorrect!")
+    try:
+        auth_header = request.headers.get('Authorization')
+        token = auth_header.split()[-1]
+        email = check_token(token)
+        if email:
+            return web.Response(text=f"Hello, {email}")
+        else:
+            return web.Response(text=f"Please, check your token. It is an incorrect!")
+    except Exception as e:
+        return web.Response(text=f"Error: {e}")
 
 app = web.Application()
 app.add_routes([
