@@ -1,11 +1,11 @@
-FROM node:23-alpine3.20
+FROM python:3.12-slim-bookworm⁠
 
 COPY . /main
 
 WORKDIR /main
 
-RUN npm i
+RUN pip install -r requirements.txt
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["python3", "main.py"]
