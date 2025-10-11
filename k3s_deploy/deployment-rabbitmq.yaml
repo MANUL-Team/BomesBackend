@@ -1,0 +1,241 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: rabbitmq
+spec:
+    serviceName: rabbitmq
+    replicas: 3
+    selector:
+        matchLabels:
+            app: rabbitmq
+    template:
+        metadata:
+            labels:
+                app: rabbitmq
+        spec:
+            initContainers:
+                - name: setup-erlang-cookie
+                  image: busybox
+                  command:
+                      - sh
+                      - -c
+                      - |
+                          cp /etc/rabbitmq-secret/erlang-cookie /var/lib/rabbitmq/.erlang.cookie
+                          chmod 600 /var/lib/rabbitmq/.erlang.cookie
+                          chown 999:999 /var/lib/rabbitmq/.erlang.cookie
+                  volumeMounts:
+                      - name: rabbitmq-secret
+                        mountPath: /etc/rabbitmq-secret
+                      - name: data
+                        mountPath: /var/lib/rabbitmq
+            containers:
+                - name: rabbitmq
+                  image: rabbitmq:4.1.4-management-alpine
+                  ports:
+                      - containerPort: 5672
+                        name: amqp
+                      - containerPort: 15672
+                        name: http
+                      - containerPort: 4369
+                        name: epmd
+                      - containerPort: 25672
+                        name: cluster
+                  env:
+                      - name: K8S_SERVICE_NAME
+                        value: "rabbitmq"
+                      - name: RABBITMQ_USE_LONGNAME
+                        value: "true"
+                      - name: RABBITMQ_CONFIG_FILE
+                        value: "/etc/rabbitmq/rabbitmq.conf"
+                      - name: RABBITMQ_DEFAULT_USERNAME
+                        value: "guest"
+                      - name: RABBITMQ_DEFAULT_PASSWORD
+                        value: "guest"
+                      - name: RABBITMQ_LOOPBACK_USERS
+                        value: "false"
+                  volumeMounts:
+                      - name: config
+                        mountPath: /etc/rabbitmq
+                      - name: data
+                        mountPath: /var/lib/rabbitmq
+                  livenessProbe:
+                      exec:
+                          command: ["rabbitmq-diagnostics", "status"]
+                      initialDelaySeconds: 60
+                      periodSeconds: 30
+                      timeoutSeconds: 15
+                  readinessProbe:
+                      exec:
+                          command: ["rabbitmq-diagnostics", "ping"]
+                      initialDelaySeconds: 20
+                      periodSeconds: 10
+                      timeoutSeconds: 10
+                  resources:
+                      requests:
+                          memory: "512Mi"
+                          cpu: "1000m"
+                      limits:
+                          memory: "1Gi"
+                          cpu: "1000m"
+            volumes:
+                - name: config
+                  configMap:
+                      name: rabbitmq-config
+                      items:
+                          - key: rabbitmq.conf
+                            path: rabbitmq.conf
+                          - key: enabled_plugins
+                            path: enabled_plugins
+                - name: rabbitmq-secret
+                  secret:
+                      secretName: rabbitmq-secret
+    volumeClaimTemplates:
+        - metadata:
+              name: data
+          spec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: local-storage
+              resources:
+                  requests:
+                      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: rabbitmq-pv-0
+spec:
+    capacity:
+        storage: 5Gi
+    volumeMode: Filesystem
+    accessModes:
+        - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-storage
+    local:
+        path: /opt/rabbitmq-0
+    nodeAffinity:
+        required:
+            nodeSelectorTerms:
+                - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                            - devbomes
+---
+# rabbitmq-pv-local-1.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: rabbitmq-pv-1
+spec:
+    capacity:
+        storage: 5Gi
+    volumeMode: Filesystem
+    accessModes:
+        - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-storage
+    local:
+        path: /opt/rabbitmq-1
+    nodeAffinity:
+        required:
+            nodeSelectorTerms:
+                - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                            - devbomes2
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: rabbitmq-pv-2
+spec:
+    capacity:
+        storage: 5Gi
+    volumeMode: Filesystem
+    accessModes:
+        - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-storage
+    local:
+        path: /opt/rabbitmq-2
+    nodeAffinity:
+        required:
+            nodeSelectorTerms:
+                - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                            - devbomes
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: rabbitmq
+    labels:
+        app: rabbitmq
+spec:
+    clusterIP: None
+    ports:
+        - port: 5672
+          name: amqp
+        - port: 15672
+          name: http
+        - port: 4369
+          name: epmd
+        - port: 25672
+          name: cluster
+    selector:
+        app: rabbitmq
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: rabbitmq-management
+    labels:
+        app: rabbitmq
+spec:
+    ports:
+        - port: 15672
+          targetPort: 15672
+          name: http
+    selector:
+        app: rabbitmq
+    type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: bomes-rabbitmq-ingress
+spec:
+    rules:
+        - host: rabbitmq-dev.bomes.ru
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: rabbitmq-management
+                            port:
+                                number: 15672
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: rabbitmq-config
+data:
+    enabled_plugins: |
+        [rabbitmq_management, rabbitmq_peer_discovery_k8s].
+    rabbitmq.conf: |
+        loopback_users.guest = none
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: rabbitmq-secret
+type: Opaque
+data:
+    erlang-cookie: U0VDUkVULUNPT0tJRS0xMjM=

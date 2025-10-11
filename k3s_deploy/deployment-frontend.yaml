@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: bomes-frontend
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: bomes-frontend
+    template:
+        metadata:
+            labels:
+                app: bomes-frontend
+        spec:
+            containers:
+                - name: bomes-frontend
+                  image: bomes-hub:5000/bomes-frontend:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: bomes-frontend-service
+spec:
+    selector:
+        app: bomes-frontend
+    ports:
+        - port: 80
+          targetPort: 80

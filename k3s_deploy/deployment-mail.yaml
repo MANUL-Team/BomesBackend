@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: bomes-mail
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: bomes-mail
+    template:
+        metadata:
+            labels:
+                app: bomes-mail
+        spec:
+            containers:
+                - name: bomes-mail
+                  image: bomes-hub:5000/bomes-mail:latest
+                  imagePullPolicy: Always
+                  env:
+                      - name: CORE_ADDRESS
+                        value: "bomes-webcore-service:3000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: bomes-mail-service
+spec:
+    selector:
+        app: bomes-mail
+    ports:
+        - port: 3000
+          targetPort: 3000
