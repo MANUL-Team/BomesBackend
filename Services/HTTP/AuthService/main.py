@@ -1,0 +1,29 @@
+import pika
+import json
+
+def main():
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue='auth-1')
+
+    def callback(ch, method, properties, body):
+        print(f" [x] Received {body.decode()}")
+        data = json.loads(body.decode())
+        response = {
+            "key": data.get("key"),
+            "message": f"I have got this message: {json.dumps(data, ensure_ascii=False)}"
+        }
+        channel.basic_publish(exchange='',
+                      routing_key='core',
+                      body=json.dumps(response, ensure_ascii=False))
+
+    channel.basic_consume(queue='auth-1',
+                          on_message_callback=callback,
+                          auto_ack=True)
+
+    print(' [*] Waiting for messages. To exit press CTRL+C')
+    channel.start_consuming()
+
+if __name__ == '__main__':
+    main()

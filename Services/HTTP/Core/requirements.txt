@@ -1,0 +1,5 @@
+aio-pika==9.5.8
+fastapi==0.126.0
+pydantic==2.12.5
+python-multipart==0.0.21
+uvicorn==0.38.0
