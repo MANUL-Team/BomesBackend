@@ -69,7 +69,10 @@ app = FastAPI(
         "persistAuthorization": True,
         "displayRequestDuration": True,
         "tryItOutEnabled": True,
-    }
+    },
+    docs_url="/api/docs" if static_data.DEV else "/docs",
+    redoc_url="/api/redoc" if static_data.DEV else "/redoc",
+    openapi_url="/api/openapi.json" if static_data.DEV else "/openapi.json"
 )
 app.router.prefix = "/api"
 app.include_router(auth_router)

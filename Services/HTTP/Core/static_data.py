@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+DEV = os.getenv("DEV", False)
 RABBIT_ADDRESS = os.getenv("RABBIT_ADDRESS")
 RABBIT_USERNAME = os.getenv("RABBIT_USERNAME", "guest")
 RABBIT_PASSWORD = os.getenv("RABBIT_PASSWORD", "guest")
