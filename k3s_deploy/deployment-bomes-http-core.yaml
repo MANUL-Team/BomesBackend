@@ -30,7 +30,7 @@ spec:
                             fieldRef:
                                 fieldPath: metadata.name
                       - name: DEV
-                        value: true
+                        value: "true"
 ---
 apiVersion: v1
 kind: Service
