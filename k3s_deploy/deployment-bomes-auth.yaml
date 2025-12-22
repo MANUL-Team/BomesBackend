@@ -20,3 +20,7 @@ spec:
                         value: "bomes-http-core-service:3000"
                       - name: TZ
                         value: Europe/Moscow
+                      - name: RabbitMQ_host
+                        value: rabbitmq
+                      - name: RabbitMQ_port
+                        value: 5672

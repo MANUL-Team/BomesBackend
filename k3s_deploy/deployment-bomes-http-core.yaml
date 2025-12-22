@@ -18,6 +18,10 @@ spec:
                   env:
                       - name: TZ
                         value: Europe/Moscow
+                      - name: RabbitMQ_host
+                        value: rabbitmq
+                      - name: RabbitMQ_port
+                        value: 5672
 ---
 apiVersion: v1
 kind: Service
