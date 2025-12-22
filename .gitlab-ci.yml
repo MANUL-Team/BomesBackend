@@ -43,38 +43,20 @@ variables:
 # При добавлении сервиса копируем блок ниже и вставляем свои названия. Смотреть также .gitlab-ci.yml нового сервиса и compose.yml
 
 ###
-BomesAPI_build: #<-- Здесь (Название сервиса)_build
+HTTP/Core_build: #<-- Здесь (Название сервиса)_build
   stage: build-docker
   extends: .trigger
   variables:
     PROJECT: "HTTP/Core" #<-- Здесь PROJECT: "(Название сервиса)"
 ###
 
-BomesWebCore_build:
+HTTP/AuthService_build:
   stage: build-docker
   extends: .trigger
   variables:
-    PROJECT: "BomesWebCore"
-
-BomesAuthentificationService_build:
-  stage: build-docker
-  extends: .trigger
-  variables:
-    PROJECT: "BomesAuthentificationService"
-
-BomesWebTelegramBot_build:
-  stage: build-docker
-  extends: .trigger
-  variables:
-    PROJECT: "BomesWebTelegramBot"
-
-BomesMailService_build:
-  stage: build-docker
-  extends: .trigger
-  variables:
-    PROJECT: "BomesMailService"
+    PROJECT: "HTTP/AuthService"
 
 BomesWebDeploy:
   stage: deploy-dev
   script:
-    - for yaml in $(sudo ls -la /root/k3s_deploy/ | grep .yaml | awk '{print $9}'); do sudo kubectl apply -f /root/k3s_deploy/$yaml; sudo kubectl rollout restart deployment/$(sudo cat /root/k3s_deploy/$yaml | grep metadata -A 1 | grep name | grep -v service | grep -v ingress  | awk '{print $2}') || true; done
+    - for yaml in $(sudo ls -la ./k3s_deploy/ | grep .yaml | awk '{print $9}'); do sudo kubectl apply -f ./k3s_deploy/$yaml; sudo kubectl rollout restart deployment/$(sudo cat ./k3s_deploy/$yaml | grep metadata -A 1 | grep name | grep -v service | grep -v ingress  | awk '{print $2}') || true; done
