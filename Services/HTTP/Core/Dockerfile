@@ -26,7 +26,7 @@ WORKDIR /app
 
 COPY --from=builder /wheels /wheels
 COPY requirements.txt .
-RUN pip install --no-index --find-links=/wheels --no-cache-dir -r requirements_install.txt && \
+RUN pip install --no-index --find-links=/wheels --no-cache-dir -r requirements.txt && \
     rm -rf /wheels
 
 COPY . /app
