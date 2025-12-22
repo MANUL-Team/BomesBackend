@@ -8,5 +8,5 @@ variables:
   DOCKERNAME: "bomes-http-core" # <-- DOCKERNAME: "(Имя контейнера)"
 
 # jobs внутри дочернего пайплайна
-BomesAPI_build:  # <-- (Название сервиса)_build
+HTTP/Core_build:  # <-- (Название сервиса)_build
   extends: .build-template-servises

@@ -8,5 +8,5 @@ variables:
   DOCKERNAME: "bomes-http-auth" # <-- DOCKERNAME: "(Имя контейнера)"
 
 # jobs внутри дочернего пайплайна
-BomesAPI_build:  # <-- (Название сервиса)_build
+HTTP/AuthService_build:  # <-- (Название сервиса)_build
   extends: .build-template-servises
