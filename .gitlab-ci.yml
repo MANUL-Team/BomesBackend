@@ -47,7 +47,7 @@ BomesAPI_build: #<-- Здесь (Название сервиса)_build
   stage: build-docker
   extends: .trigger
   variables:
-    PROJECT: "BomesAPI" #<-- Здесь PROJECT: "(Название сервиса)"
+    PROJECT: "HTTP/Core" #<-- Здесь PROJECT: "(Название сервиса)"
 ###
 
 BomesWebCore_build:

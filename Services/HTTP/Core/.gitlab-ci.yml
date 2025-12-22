@@ -1,0 +1,12 @@
+# Забираем шаблоны
+include:
+  - '/gitlab-ci/template.yml'
+
+# Ставим переменные дочернего пайплайна
+variables:
+  PROJECT: "HTTP/Core" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-http-core" # <-- DOCKERNAME: "(Имя контейнера)"
+
+# jobs внутри дочернего пайплайна
+BomesAPI_build:  # <-- (Название сервиса)_build
+  extends: .build-template-servises
