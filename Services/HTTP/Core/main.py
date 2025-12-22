@@ -71,6 +71,7 @@ app = FastAPI(
         "tryItOutEnabled": True,
     }
 )
+app.router.prefix = "/api"
 app.include_router(auth_router)
 
 @app.get(
