@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: bomes-bomes-http-auth
+    name: bomes-http-auth
 spec:
     replicas: 2
     selector:
         matchLabels:
-            app: bomes-bomes-http-auth
+            app: bomes-http-auth
     template:
         metadata:
             labels:
-                app: bomes-bomes-http-auth
+                app: bomes-http-auth
         spec:
             containers:
-                - name: bomes-bomes-http-auth
-                  image: bomes-hub:5000/bomes-bomes-http-auth:latest
+                - name: bomes-http-auth
+                  image: bomes-hub:5000/bomes-http-auth:latest
                   env:
                       - name: CORE_ADDRESS
                         value: "bomes-http-core-service:3000"
