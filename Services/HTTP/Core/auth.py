@@ -9,7 +9,7 @@ from typing import Optional
 from datetime import datetime
 
 router = APIRouter(
-    prefix="/auth",
+    prefix="/api/auth",
     tags=["authentication"],
     responses={404: {"description": "Not found"}}
 )
