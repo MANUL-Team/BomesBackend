@@ -24,6 +24,10 @@ spec:
                         value: guest
                       - name: RABBIT_PASSWORD
                         value: guest
+                      - name: CORE_INDEX
+                        valueFrom:
+                            fieldRef:
+                                fieldPath: metadata.name
 
 ---
 apiVersion: v1
