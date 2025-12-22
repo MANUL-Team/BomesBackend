@@ -59,4 +59,4 @@ HTTP/AuthService_build:
 BomesWebDeploy:
   stage: deploy-dev
   script:
-    - for yaml in $(sudo ls -la ./k3s_deploy/ | grep bomes | grep .yaml | awk '{print $9}'); do sudo kubectl apply -f ./k3s_deploy/$yaml; sudo kubectl rollout restart deployment/$(sudo cat ./k3s_deploy/$yaml | grep metadata -A 1 | grep name | grep -v service | grep -v ingress  | awk '{print $2}') || true; done
+    - for yaml in $(sudo ls -la ./k3s_deploy/ | grep bomes | grep .yaml | awk '{print $9}'); do sudo kubectl apply -f ./k3s_deploy/$yaml; sudo kubectl rollout restart deployment/$(sudo cat ./k3s_deploy/$yaml | grep metadata -A 1 | grep name | grep -v service | awk '{print $2}') || true; done
