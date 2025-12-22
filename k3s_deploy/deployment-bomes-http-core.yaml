@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
     name: bomes-http-core
 spec:
     replicas: 2
+    serviceName: "bomes-http-core-service"
     selector:
         matchLabels:
             app: bomes-http-core
@@ -28,7 +29,6 @@ spec:
                         valueFrom:
                             fieldRef:
                                 fieldPath: metadata.name
-
 ---
 apiVersion: v1
 kind: Service
