@@ -27,11 +27,13 @@ async def core_callback(message: aio_pika.IncomingMessage):
             print(f"Received message for key: {key}")
 
 async def setup_rabbitmq():
-    static_data.connection = await aio_pika.connect_robust("amqp://guest:guest@localhost/")
+    static_data.connection = await aio_pika.connect_robust(
+        f"amqp://{static_data.RABBIT_USERNAME}:{static_data.RABBIT_PASSWORD}@{static_data.RABBIT_ADDRESS}/"
+    )
     static_data.channel = await static_data.connection.channel()
     
     await static_data.channel.declare_queue('auth-1')
-    core_queue = await static_data.channel.declare_queue('core')
+    core_queue = await static_data.channel.declare_queue(f'core-{static_data.CORE_INDEX}')
     
     await core_queue.consume(core_callback)
     print("RabbitMQ was setup")

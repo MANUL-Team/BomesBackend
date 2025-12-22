@@ -66,8 +66,11 @@ async def auth_test(email: str = Form(), password: str = Form()):
     key = generate_key(20)
     data = {
         "key": key,
-        "email": email,
-        "password": password
+        "core_index": static_data.CORE_INDEX,
+        "data": {
+            "email": email,
+            "password": password
+        }
     }
     
     if static_data.channel:
