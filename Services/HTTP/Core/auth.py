@@ -25,6 +25,9 @@ class RegisterResponse(BaseModel):
     message: Optional[str] = Field(None, example="Code was sent to the email")
     timestamp: datetime
 
+class ErrorResponse(BaseModel):
+    error: Optional[str] = Field(None, example="Timeout waiting for response")
+
 async def process_auth_request(request: Request, email: str = Form(), password: str = Form()):
     endpoint_path = request.url.path
     key = generate_key(20)
