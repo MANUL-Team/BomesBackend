@@ -16,7 +16,6 @@ async def main():
         f"amqp://{RABBIT_USERNAME}:{RABBIT_PASSWORD}@{RABBIT_ADDRESS}/"
     )
     channel = await connection.channel()
-    await channel.set_qos(prefetch_count=5)
     async def auth_callback(message: aio_pika.IncomingMessage):
         async with message.process():
             print(f" [x] Received {message.body.decode()}")
