@@ -25,9 +25,10 @@ def main():
         request = data.get("request")
         core_index = data.get("core_index")
         response_message = f"Unknown request: {request}"
+        request_data = data.get("data", {})
         code = 404
         if request == "/api/auth/register":
-            response_message, code = register(data.get("email"), data.get("password"))
+            response_message, code = register(request_data.get("email"), request_data.get("password"))
         response = {
             "key": data.get("key"),
             "message": response_message,
