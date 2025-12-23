@@ -50,7 +50,7 @@ async def process_auth_request(request: Request, email: str = Form(), password: 
             routing_key='auth-1'
         )
     
-    max_wait = 30
+    max_wait = 3000
     for _ in range(max_wait):
         if key in static_data.returned_messages:
             response = static_data.returned_messages.pop(key)
@@ -58,7 +58,7 @@ async def process_auth_request(request: Request, email: str = Form(), password: 
                 status_code=response.get("code"),
                 content= response.get("message", {})
             )
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.01)
     return JSONResponse(
         status_code=400,
         content={"error": "Timeout waiting for response"}
