@@ -7,6 +7,7 @@ import json
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from fastapi.responses import JSONResponse
 
 router = APIRouter(
     prefix="/auth",
@@ -50,10 +51,15 @@ async def process_auth_request(request: Request, email: str = Form(), password: 
     for _ in range(max_wait):
         if key in static_data.returned_messages:
             response = static_data.returned_messages.pop(key)
-            return response.get("message", {})
+            return JSONResponse(
+                status_code=response.get("code"),
+                content= response.get("message", {})
+            )
         await asyncio.sleep(0.1)
-    
-    return {"error": "Timeout waiting for response"}
+    return JSONResponse(
+        status_code=400,
+        content={"error": "Timeout waiting for response"}
+    )
 
 router.post(
     "/register",
