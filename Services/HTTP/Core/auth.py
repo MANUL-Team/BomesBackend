@@ -27,7 +27,7 @@ class RegisterResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: Optional[str] = Field(None, example="Timeout waiting for response")
 
-async def process_auth_request(request: Request, data: str = Form(example='{"email": "user@example.com", "password": "StrongPass123"}')):
+async def process_auth_request(request: Request, email: str = Form(), password: str = Form()):
     data = json.loads(data)
     endpoint_path = request.url.path
     key = generate_key(20)
@@ -36,8 +36,8 @@ async def process_auth_request(request: Request, data: str = Form(example='{"ema
         "core_index": static_data.CORE_INDEX,
         "request": endpoint_path,
         "data": {
-            "email": data.get("email"),
-            "password": data.get("password")
+            "email": email,
+            "password": password
         }
     }
     
