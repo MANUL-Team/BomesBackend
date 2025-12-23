@@ -26,7 +26,7 @@ def main():
         core_index = data.get("core_index")
         response_message = "Unknown request"
         code = 404
-        if request == "register":
+        if request == "/register":
             response_message, code = register(data.get("email"), data.get("password"))
         response = {
             "key": data.get("key"),
