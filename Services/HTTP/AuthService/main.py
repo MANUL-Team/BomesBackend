@@ -24,7 +24,7 @@ def main():
         data = json.loads(body.decode())
         request = data.get("request")
         core_index = data.get("core_index")
-        response_message = "Unknown request"
+        response_message = f"Unknown request: {request}"
         code = 404
         if request == "/register":
             response_message, code = register(data.get("email"), data.get("password"))
