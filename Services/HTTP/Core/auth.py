@@ -16,8 +16,7 @@ router = APIRouter(
 )
 
 class RegisterRequest(BaseModel):
-    email: str = Field(..., example="user@example.com")
-    password: str = Field(..., min_length=8, example="StrongPass123")
+    data: dict = Field(..., example={"email", "user@example.com", "password": "StrongPass123"})
 
 class RegisterResponse(BaseModel):
     status: str = Field(..., example="SUCCESS")
@@ -28,7 +27,7 @@ class RegisterResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: Optional[str] = Field(None, example="Timeout waiting for response")
 
-async def process_auth_request(request: Request, **kwargs):
+async def process_auth_request(request: Request, data: dict = Form(...)):
     endpoint_path = request.url.path
     key = generate_key(20)
     data = {
@@ -36,8 +35,8 @@ async def process_auth_request(request: Request, **kwargs):
         "core_index": static_data.CORE_INDEX,
         "request": endpoint_path,
         "data": {
-            "email": kwargs.get("email"),
-            "password": kwargs.get("password")
+            "email": data.get("email"),
+            "password": data.get("password")
         }
     }
     
