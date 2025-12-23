@@ -80,7 +80,7 @@ app.include_router(auth_router)
 @app.get(
     "/health",
     tags=["health"],
-    summary="Проверка работоспособности",
+    summary="Проверка работоспособности сервера",
     description="Проверяет, что сервер запущен и работает",
     response_description="Статус сервера",
     responses={
