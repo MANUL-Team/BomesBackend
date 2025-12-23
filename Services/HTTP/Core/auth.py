@@ -28,7 +28,7 @@ class RegisterResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: Optional[str] = Field(None, example="Timeout waiting for response")
 
-async def process_auth_request(request: Request, email: str = Form(), password: str = Form()):
+async def process_auth_request(request: Request, **kwargs):
     endpoint_path = request.url.path
     key = generate_key(20)
     data = {
@@ -36,8 +36,8 @@ async def process_auth_request(request: Request, email: str = Form(), password: 
         "core_index": static_data.CORE_INDEX,
         "request": endpoint_path,
         "data": {
-            "email": email,
-            "password": password
+            "email": kwargs.get("email"),
+            "password": kwargs.get("password")
         }
     }
     
