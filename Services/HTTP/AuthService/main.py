@@ -39,7 +39,7 @@ async def main():
                 ),
                 routing_key=f'core-{core_index}',
             )
-    auth_queue = await static_data.channel.declare_queue(f'auth-1')
+    auth_queue = await channel.declare_queue(f'auth-1')
     await auth_queue.consume(auth_callback)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
