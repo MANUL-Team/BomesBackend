@@ -33,7 +33,7 @@ def main():
             }
             await channel.default_exchange.publish(
                 aio_pika.Message(
-                    body=json.dumps(response, ensure_ascii=False),
+                    body=json.dumps(response, ensure_ascii=False).encode(),
                     delivery_mode=aio_pika.DeliveryMode.PERSISTENT
                 ),
                 routing_key=f'core-{core_index}',
