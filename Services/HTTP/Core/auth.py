@@ -101,11 +101,38 @@ class RegisterResponse(BaseModel):
     message: Optional[str] = Field(None, example="Code was sent to the email")
     timestamp: datetime
 
-class ErrorResponse(BaseModel):
-    error: str = Field(..., example="Timeout waiting for response")
-    detail: Optional[str] = Field(None, example="Service did not respond in time")
+async def process_auth_request(request: Request, email: str = Form(), password: str = Form()):
+    endpoint_path = request.url.path
+    key = generate_key(20)
+    data = {
+        "key": key,
+        "core_index": static_data.CORE_INDEX,
+        "request": endpoint_path,
+        "data": {
+            "email": email,
+            "password": password
+        }
+    }
+    
+    if static_data.channel:
+        await static_data.channel.default_exchange.publish(
+            aio_pika.Message(
+                body=json.dumps(data).encode(),
+                delivery_mode=aio_pika.DeliveryMode.PERSISTENT
+            ),
+            routing_key='auth-1'
+        )
+    
+    max_wait = 30
+    for _ in range(max_wait):
+        if key in static_data.returned_messages:
+            response = static_data.returned_messages.pop(key)
+            return response.get("message", {})
+        await asyncio.sleep(0.1)
+    
+    return {"error": "Timeout waiting for response"}
 
-@router.post(
+router.post(
     "/register",
     summary="Запрос на регистрацию",
     description="Отправляет запрос на регистрацию",
@@ -152,33 +179,4 @@ class ErrorResponse(BaseModel):
             }
         }
     }
-)
-async def register(email: str = Form(), password: str = Form()):
-    key = generate_key(20)
-    data = {
-        "key": key,
-        "core_index": static_data.CORE_INDEX,
-        "request": "register",
-        "data": {
-            "email": email,
-            "password": password
-        }
-    }
-    
-    if static_data.channel:
-        await static_data.channel.default_exchange.publish(
-            aio_pika.Message(
-                body=json.dumps(data).encode(),
-                delivery_mode=aio_pika.DeliveryMode.PERSISTENT
-            ),
-            routing_key='auth-1'
-        )
-    
-    max_wait = 30
-    for _ in range(max_wait):
-        if key in static_data.returned_messages:
-            response = static_data.returned_messages.pop(key)
-            return response.get("message", {})
-        await asyncio.sleep(0.1)
-    
-    return {"error": "Timeout waiting for response"}
+)(process_auth_request)
