@@ -2,6 +2,7 @@ import pika
 import json
 import os
 from dotenv import load_dotenv
+from auth_requests import *
 
 load_dotenv()
 
@@ -21,10 +22,16 @@ def main():
     def callback(ch, method, properties, body):
         print(f" [x] Received {body.decode()}")
         data = json.loads(body.decode())
+        request = data.get("request")
         core_index = data.get("core_index")
+        response_message = "Unknown request"
+        code = 404
+        if request == "register":
+            response_message, code = register(data.get("email"), data.get("password"))
         response = {
             "key": data.get("key"),
-            "message": f"I have got this message: {json.dumps(data, ensure_ascii=False)}"
+            "message": response_message,
+            "code": code
         }
         channel.basic_publish(exchange='',
                       routing_key=f'core-{core_index}',
