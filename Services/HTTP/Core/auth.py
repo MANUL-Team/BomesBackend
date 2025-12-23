@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 class RegisterRequest(BaseModel):
-    data: dict = Field(..., example={"email", "user@example.com", "password": "StrongPass123"})
+    data: dict = Field(..., example={"email": "user@example.com", "password": "StrongPass123"})
 
 class RegisterResponse(BaseModel):
     status: str = Field(..., example="SUCCESS")
@@ -27,10 +27,10 @@ class RegisterResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: Optional[str] = Field(None, example="Timeout waiting for response")
 
-async def process_auth_request(request: Request, data: dict = Form(...)):
+async def process_auth_request(request: Request, data: str = Form(...)):
     endpoint_path = request.url.path
     key = generate_key(20)
-    data = {
+    request_data = {
         "key": key,
         "core_index": static_data.CORE_INDEX,
         "request": endpoint_path,
@@ -43,7 +43,7 @@ async def process_auth_request(request: Request, data: dict = Form(...)):
     if static_data.channel:
         await static_data.channel.default_exchange.publish(
             aio_pika.Message(
-                body=json.dumps(data).encode(),
+                body=json.dumps(request_data).encode(),
                 delivery_mode=aio_pika.DeliveryMode.PERSISTENT
             ),
             routing_key='auth-1'
