@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 class RegisterRequest(BaseModel):
-    data: dict = Field(..., example={"email": "user@example.com", "password": "StrongPass123"})
+    data: str = Field(..., example='{"email": "user@example.com", "password": "StrongPass123"}')
 
 class RegisterResponse(BaseModel):
     status: str = Field(..., example="SUCCESS")
@@ -27,7 +27,8 @@ class RegisterResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: Optional[str] = Field(None, example="Timeout waiting for response")
 
-async def process_auth_request(request: Request, data: dict = Form(...)):
+async def process_auth_request(request: Request, data: str = Form(...)):
+    data = json.loads(data)
     endpoint_path = request.url.path
     key = generate_key(20)
     request_data = {
