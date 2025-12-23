@@ -28,7 +28,6 @@ class ErrorResponse(BaseModel):
     error: Optional[str] = Field(None, example="Timeout waiting for response")
 
 async def process_auth_request(request: Request, email: str = Form(), password: str = Form()):
-    data = json.loads(data)
     endpoint_path = request.url.path
     key = generate_key(20)
     request_data = {
