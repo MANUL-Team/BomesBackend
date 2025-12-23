@@ -16,7 +16,8 @@ router = APIRouter(
 )
 
 class RegisterRequest(BaseModel):
-    data: str = Field(..., example='{"email": "user@example.com", "password": "StrongPass123"}')
+    email: str = Field(..., example='user@example.com')
+    password: str = Field(..., example='StrongPass123')
 
 class RegisterResponse(BaseModel):
     status: str = Field(..., example="SUCCESS")
