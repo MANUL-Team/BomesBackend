@@ -16,6 +16,7 @@ async def main():
         f"amqp://{RABBIT_USERNAME}:{RABBIT_PASSWORD}@{RABBIT_ADDRESS}/"
     )
     channel = await connection.channel()
+    await channel.set_qos(prefetch_count=5)
     async def auth_callback(message: aio_pika.IncomingMessage):
         async with message.process():
             print(f" [x] Received {message.body.decode()}")
@@ -43,7 +44,10 @@ async def main():
     await auth_queue.consume(auth_callback)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
-    channel.start_consuming()
+    await asyncio.Future()
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\n [*] Auth service stopped")
