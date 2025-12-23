@@ -3,6 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 from auth_requests import *
+import asyncio
 
 load_dotenv()
 
@@ -10,7 +11,7 @@ RABBIT_ADDRESS = os.getenv("RABBIT_ADDRESS")
 RABBIT_USERNAME = os.getenv("RABBIT_USERNAME", "guest")
 RABBIT_PASSWORD = os.getenv("RABBIT_PASSWORD", "guest")
 
-def main():
+async def main():
     connection = await aio_pika.connect_robust(
         f"amqp://{RABBIT_USERNAME}:{RABBIT_PASSWORD}@{RABBIT_ADDRESS}/"
     )
@@ -45,4 +46,4 @@ def main():
     channel.start_consuming()
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
