@@ -126,11 +126,10 @@ async def register(
 )
 async def login(
     request: Request,
-    username: str = Form(),
     email: str = Form(),
     password: str = Form(),
 ):
     endpoint_path = request.url.path
     return await process_auth_request(
-        endpoint_path, username=username, email=email, password=password
+        endpoint_path, email=email, password=password
     )
