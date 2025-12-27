@@ -25,8 +25,19 @@ async def main():
             response_message = f"Unknown request: {request}"
             request_data = data.get("data", {})
             code = 404
+            
             if request == "/api/auth/register":
-                response_message, code = register(request_data.get("email"), request_data.get("password"))
+                response_message, code = register(
+                    request_data.get("username"), 
+                    request_data.get("email"), 
+                    request_data.get("password")
+                )
+            if request == "/api/auth/login":
+                response_message, code = login(
+                    request_data.get("email"), 
+                    request_data.get("password")
+                )
+
             response = {
                 "key": data.get("key"),
                 "message": response_message,

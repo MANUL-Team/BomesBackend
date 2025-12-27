@@ -33,7 +33,6 @@ async def process_auth_request(endpoint_path: str, **kwargs):
                 "application/json": {
                     "example": {
                         "status": "SUCCESS",
-                        "operation_id": "12345",
                         "message": "Code was sent to the email",
                         "timestamp": "2024-01-01T12:00:00Z",
                     }
@@ -47,7 +46,6 @@ async def process_auth_request(endpoint_path: str, **kwargs):
                 "application/json": {
                     "example": {
                         "status": "FAIL",
-                        "operation_id": "12345",
                         "message": "Email is already used",
                         "timestamp": "2024-01-01T12:00:00Z",
                     }
