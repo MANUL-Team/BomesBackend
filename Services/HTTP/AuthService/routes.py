@@ -1,7 +1,13 @@
+from ServiceLib.service import Service
 from datetime import datetime
 
+service = Service.get_service("Auth")
 
-def register(username: str, email: str, password: str):
+@service.register_request("/api/auth/register")
+def register(request_data: dict):
+    username = request_data.get("username")
+    email = request_data.get("username")
+    password = request_data.get("password")
     response = {
         "status": "SUCCESS",
         "message": "Code was sent to your email!",
@@ -10,7 +16,10 @@ def register(username: str, email: str, password: str):
     }
     return response, 200
 
-def login(email: str, password: str):
+@service.register_request("/api/auth/login")
+def login(request_data: dict):
+    email = request_data.get("username")
+    password = request_data.get("password")
     response = {
         "status": "SUCCESS",
         "message": "Successful login",
