@@ -25,8 +25,8 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 COPY --from=builder /wheels /wheels
-COPY requirements.txt .
-RUN pip install --no-index --find-links=/wheels --no-cache-dir -r requirements.txt && \
+COPY requirements_install.txt .
+RUN pip install --no-index --find-links=/wheels --no-cache-dir -r requirements_install.txt && \
     rm -rf /wheels
 
 COPY . /app
