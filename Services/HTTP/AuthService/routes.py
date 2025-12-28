@@ -1,4 +1,4 @@
-from ServiceLib.service import Service
+from service_lib import Service
 from datetime import datetime
 
 service = Service.get_service("Auth")
