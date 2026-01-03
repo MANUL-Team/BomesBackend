@@ -2,3 +2,4 @@ service-lib @ git+http://gitlab.bomes.ru/stolbov.e/backend_service_lib.git
 pika==1.3.2
 python-dotenv==1.2.1
 aio-pika==9.5.8
+psycopg2-binary==2.9.11
