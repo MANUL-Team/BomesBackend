@@ -44,6 +44,7 @@ def confirm_user(request_data: dict):
             confirming_user.get("email"), 
             confirming_user.get("password")
         )
+        confirming_users.pop(email)
         return {
             "status": "SUCCESS",
             "message": "Successful registration!",
