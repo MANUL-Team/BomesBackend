@@ -36,3 +36,13 @@ class LoginResponse(BaseModel):
 
 
 # --------------------
+
+class ConfirmUserRequest(BaseModel):
+    email: str = Field(..., example="user@example.com")
+    code: int = Field(..., example=123456)
+
+
+class ConfirmUserResponse(BaseModel):
+    status: str = Field(..., example="SUCCESS")
+    message: Optional[str] = Field(None, example="Successful registration!")
+    timestamp: datetime

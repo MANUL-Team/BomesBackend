@@ -133,3 +133,59 @@ async def login(
     return await process_auth_request(
         endpoint_path, email=email, password=password
     )
+
+@router.post(
+    "/confirm_user",
+    summary="Запрос на подтверждение почты",
+    description="Подтверждает почту",
+    response_description="Результат подтверждения почты",
+    responses={
+        200: {
+            "description": "Успешное подтверждение",
+            "model": ConfirmUserResponse,
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": "SUCCESS",
+                        "message": "Successful registration!",
+                        "timestamp": "2024-01-01T12:00:00Z",
+                    }
+                }
+            },
+        },
+        401: {
+            "description": "Неверная почта или код",
+            "model": ConfirmUserResponse,
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": "FAIL",
+                        "message": "Invalid code or email!",
+                        "timestamp": "2024-01-01T12:00:00Z",
+                    }
+                }
+            },
+        },
+        408: {
+            "description": "Таймаут ожидания ответа",
+            "model": ErrorResponse,
+            "content": {
+                "application/json": {
+                    "example": {
+                        "error": "Timeout waiting for response",
+                        "detail": "Service did not respond within 30 seconds",
+                    }
+                }
+            },
+        },
+    },
+)
+async def confirm_user(
+    request: Request,
+    email: str = Form(),
+    code: int = Form(),
+):
+    endpoint_path = request.url.path
+    return await process_auth_request(
+        endpoint_path, email=email, code=code
+    )
