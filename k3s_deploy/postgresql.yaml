@@ -91,7 +91,7 @@ spec:
                           command:
                               - pg_isready
                               - -U
-                              - bomes
+                              - BomesDatabase
                       initialDelaySeconds: 5
                       periodSeconds: 5
     volumeClaimTemplates:

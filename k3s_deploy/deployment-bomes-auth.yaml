@@ -26,3 +26,13 @@ spec:
                         value: guest
                       - name: RABBIT_PASSWORD
                         value: guest
+                      - name: DB_NAME
+                        value: BomesDatabase
+                      - name: DB_USER
+                        value: bomes
+                      - name: DB_PASSWORD
+                        value: bomes
+                      - name: DB_HOST
+                        value: postgres-service
+                      - name: DB_PORT
+                        value: "5432"
