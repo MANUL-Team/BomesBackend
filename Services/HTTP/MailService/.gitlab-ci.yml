@@ -1,0 +1,12 @@
+# Забираем шаблоны
+include:
+  - '/gitlab-ci/template.yml'
+
+# Ставим переменные дочернего пайплайна
+variables:
+  PROJECT: "HTTP/MailService" # <-- PROJECT: "(Название сервиса)"
+  DOCKERNAME: "bomes-http-mail" # <-- DOCKERNAME: "(Имя контейнера)"
+
+# jobs внутри дочернего пайплайна
+HTTP/MailService_build:  # <-- (Название сервиса)_build
+  extends: .build-template-servises

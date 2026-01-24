@@ -4,8 +4,10 @@ import aio_pika
 import json
 import static_data
 from contextlib import asynccontextmanager
-from auth import auth_router
 from datetime import datetime
+
+from auth import auth_router
+from mail import mail_router
 
 openapi_tags = [
     {
@@ -81,6 +83,7 @@ app = FastAPI(
 )
 app.router.prefix = "/api"
 app.include_router(auth_router)
+app.include_router(mail_router)
 
 
 @app.get(
