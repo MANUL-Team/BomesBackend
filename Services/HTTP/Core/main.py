@@ -18,6 +18,10 @@ openapi_tags = [
         "name": "health",
         "description": "Проверка работоспособности сервера",
     },
+    {
+        "name": "mail",
+        "description": "Операции работы с почтой",
+    },
 ]
 
 
