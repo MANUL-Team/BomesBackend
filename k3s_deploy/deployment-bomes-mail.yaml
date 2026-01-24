@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: bomes-http-mail
+spec:
+    replicas: 5
+    selector:
+        matchLabels:
+            app: bomes-http-mail
+    template:
+        metadata:
+            labels:
+                app: bomes-http-mail
+        spec:
+            containers:
+                - name: bomes-http-mail
+                  image: bomes-hub:5000/bomes-http-mail:latest
+                  env:
+                      - name: CORE_ADDRESS
+                        value: "bomes-http-core-service:3000"
+                      - name: TZ
+                        value: Europe/Moscow
+                      - name: RABBIT_ADDRESS
+                        value: rabbitmq:5672
+                      - name: RABBIT_USERNAME
+                        value: guest
+                      - name: RABBIT_PASSWORD
+                        value: guest
+                      - name: DB_NAME
+                        value: BomesDatabase
+                      - name: DB_USER
+                        value: bomes
+                      - name: DB_PASSWORD
+                        value: bomes
+                      - name: DB_HOST
+                        value: postgres-service
+                      - name: DB_PORT
+                        value: "5432"
