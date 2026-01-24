@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
     name: bomes-http-auth
 spec:
-    replicas: 5
+    replicas: 1
     selector:
         matchLabels:
             app: bomes-http-auth

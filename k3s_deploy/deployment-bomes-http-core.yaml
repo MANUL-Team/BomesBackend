@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
     name: bomes-http-core
 spec:
-    replicas: 5
+    replicas: 2
     serviceName: "bomes-http-core-service"
     selector:
         matchLabels:
