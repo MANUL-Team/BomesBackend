@@ -28,7 +28,7 @@ async def process_mail_request(endpoint_path: str, **kwargs):
     responses={
         200: {
             "description": "Успешная отправка письма",
-            "model": RegisterResponse,
+            "model": SendMailResponse,
             "content": {
                 "application/json": {
                     "example": {
