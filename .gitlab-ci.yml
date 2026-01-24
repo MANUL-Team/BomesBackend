@@ -56,6 +56,12 @@ HTTP/AuthService_build:
   variables:
     PROJECT: "HTTP/AuthService"
 
+HTTP/MailService_build:
+  stage: build-docker
+  extends: .trigger
+  variables:
+    PROJECT: "HTTP/MailService"
+
 BomesWebDeploy:
   stage: deploy-dev
   script:
