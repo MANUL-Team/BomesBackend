@@ -59,6 +59,6 @@ async def send_mail(
     data: str = Form(),
 ):
     endpoint_path = request.url.path
-    return await process_auth_request(
+    return await process_mail_request(
         endpoint_path, email=email, data=data
     )
